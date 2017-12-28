@@ -1,2 +1,8 @@
 # space-station
-try to make something with Pygame
+
+### What's this?
+
+Another probe of making something with Pygame.
+Some children decided to help me :)
+May be we could do something interesting together.
+Repo created for files exchanging.

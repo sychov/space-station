@@ -1,0 +1,163 @@
+# -*- coding: utf-8 -*-
+"""----------------------------------------------------------
+ Author:      alexey.sychov@gameloft.com
+ Created:     19-12-2017
+ Description: Game map classes
+----------------------------------------------------------"""
+
+import json
+
+import pygame
+from pygame import sprite, Rect
+
+
+# ========================== MAP CELL CLASS =============================== #
+
+class Map_Cell(sprite.Sprite):
+    """One cell of the map.
+    Class must be initialized before using by initialize() method.
+    This is because we will read tileset only once per class,
+    bu we dont want to hardcode its name.
+    """
+    # --------------------- CONST ------------------------ #
+
+    _is_class_initialized = False
+    SIZE = None
+    tiles = []
+
+    STOPPABLES = (17, 18)
+
+
+    @classmethod
+    def initialize(cls, filename, size, scale=1):
+        """Load tileset for a map.
+        Tileset must be single image. Tiles are read to be supported
+        by Tiled editor, from left to right, and from up to down.
+        """
+        image = pygame.image.load(filename).convert()
+        image_width, image_height = image.get_size()
+        tiles = []
+        for tile_y in range(0, image_height / size):
+            for tile_x in range(0, image_width / size):
+                rect = (tile_x * size, tile_y * size, size, size)
+                tile = image.subsurface(rect).convert()
+                if scale == 2:
+                    tiles.append(pygame.transform.scale2x(tile))
+                elif scale == 1:
+                    tiles.append(tile)
+                else:
+                    raise RuntimeError('Sorry! only scale 1x and 2x is '
+                                                              'supported now!')
+        cls.tiles = tiles
+        cls.SIZE = size * scale
+        cls._is_class_initialized = True
+
+
+    def __init__(self, x, y, tile_number):
+        """
+        """
+        if not self._is_class_initialized:
+            raise RuntimeError('Impossible to use insances before class '
+                            'initializing! Use <class>.initialize(...) first!')
+        sprite.Sprite.__init__(self)
+        self.rect = Rect(x * self.SIZE , y * self.SIZE, self.SIZE, self.SIZE)
+        self.image = self.tiles[tile_number - 1]
+        self.tile_number = tile_number
+        self.is_walkable = tile_number not in self.STOPPABLES
+
+
+    def __repr__(self):
+        """
+        """
+        return 'Game tile #%d :' % self.tile_number + str(self.is_walkable)
+
+
+# ========================== MAP CELL CLASS =============================== #
+
+
+class Map(sprite.Sprite):
+    """
+    """
+    LAYER_NUM = 0
+
+    def __init__(self, map_path, tileset_path, display_size_tuple, scale=1):
+        """
+        """
+        self.debug = ''
+        self.display_width, self.display_height = display_size_tuple
+        self.scale = scale
+
+        with open(map_path) as f:
+            map_json = json.load(f)
+
+        origin_tile_size = map_json['tileheight']
+        Map_Cell.initialize(tileset_path, origin_tile_size, scale)
+
+        self.tile_size = origin_tile_size * scale
+
+        layer = map_json['layers'][self.LAYER_NUM]
+        self.map = self._get_map_from_layer(layer)
+
+        min_x = self.tile_size
+        min_y = self.tile_size
+        width = self.tile_size * (len(self.map[0]) - 2)
+        height = self.tile_size * (len(self.map) - 2)
+        self.rect = Rect(min_x, min_y, width, height)
+
+
+    def _get_map_from_layer(self, layer):
+        """Scan layer for tiles numbers.
+        Return game map in format:
+            [
+                [Map_Cell, Map_Cell, ....],
+                [Map_Cell, Map_Cell, ....],
+                ...
+            ]
+        """
+        layer_map, row, x, y = [], [], 0, 0
+        for tile_num in layer['data']:
+            row.append(Map_Cell(x, y, tile_num))
+            x += 1
+            if x == layer['width']:
+                layer_map.append(row)
+                row, x = [], 0
+                y += 1
+        return layer_map
+
+
+    def draw_map(self, screen, camera_coords):
+        """Draw part of map (in a frame around camera_coords).
+        """
+        camera_x, camera_y = camera_coords
+
+        shift_x = camera_x - self.display_width / 2
+        shift_y = camera_y - self.display_height / 2
+        size = self.tile_size
+
+        left_cell = shift_x / self.tile_size
+        top_cell = shift_y / self.tile_size
+        right_cell = (shift_x + self.display_width) / self.tile_size
+        bottom_cell = (shift_y + self.display_height) / self.tile_size
+
+        for y, row in enumerate(self.map):
+            if y < top_cell or y > bottom_cell:
+                continue
+            for x, tile in enumerate(row):
+                if x < left_cell or x > right_cell:
+                    continue
+                screen.blit(tile.image, (x*size - shift_x, y*size - shift_y))
+
+
+    def get_cells_to_verification(self, rect):
+        """Return tuple of four cells around current char position.
+        """
+        top = rect.y / self.tile_size
+        left = rect.x / self.tile_size
+        return (self.map[top][left],
+                self.map[top + 1][left],
+                self.map[top][left + 1],
+                self.map[top + 1][left + 1])
+
+
+
+
