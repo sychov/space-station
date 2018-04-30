@@ -27,7 +27,7 @@ BG_COLOR = Color("#888822")
 
 # ------------------------ OTHER -------------------------- #
 
-MOVE_SPEED = 3
+MOVE_SPEED = 2
 DIRECTIONS = ('top', 'right', 'bottom', 'left')
 
 # ============================== CHAR CLASS ================================ #
@@ -45,7 +45,7 @@ class Char(sprite.Sprite):
         self.startX = start_x
         self.startY = start_y
         self.size = CHAR_SIZE * scale
-        self.direction = 'idle_bottom'
+        self.direction = 'bottom'
         self.id_ = id_
 
         # rect of character inside sprite. Is left for debug purposes.
@@ -146,16 +146,17 @@ class Char(sprite.Sprite):
             return True
 
         # check nearest tiles
-        for cell in game_map.get_cells_to_verification(self.rect):
-            if not cell.is_walkable and self.rect.colliderect(cell):
+        for floor_c, object_c in game_map.get_cells_to_verification(self.rect):
+            if not(floor_c.is_walkable and object_c.is_walkable) \
+                                            and self.rect.colliderect(floor_c):
                 if self.direction == 'right':
-                    self.rect.right = cell.rect.left
+                    self.rect.right = floor_c.rect.left
                 elif self.direction == 'left':
-                    self.rect.left = cell.rect.right
+                    self.rect.left = floor_c.rect.right
                 elif self.direction == 'top':
-                    self.rect.top = cell.rect.bottom
+                    self.rect.top = floor_c.rect.bottom
                 elif self.direction == 'bottom':
-                    self.rect.bottom = cell.rect.top
+                    self.rect.bottom = floor_c.rect.top
                 self._stop_moving()
                 return True
 

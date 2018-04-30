@@ -15,7 +15,7 @@ from char_classes import Player, NPC
 # ------------------------------ CONST ------------------------------------- #
 
 DISPLAY_SIZE = (1024, 768)
-FPS = 60
+FPS = 90
 DOUBLE = True
 BG_COLOR = pygame.Color(31, 29, 44)
 
@@ -42,11 +42,13 @@ class Main(object):
 
         self.game_map = Map(
             map_path='map.json',
-            tileset_path="tilesets/scifitiles-sheet_0.png",
+            tileset_path="tilesets/TILES.png",
             display_size_tuple=DISPLAY_SIZE,
             scale=2 if DOUBLE else 1)
 
-        self.player = Player(400, 400,
+        x, y = self.game_map.get_first_walkable_cell_coords()
+        self.player = Player(x,
+                             y,
                              'chars/captain.png',
                              scale=2 if DOUBLE else 1)
         self.player_coords = self.player.get_player_coords_on_screen(
@@ -73,7 +75,8 @@ class Main(object):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    raise SystemExit(0)
+                    print 'Exit'
+                    return self
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
@@ -86,7 +89,8 @@ class Main(object):
                         key_bottom = True
                     elif event.key == pygame.K_ESCAPE:
                         pygame.quit()
-                        raise SystemExit(0)
+                        print 'Exit'
+                        return self
 
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_RIGHT:
@@ -113,19 +117,17 @@ class Main(object):
             self.player.update(direction, self.game_map)
             camera_x, camera_y = self.player.get_camera_pos()
             self.screen.fill(BG_COLOR)
-            self.game_map.draw_map(self.screen, (camera_x, camera_y))
+            self.game_map.draw_bottom(self.screen, (camera_x, camera_y))
+            self.screen.blit(self.player.image, self.player_coords)
+            self.game_map.draw_top(self.screen, (camera_x, camera_y))
 
             if DEBUG:
                 debug_msg = self.game_map.debug + ', fps = %d' % \
                                                            self.timer.get_fps()
                 self.debug_outtext(debug_msg, 0)
 
-            self.screen.blit(self.player.image, self.player_coords)
             pygame.display.update()
 
-        # finish
-        print 'Shutdown.'
-        return self
 
 # --------------------------------- RUN ------------------------------------- #
 
