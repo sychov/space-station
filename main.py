@@ -19,7 +19,7 @@ FPS = 90
 DOUBLE = True
 BG_COLOR = pygame.Color(31, 29, 44)
 
-DEBUG = False
+DEBUG = True
 DEBUG_COLOR = pygame.Color(0, 250, 0)
 
 # ================================ MAIN ==================================== #
@@ -122,8 +122,10 @@ class Main(object):
             self.game_map.draw_top(self.screen, (camera_x, camera_y))
 
             if DEBUG:
-                debug_msg = self.game_map.debug + ', fps = %d' % \
-                                                           self.timer.get_fps()
+                debug_msg = '%s %s fps = %d' % (
+                                self.player.debug,
+                                self.game_map.debug,
+                                self.timer.get_fps())
                 self.debug_outtext(debug_msg, 0)
 
             pygame.display.update()

@@ -147,8 +147,7 @@ class Char(sprite.Sprite):
 
         # check nearest tiles
         for floor_c, object_c in game_map.get_cells_to_verification(self.rect):
-            if not(floor_c.is_walkable and object_c.is_walkable) \
-                                            and self.rect.colliderect(floor_c):
+            if not floor_c.is_walkable and self.rect.colliderect(floor_c):
                 if self.direction == 'right':
                     self.rect.right = floor_c.rect.left
                 elif self.direction == 'left':
@@ -159,6 +158,19 @@ class Char(sprite.Sprite):
                     self.rect.bottom = floor_c.rect.top
                 self._stop_moving()
                 return True
+
+            elif not object_c.is_walkable and self.rect.colliderect(object_c):
+                if self.direction == 'right':
+                    self.rect.right = object_c.rect.left
+                elif self.direction == 'left':
+                    self.rect.left = object_c.rect.right
+                elif self.direction == 'top':
+                    self.rect.top = object_c.rect.bottom
+                elif self.direction == 'bottom':
+                    self.rect.bottom = object_c.rect.top
+                self._stop_moving()
+                return True
+
 
         return False
 
@@ -182,6 +194,7 @@ class Player(Char):
                                start_x, start_y, tileset_path, scale, 'Player')
         self.camera_shift_x = self.rect.width / 2
         self.camera_shift_y = self.rect.height / 2
+        self.debug = ''
 
 
     def get_camera_pos(self):

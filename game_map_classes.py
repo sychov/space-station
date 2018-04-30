@@ -10,6 +10,8 @@ import json
 import pygame
 from pygame import sprite, Rect
 
+from _specials import SPECIAL_COLLISIONS
+
 
 # ========================== MAP CELL CLASS =============================== #
 
@@ -62,6 +64,13 @@ class Map_Cell(sprite.Sprite):
         self.tile_number = tile_number
         self.is_walkable = False
 
+        # correct collisions map for some sprites
+        if tile_number in SPECIAL_COLLISIONS:
+            special = SPECIAL_COLLISIONS[tile_number]
+            self.rect.x += special['dx']
+            self.rect.y += special['dy']
+            self.rect.width -= special['d_width']
+            self.rect.height -= special['d_height']
 
     def set_walkable(self, flag):
         self.is_walkable = flag
