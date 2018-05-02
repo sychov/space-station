@@ -15,7 +15,7 @@ from char_classes import Player, NPC
 # ------------------------------ CONST ------------------------------------- #
 
 DISPLAY_SIZE = (1024, 768)
-FPS = 120
+FPS = 480
 DOUBLE = True
 BG_COLOR = pygame.Color(31, 29, 44)
 

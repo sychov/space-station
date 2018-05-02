@@ -118,9 +118,12 @@ class Map(sprite.Sprite):
         self.virtuals = self._get_map_from_layer(
                             layers[self.VIRTUALS_NUM], 'virtual')
 
+        self.tiles_height = len(self.map)
+        self.tiles_width = len(self.map[0])
+
         min_x = min_y = self.tile_size
-        width = self.tile_size * (len(self.map[0]) - 2)
-        height = self.tile_size * (len(self.map) - 2)
+        width = self.tile_size * (self.tiles_width - 2)
+        height = self.tile_size * (self.tiles_height - 2)
         self.rect = Rect(min_x, min_y, width, height)
 
 
@@ -164,12 +167,8 @@ class Map(sprite.Sprite):
         right_cell = (shift_x + self.display_width) / self.tile_size
         bottom_cell = (shift_y + self.display_height) / self.tile_size
 
-        for y in xrange(self.rect.height):
-            if y < top_cell or y > bottom_cell:
-                continue
-            for x in xrange(self.rect.width):
-                if x < left_cell or x > right_cell:
-                    continue
+        for y in xrange(top_cell, bottom_cell + 1):
+            for x in xrange(left_cell, right_cell + 1):
                 floor_tile = self.map[y][x].image
                 screen.blit(floor_tile, (x*size - shift_x, y*size - shift_y))
                 if self.objects[y][x].tile_number:
@@ -181,8 +180,8 @@ class Map(sprite.Sprite):
         """Return first cell on map, where player can spawn.
         """
         BOUNDS = 5
-        for y in xrange(len(self.map)):
-            for x in xrange(len(self.map[0])):
+        for y in xrange(self.tiles_height):
+            for x in xrange(self.tiles_width):
                  if self.map[y][x].is_walkable and \
                                                 self.objects[y][x].is_walkable:
                     return x * self.tile_size + BOUNDS, \
@@ -203,12 +202,8 @@ class Map(sprite.Sprite):
         right_cell = (shift_x + self.display_width) / self.tile_size
         bottom_cell = (shift_y + self.display_height) / self.tile_size
 
-        for y in xrange(self.rect.height):
-            if y < top_cell or y > bottom_cell:
-                continue
-            for x in xrange(self.rect.width):
-                if x < left_cell or x > right_cell:
-                    continue
+        for y in xrange(top_cell, bottom_cell + 1):
+            for x in xrange(left_cell, right_cell + 1):
                 if self.virtuals[y][x].tile_number:
                     tile = self.virtuals[y][x].image
                     screen.blit(tile, (x*size - shift_x, y*size - shift_y))
