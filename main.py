@@ -10,12 +10,13 @@ import pygame
 
 from game_map_classes import Map
 from char_classes import Player, NPC
+from objects_classes import Door
 
 
 # ------------------------------ CONST ------------------------------------- #
 
 DISPLAY_SIZE = (1024, 768)
-FPS = 480
+FPS = 90
 DOUBLE = True
 BG_COLOR = pygame.Color(31, 29, 44)
 
@@ -53,6 +54,8 @@ class Main(object):
                              scale=2 if DOUBLE else 1)
         self.player_coords = self.player.get_player_coords_on_screen(
                                                                   DISPLAY_SIZE)
+        self.objects = self.game_map.get_special_objects_list()
+        self.add_events_to_objects()
 
 
     def debug_outtext(self, msg, line=0):
@@ -61,6 +64,12 @@ class Main(object):
         """
         textsurface = self.debug_text.render(msg, False, DEBUG_COLOR)
         self.screen.blit(textsurface, (20, 20 + line * 25))
+
+
+    def add_events_to_objects(self):
+        for obj in self.objects:
+            if isinstance(obj, Door):
+                obj.add_activator([self.player], self.game_map.tile_size)
 
 
     def mainloop(self):

@@ -1,0 +1,28 @@
+{ "height":2,
+ "layers":[
+        {
+         "data":[94, 108, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "height":2,
+         "name":"Tile Layer 1",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":20,
+         "x":0,
+         "y":0
+        }],
+ "nextobjectid":1,
+ "orientation":"orthogonal",
+ "renderorder":"right-down",
+ "tiledversion":"1.0.3",
+ "tileheight":32,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "source":"tilesets\/test_tileset.tsx"
+        }],
+ "tilewidth":32,
+ "type":"map",
+ "version":1,
+ "width":20
+}

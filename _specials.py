@@ -24,6 +24,6 @@ SPECIAL_COLLISIONS = {
     135: {'dx': 5, 'dy': 0, 'd_width': 10, 'd_height': 12},    # tube 1
     134: {'dx': 5, 'dy': 0, 'd_width': 10, 'd_height': 12},    # tube 2
     133: {'dx': 5, 'dy': 0, 'd_width': 10, 'd_height': 12},    # tube 3
-    59:  {'dx': 0, 'dy': 0, 'd_width': 0, 'd_height': 15},     # red door
-    4:   {'dx': 0, 'dy': 0, 'd_width': 0, 'd_height': 15},     # blue door
+    94:  {'dx': 0, 'dy': 15, 'd_width': 0, 'd_height': 30},    # red door
+    108: {'dx': 0, 'dy': 15, 'd_width': 0, 'd_height': 30},    # blue door
 }
