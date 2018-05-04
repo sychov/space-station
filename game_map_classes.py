@@ -104,7 +104,7 @@ class Map(sprite.Sprite):
     TOP_NUM = 3
 
     # tiles indexies:
-    STOPPABLES_FLOOR = (15, 16, 17, 18)
+    STOPPABLES_FLOOR = (3, 2)
     WALKABLE_OBJ = 0
     DOORS = (94, 108)
 
