@@ -6,6 +6,8 @@
 ----------------------------------------------------------"""
 
 
+from _enums import *
+
 
 class Door(object):
     """ Simple door class.

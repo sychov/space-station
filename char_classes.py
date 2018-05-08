@@ -10,6 +10,7 @@ import pygame
 from pygame import sprite, draw
 from pygame import Surface, Rect, Color
 
+from _enums import *
 
 # ================================= CONST =================================== #
 
@@ -18,17 +19,17 @@ from pygame import Surface, Rect, Color
 CHAR_SIZE = 42
 DELAY = 100
 CHAR_INNER_COLLISION = {
-    'x': 10,
-    'y': 30,
-    'width': 22,
-    'height': 10
+    X: 10,
+    Y: 30,
+    WIDTH: 22,
+    HEIGHT: 10
 }
 BG_COLOR = Color("#888822")
 
 # ------------------------ OTHER -------------------------- #
 
-MOVE_SPEED = 2
-DIRECTIONS = ('top', 'right', 'bottom', 'left')
+MOVE_SPEED = 1
+DIRECTIONS = (UP, RIGHT, DOWN, LEFT)
 
 # ============================== CHAR CLASS ================================ #
 
@@ -45,15 +46,15 @@ class Char(sprite.Sprite):
         self.startX = start_x
         self.startY = start_y
         self.size = CHAR_SIZE * scale
-        self.direction = 'bottom'
+        self.direction = DOWN
         self.id_ = id_
 
         # rect of character inside sprite. Is left for debug purposes.
         self._inner_rect = Rect(
-            CHAR_INNER_COLLISION['x'] * scale,
-            CHAR_INNER_COLLISION['y'] * scale,
-            CHAR_INNER_COLLISION['width'] * scale,
-            CHAR_INNER_COLLISION['height'] * scale)
+            CHAR_INNER_COLLISION[X] * scale,
+            CHAR_INNER_COLLISION[Y] * scale,
+            CHAR_INNER_COLLISION[WIDTH] * scale,
+            CHAR_INNER_COLLISION[HEIGHT] * scale)
 
         # real rect of character
         self.rect = Rect(self.startX,
@@ -70,7 +71,7 @@ class Char(sprite.Sprite):
         self.animations = self._get_animation_set(tileset_path, DELAY, scale)
         for q in self.animations:
             self.animations[q].play()
-        self._draw()
+        self._redraw()
 
 
     def _get_animation_set(self, tileset_path, delay, scale):
@@ -94,13 +95,13 @@ class Char(sprite.Sprite):
                 tiles.append((tile, DELAY))
 
                 if tile_x == 0:
-                    animations['idle_' + phase_name] = pyganim.PygAnimation(
+                    animations[IDLE + phase_name] = pyganim.PygAnimation(
                                                                [(tile, DELAY)])
             animations[phase_name] = pyganim.PygAnimation(tiles)
         return animations
 
 
-    def _draw(self):
+    def _redraw(self):
         """Draw character sprite according to animation phase and direction.
         """
         if self.direction in self.animations:
@@ -124,7 +125,7 @@ class Char(sprite.Sprite):
     def _stop_moving(self):
         """Change moving animation to idle in the same direction.
         """
-        self.direction = 'idle_' + self.direction
+        self.direction = IDLE + self.direction
 
 
     def _collide_map(self, game_map):
@@ -134,13 +135,13 @@ class Char(sprite.Sprite):
         """
         # check borders of the map
         if not game_map.rect.contains(self.rect):
-            if self.direction == 'right':
+            if self.direction == RIGHT:
                 self.rect.right = game_map.rect.right
-            elif self.direction == 'left':
+            elif self.direction == LEFT:
                 self.rect.left = game_map.rect.left
-            elif self.direction == 'top':
+            elif self.direction == UP:
                 self.rect.top = game_map.rect.top
-            elif self.direction == 'bottom':
+            elif self.direction == DOWN:
                 self.rect.bottom = game_map.rect.bottom
             self._stop_moving()
             return True
@@ -148,35 +149,34 @@ class Char(sprite.Sprite):
         # check nearest tiles
         for floor_c, object_c in game_map.get_cells_to_verification(self.rect):
             if not floor_c.is_walkable and self.rect.colliderect(floor_c):
-                if self.direction == 'right':
+                if self.direction == RIGHT:
                     self.rect.right = floor_c.rect.left
-                elif self.direction == 'left':
+                elif self.direction == LEFT:
                     self.rect.left = floor_c.rect.right
-                elif self.direction == 'top':
+                elif self.direction == UP:
                     self.rect.top = floor_c.rect.bottom
-                elif self.direction == 'bottom':
+                elif self.direction == DOWN:
                     self.rect.bottom = floor_c.rect.top
                 self._stop_moving()
                 return True
 
             elif not object_c.is_walkable and self.rect.colliderect(object_c):
-                if self.direction == 'right':
+                if self.direction == RIGHT:
                     self.rect.right = object_c.rect.left
-                elif self.direction == 'left':
+                elif self.direction == LEFT:
                     self.rect.left = object_c.rect.right
-                elif self.direction == 'top':
+                elif self.direction == UP:
                     self.rect.top = object_c.rect.bottom
-                elif self.direction == 'bottom':
+                elif self.direction == DOWN:
                     self.rect.bottom = object_c.rect.top
                 self._stop_moving()
                 return True
-
 
         return False
 
 
     def __repr__(self):
-        """
+        """Simple representation.
         """
         return 'Char sprite set: %s' % self.id_
 
@@ -187,29 +187,25 @@ class Char(sprite.Sprite):
 class Player(Char):
     """Player character.
     """
-    def __init__(self, start_x, start_y, tileset_path, scale):
+    def __init__(self, start_x, start_y, tileset_path, scale, display_size):
         """
         """
         super(Player, self).__init__(
                                start_x, start_y, tileset_path, scale, 'Player')
         self.camera_shift_x = self.rect.width / 2
         self.camera_shift_y = self.rect.height / 2
-        self.debug = ''
+        self.debug_message = ''
+
+        x = (display_size[0] - self._inner_rect.width) / 2 - self._inner_rect.x
+        y = (display_size[1] - self._inner_rect.height)/ 2 - self._inner_rect.y
+        self.screen_coords = x, y
 
 
     def get_camera_pos(self):
-        """Get linked to player camera coords.
+        """Get linked to player camera coords (center of the screen).
         """
         x = self.rect.x + self.camera_shift_x
         y = self.rect.y + self.camera_shift_y
-        return x, y
-
-
-    def get_player_coords_on_screen(self, display_size):
-        """Get linked to player camera coords.
-        """
-        x = (display_size[0] - self._inner_rect.width) / 2 - self._inner_rect.x
-        y = (display_size[1] - self._inner_rect.height)/ 2 - self._inner_rect.y
         return x, y
 
 
@@ -218,22 +214,26 @@ class Player(Char):
         """
         if direction in DIRECTIONS:
             self.direction = direction
-            if direction == 'left':
+            if direction == LEFT:
                 self.rect.x -= MOVE_SPEED
-            elif direction == 'right':
+            elif direction == RIGHT:
                 self.rect.x += MOVE_SPEED
-            if direction == 'top':
+            if direction == UP:
                 self.rect.y -= MOVE_SPEED
-            elif direction == 'bottom':
+            elif direction == DOWN:
                 self.rect.y += MOVE_SPEED
 
-        elif direction == 'idle':
+        elif direction == IDLE:
             if self.direction in DIRECTIONS:
                 self._stop_moving()
 
         self._collide_map(game_map)
-        self._draw()
+        self._redraw()
 
+    def draw(self, screen):
+        """Draw current player animation phase on screen
+        """
+        screen.blit(self.image, self.screen_coords)
 
 
 # ============================ NPC CLASS ================================= #

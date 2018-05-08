@@ -11,14 +11,13 @@ import pygame
 from game_map_classes import Map
 from char_classes import Player, NPC
 from objects_classes import Door
-
+from _enums import *
 
 # ------------------------------ CONST ------------------------------------- #
 
 DISPLAY_SIZE = (1024, 768)
-FPS = 90
+FPS = 600
 DOUBLE = True
-BG_COLOR = pygame.Color(31, 29, 44)
 
 DEBUG = True
 DEBUG_COLOR = pygame.Color(0, 250, 0)
@@ -34,7 +33,6 @@ class Main(object):
         """
         pygame.init()
         self.screen = pygame.display.set_mode(DISPLAY_SIZE)
-        self.screen.fill(BG_COLOR)
 
         pygame.font.init()
         self.debug_text = pygame.font.SysFont('Comic Sans MS', 20)
@@ -48,14 +46,13 @@ class Main(object):
             scale=2 if DOUBLE else 1)
 
         x, y = self.game_map.get_first_walkable_cell_coords()
-        self.player = Player(x,
-                             y,
-                             'chars/captain.png',
-                             scale=2 if DOUBLE else 1)
-        self.player_coords = self.player.get_player_coords_on_screen(
-                                                                  DISPLAY_SIZE)
+        self.player = Player(x, y, 'chars/captain.png',
+                             scale=2 if DOUBLE else 1,
+                             display_size=DISPLAY_SIZE)
         self.objects = self.game_map.get_special_objects_list()
         self.add_events_to_objects()
+
+        self.game_map.make_bottom_buffer(self.player.get_camera_pos())
 
 
     def debug_outtext(self, msg, line=0):
@@ -113,27 +110,26 @@ class Main(object):
 
             # keys handling
             if key_bottom:
-                direction = 'bottom'
+                direction = DOWN
             elif key_top:
-                direction = 'top'
+                direction = UP
             elif key_left:
-                direction = 'left'
+                direction = LEFT
             elif key_right:
-                direction = 'right'
+                direction = RIGHT
             else:
-                direction = 'idle'
+                direction = IDLE
 
             self.player.update(direction, self.game_map)
-            camera_x, camera_y = self.player.get_camera_pos()
-            self.screen.fill(BG_COLOR)
-            self.game_map.draw_bottom(self.screen, (camera_x, camera_y))
-            self.screen.blit(self.player.image, self.player_coords)
-            self.game_map.draw_top(self.screen, (camera_x, camera_y))
+            camera_position = self.player.get_camera_pos()
+            self.game_map.draw_bottom(self.screen, camera_position)
+            self.player.draw(self.screen)
+            self.game_map.draw_top(self.screen, camera_position)
 
             if DEBUG:
                 debug_msg = '%s %s fps = %d' % (
-                                self.player.debug,
-                                self.game_map.debug,
+                                self.player.debug_message,
+                                self.game_map.debug_message,
                                 self.timer.get_fps())
                 self.debug_outtext(debug_msg, 0)
 
