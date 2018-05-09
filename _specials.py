@@ -15,14 +15,22 @@ SPECIAL_COLLISIONS = {
     263: {X: 0,  Y: 0,  WIDTH: 25, HEIGHT: 0},     # table 1 right
     262: {X: 25, Y: 0,  WIDTH: 0,  HEIGHT: 0},     # table 2 left
     264: {X: 0,  Y: 0,  WIDTH: 25, HEIGHT: 0},     # table 2 right
-    224: {X: 17, Y: 0,  WIDTH: 0,  HEIGHT: 0},     # shoverC left
-    225: {X: 0,  Y: 0,  WIDTH: 17, HEIGHT: 0},     # shoverC right
+    224: {X: 17, Y: 0,  WIDTH: 0,  HEIGHT: 10},    # shoverC left
+    225: {X: 0,  Y: 0,  WIDTH: 17, HEIGHT: 10},    # shoverC right
+    307: {X: 13, Y: 5,  WIDTH: 0,  HEIGHT: 15},    # red bar left
+    308: {X: 0,  Y: 5,  WIDTH: 13, HEIGHT: 15},    # red bar right
     222: {X: 0,  Y: 0,  WIDTH: 0,  HEIGHT: 12},    # high locker
     223: {X: 0,  Y: 0,  WIDTH: 0,  HEIGHT: 12},    # low locker
+    301: {X: 0,  Y: 0,  WIDTH: 0,  HEIGHT: 10},    # metal locker
     183: {X: 18, Y: 5,  WIDTH: 35, HEIGHT: 15},    # flower 1
     184: {X: 18, Y: 5,  WIDTH: 35, HEIGHT: 15},    # flower 2
     181: {X: 9,  Y: 0,  WIDTH: 18, HEIGHT: 12},    # cooler
+
 }
+
+# beds (all bounds are equal)
+for q in (351, 352, 371, 372):
+    SPECIAL_COLLISIONS[q] = {X: 10, Y: 5,  WIDTH: 20, HEIGHT: 10}
 
 # doors (all bounds are equal)
 for q in (421, 422, 423, 424, 401, 402, 403, 404):
@@ -31,6 +39,10 @@ for q in (421, 422, 423, 424, 401, 402, 403, 404):
 # colored round puffics (all bounds are equal)
 for q in (242, 243, 244, 245):
     SPECIAL_COLLISIONS[q] = {X: 15, Y: 10, WIDTH: 30, HEIGHT: 20}
+
+# colored small tables (all bounds are equal)
+for q in (283, 284, 285, 303, 304, 305):
+    SPECIAL_COLLISIONS[q] = {X: 0, Y: 0, WIDTH: 0, HEIGHT: 12}
 
 # computer (all bounds are equal)
 for q in (381, 382, 383):
