@@ -16,7 +16,7 @@ from _enums import *
 # ------------------------------ CONST ------------------------------------- #
 
 DISPLAY_SIZE = (1024, 768)
-FPS = 600
+FPS = 90
 DOUBLE = True
 
 DEBUG = True

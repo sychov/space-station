@@ -28,7 +28,7 @@ BG_COLOR = Color("#888822")
 
 # ------------------------ OTHER -------------------------- #
 
-MOVE_SPEED = 1
+MOVE_SPEED = 2
 DIRECTIONS = (UP, RIGHT, DOWN, LEFT)
 
 # ============================== CHAR CLASS ================================ #

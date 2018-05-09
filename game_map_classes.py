@@ -151,7 +151,7 @@ class Map():
         self.rect = Rect(self.tile_size, self.tile_size, width, height)
 
 
-    def make_bottom_buffer(self, camera_coords, direction=None):
+    def make_bottom_buffer(self, camera_coords, direction=None, shift=0):
         """Draw part of map, screen + buffer zone (+ 1 screen in every
         direction). Bottom layers only (floor, floor decor and bottom object).
         This buffer will be used later as a cache of rendered map.
@@ -179,7 +179,7 @@ class Map():
         if direction == RIGHT:
             left_cell = (left_x + self.display_width) / size
             start_cell_x = self.display_width * 2 / size
-            buffer_surface.scroll(dx=-self.display_width, dy=0)
+            buffer_surface.scroll(dx=-self.display_width - shift, dy=0)
         else:
             left_cell = (left_x - self.display_width) / size
             start_cell_x = 0
@@ -187,7 +187,7 @@ class Map():
         # LEFT scroll features
         if direction == LEFT:
             right_cell = left_x / size
-            buffer_surface.scroll(dx=self.display_width, dy=0)
+            buffer_surface.scroll(dx=self.display_width - shift, dy=0)
         else:
             right_cell = (left_x + 2 * self.display_width) / size
 
@@ -195,7 +195,7 @@ class Map():
         if direction == DOWN:
             top_cell = (top_y + self.display_height) / size
             start_cell_y = self.display_height * 2 / size
-            buffer_surface.scroll(dx=0, dy=-self.display_height)
+            buffer_surface.scroll(dx=0, dy=-self.display_height - shift)
         else:
             top_cell = (top_y - self.display_height) / size
             start_cell_y = 0
@@ -203,7 +203,7 @@ class Map():
         # UP scroll features
         if direction == UP:
             bottom_cell = top_y / size
-            buffer_surface.scroll(dx=0, dy=self.display_height)
+            buffer_surface.scroll(dx=0, dy=self.display_height - shift)
         else:
             bottom_cell = (top_y + 2 * self.display_height) / size
 
@@ -243,16 +243,20 @@ class Map():
         shift_y = camera_y - old_camera_y
 
         if shift_x > self.display_width:
-            self.make_bottom_buffer(camera_coords, direction=RIGHT)
+            outline = shift_x - self.display_width
+            self.make_bottom_buffer(camera_coords, RIGHT, outline)
             return self.draw_bottom(screen, camera_coords)
         elif shift_x < -self.display_width:
-            self.make_bottom_buffer(camera_coords, direction=LEFT)
+            outline = shift_x + self.display_width
+            self.make_bottom_buffer(camera_coords, LEFT, outline)
             return self.draw_bottom(screen, camera_coords)
         elif shift_y > self.display_height:
-            self.make_bottom_buffer(camera_coords, direction=DOWN)
+            outline = shift_y - self.display_height
+            self.make_bottom_buffer(camera_coords, DOWN, outline)
             return self.draw_bottom(screen, camera_coords)
         elif shift_y < -self.display_height:
-            self.make_bottom_buffer(camera_coords, direction=UP)
+            outline = shift_y + self.display_height
+            self.make_bottom_buffer(camera_coords, UP, outline)
             return self.draw_bottom(screen, camera_coords)
 
         surface = self.bottom_buffer[SURFACE]
