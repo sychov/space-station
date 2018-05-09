@@ -25,7 +25,12 @@ SPECIAL_COLLISIONS = {
     183: {X: 18, Y: 5,  WIDTH: 35, HEIGHT: 15},    # flower 1
     184: {X: 18, Y: 5,  WIDTH: 35, HEIGHT: 15},    # flower 2
     181: {X: 9,  Y: 0,  WIDTH: 18, HEIGHT: 12},    # cooler
+    367: {X: 4,  Y: 5,  WIDTH: 8, HEIGHT: 15},     # yellow chair
 
+    348: {X: 15,  Y: 5,  WIDTH: 15, HEIGHT: 10},   # right sofa top
+    368: {X: 15,  Y: 5,  WIDTH: 15, HEIGHT: 10},   # right sofa bottom
+    349: {X: 0,  Y: 5,  WIDTH: 15, HEIGHT: 10},    # left sofa top
+    369: {X: 0,  Y: 5,  WIDTH: 15, HEIGHT: 10},    # left sofa bottom
 }
 
 # beds (all bounds are equal)
