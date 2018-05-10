@@ -49,7 +49,8 @@ TILES_COLLISIONS = {
 }
 
 # beds (all bounds are equal)
-for q in (351, 352, 371, 372):
+for q in (351, 352, 353, 354, 355, 356, 357, 358,
+                                     371, 372, 373, 374, 375, 376, 377, 378,):
     TILES_COLLISIONS[q] = {X: 5, Y: 2,  WIDTH: 10, HEIGHT: 5}
 
 # doors (all bounds are equal)

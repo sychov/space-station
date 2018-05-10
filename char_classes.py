@@ -165,7 +165,7 @@ class Player(Char):
     def __init__(self, start_x, start_y, tileset_path, scale, display_size):
         """ Init.
 
-            start_x, start_y:       starting char's coords
+            start_x, start_y:       starting char's coords on global map
             tileset_path:           chars tileset file path
             scale:                  game tile's scale param (1 or 2)
             display_size:           (<screen width>, <screen height>)

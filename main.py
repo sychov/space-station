@@ -21,7 +21,7 @@ MAP_PATH = 'map.json'
 TILESET_PATH = "tilesets/TILES.png"
 CHARACTER_TILESET = 'chars/captain.png'
 
-DEBUG = False
+DEBUG = True
 DEBUG_COLOR = pygame.Color(0, 250, 0)
 
 # ================================ MAIN ==================================== #
