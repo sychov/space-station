@@ -15,7 +15,7 @@ FileName=$[Project-Path]_enums.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node1]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]_specials.py
+FileName=$[Project-Path]_tile_collisions.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node2]
 ClassName=TProjectFileNode
@@ -23,18 +23,22 @@ FileName=$[Project-Path]char_classes.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node3]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]game_map_classes.py
+FileName=$[Project-Path]game_map.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node4]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]main.py
+FileName=$[Project-Path]layer_cell.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node5]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]main.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node6]
 ClassName=TProjectFileNode
 FileName=$[Project-Path]objects_classes.py
 
 [Project\ChildNodes\Node0\ChildNodes]
-Count=6
+Count=7
 
 [Project\ChildNodes\Node1]
 ClassName=TProjectRunConfiguationsNode

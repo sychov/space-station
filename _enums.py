@@ -2,7 +2,7 @@
 """----------------------------------------------------------
  Author:      alexey.sychov@gameloft.com
  Created:     08-05-2018
- Description: Dumb constants (like enums)
+ Description: Dumb enum constants (like C-type enums)
 ----------------------------------------------------------"""
 
 
