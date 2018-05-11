@@ -10,6 +10,7 @@ import pygame
 
 from game_map import Map
 from char_classes import Player
+from hud import Hud
 from _enums import *
 
 # ------------------------------ CONST ------------------------------------- #
@@ -20,6 +21,9 @@ DOUBLE = True
 MAP_PATH = 'map.json'
 TILESET_PATH = "tilesets/TILES.png"
 CHARACTER_TILESET = 'chars/captain.png'
+
+HUD_START_COORDS = (-13, 596, 497, 183)
+
 
 DEBUG = True
 DEBUG_COLOR = pygame.Color(0, 250, 0)
@@ -38,7 +42,6 @@ class Main(object):
         self.screen = pygame.display.set_mode(DISPLAY_SIZE)
 
         if DEBUG:
-            pygame.font.init()
             self.debug_text = pygame.font.SysFont('Comic Sans MS', 20)
 
         self.timer = pygame.time.Clock()
@@ -55,11 +58,15 @@ class Main(object):
                              display_size=DISPLAY_SIZE)
         self.game_map.make_bottom_buffer(self.player.get_camera_pos())
 
+        self.hud = Hud(HUD_START_COORDS)
+
 
     def mainloop(self):
         """Start game main loop.
         """
         key_right = key_left = key_top = key_bottom = False
+        dragging = resizing = False
+        mouse_pressed_pos = (0, 0)
 
         while True:
             self.timer.tick(FPS)
@@ -73,6 +80,21 @@ class Main(object):
                     print 'Exit'
                     return self
 
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if self.hud.rect.collidepoint(event.pos):
+                        if self.hud.is_resize_button_pressed(event.pos):
+                            # resize HUD
+                            resizing = True
+                        else:
+                            # move HUD
+                            dragging = True
+                        mouse_pressed_pos = event.pos
+
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    if dragging or resizing:
+                        dragging = False
+                        resizing = False
+
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
                         key_left = True
@@ -82,6 +104,8 @@ class Main(object):
                         key_top = True
                     elif event.key == pygame.K_DOWN:
                         key_bottom = True
+                    elif event.key == pygame.K_d:
+                        print self.hud.rect
                     elif event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         print 'Exit'
@@ -110,6 +134,20 @@ class Main(object):
             else:
                 direction = IDLE
 
+            # ~ 3. HUD dragging handling ~
+
+            if dragging or resizing:
+                current_mouse_pos = pygame.mouse.get_pos()
+                if current_mouse_pos != mouse_pressed_pos:
+                    dx = current_mouse_pos[0] - mouse_pressed_pos[0]
+                    dy = current_mouse_pos[1] - mouse_pressed_pos[1]
+                    if dragging:
+                        self.hud.move(dx, dy)
+                    elif resizing:
+                        self.hud.resize(dx, dy)
+                    mouse_pressed_pos = current_mouse_pos
+
+
             # ~ 3. Game logics ~
 
             self.player.update(direction, self.game_map)
@@ -118,14 +156,18 @@ class Main(object):
             self.player.draw(self.screen)
             self.game_map.draw_top_layer(self.screen, camera_position)
 
+            # ~ 4. Interface drawing ~
+
+            self.hud.draw(self.screen)
+
+            # ~ 5. Display updating ~
+
             if DEBUG:
                 debug_msg = '%s %s fps = %d' % (
                                 self.player.debug_message,
                                 self.game_map.debug_message,
                                 self.timer.get_fps())
                 self.debug_outtext(debug_msg, 0)
-
-            # ~ 4. Display updating ~
 
             pygame.display.update()
 

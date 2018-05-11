@@ -67,6 +67,7 @@ class LayerCell(object):
         cls.SIZE = size * scale
         cls._is_class_initialized = True
         cls._scale = scale
+        del image
 
 
     def __init__(self, x, y, tile_number, is_walkable=True):
