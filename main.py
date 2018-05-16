@@ -16,7 +16,7 @@ from _enums import *
 # ------------------------------ CONST ------------------------------------- #
 
 DISPLAY_SIZE = (1024, 768)
-FPS = 93
+FPS = 183
 DOUBLE = True
 MAP_PATH = 'map.json'
 TILESET_PATH = "tilesets/TILES.png"
