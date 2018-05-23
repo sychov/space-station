@@ -6,106 +6,73 @@
 ----------------------------------------------------------"""
 
 
-from collections import deque
-
 import pygame
 from pygame import Rect, Surface, Color
 
-from _enums import *
+from source.references._enums import *
 
 
-# ------------------------------ CONST ------------------------------------- #
+# ========================== Frame class ============================== #
 
-##HUD_TILESET_PATH = "interface/chat3.png"
-##
-##HUD_PARTS_RECTS = {
-##    TOP_LEFT:       Rect(0, 0, 60, 54),
-##    TOP_RIGHT:      Rect(140, 0, 85, 49),
-##    BOTTOM_LEFT:    Rect(0, 69, 50, 71),
-##    BOTTOM_RIGHT:   Rect(185, 67, 40, 73),
-##    UP:             Rect(62, 0, 51, 22),
-##    DOWN:           Rect(62, 124, 51, 16),
-##    LEFT:           Rect(0, 55, 19, 16),
-##    RIGHT:          Rect(204, 47, 21, 24),
-##}
-##
-##HUD_MAX_SIZE = (700, 700)
-##HUD_MIN_SIZE = (300, 130)
-##HUD_DEQUE_MAX_LEN = 10
-##HUD_BACKGROUND_COLOR = Color(0, 0, 0)
-##HUD_TEXT_COLORS = {}
-##HUD_RESIZE_BUTTON_SIZE = 20
-##
-##HUD_PADDING = 25
-##HUD_FONT = ('Comic Sans MS', 15)
-
-HUD_TILESET_PATH = "interface/chat_border.png"
-
-HUD_PARTS_RECTS = {
-    TOP_LEFT:       Rect(0, 0, 78, 35),
-    TOP_RIGHT:      Rect(219, 0, 45, 71),
-    BOTTOM_LEFT:    Rect(0, 137, 61, 61),
-    BOTTOM_RIGHT:   Rect(163, 134, 101, 64),
-    UP:             Rect(77, 0, 142, 7),
-    DOWN:           Rect(62, 192, 102, 6),
-    LEFT:           Rect(0, 34, 5, 104),
-    RIGHT:          Rect(258, 69, 6, 66),
-}
-
-HUD_MAX_SIZE = (700, 600)
-HUD_MIN_SIZE = (300, 135)
-HUD_DEQUE_MAX_LEN = 10
-HUD_BACKGROUND_COLOR = Color(10, 10, 10)
-HUD_TEXT_COLORS = {}
-HUD_RESIZE_BUTTON_SIZE = 20
-
-HUD_PADDING = 18
-HUD_FONT = ('Lucida Console', 15)
-
-# ========================== HUD monitor class ============================== #
-
-class InterfaceFrame(object):
+class Frame(object):
+    """Parent frame class.
+    Used as base to make any custom windows in-game.
     """
-    """
-    def __init__(self, rect):
+    def __init__(self, rect, tileset_path, parts_rects, max_size, min_size,
+                                                            bg_color, padding):
         """ Load tileset for a game HUD.
         Create Hud instance with default settings of tileset and limits.
 
-            rect:  x, y, width, height (on global screen)
+            rect:           x, y, width, height (position on global screen);
+            tileset_path:   full path to tileset file
+            parts_rects:    dictionary, where keys are directions and corners
+                            enums (UP, BOTTOM_LEFT, etc), and values are
+                            Rect instances
+            max_size:       x, y
+            min_size:       x, y
+            bg_color:       Color instance
+            padding:        int, in pixels, both for X and Y paddings
         """
-        image = pygame.image.load(HUD_TILESET_PATH)
-        image_width, image_height = image.get_size()
+        # 1. ~ Init variables ~
+
+        self.parts_rects = parts_rects
+        self.rect = Rect(rect)
+        self.max_size = max_size
+        self.min_size = min_size
+        self.padding = padding
+        self._background_color = bg_color
+
+        # "_background_source" used as hidden canvas of maximum size, where
+        # borders and background are drawn
+        self._background_source = Surface(max_size)
+
+        # "_background" used as a part of "_background_source", that is
+        # actually drawn on screen
+        self._background = None
+
+        # 2. ~ Load tiles ~
 
         self._tileset = {}
-        for q in (TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, UP,
-                                                            DOWN, LEFT, RIGHT):
-            _rect = HUD_PARTS_RECTS[q]
+        image = pygame.image.load(tileset_path)
+        for q in (UP, DOWN, LEFT, RIGHT,
+                  TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT):
+            _rect = self.parts_rects[q]
             self._tileset[q] = image.subsurface(_rect).convert()
 
-        self._background_source = Surface(HUD_MAX_SIZE)
+        # 3. ~ Make background ~
 
-        self._background = None
-        self._messages = deque()
-        self._background_color = HUD_BACKGROUND_COLOR
-
-        self.rect = Rect(rect)
-        min_x, min_y = HUD_MIN_SIZE
-        max_x, max_y = HUD_MAX_SIZE
+        min_x, min_y = self.min_size
+        max_x, max_y = self.max_size
         self.rect.width = min(max(self.rect.width, min_x), max_x)
         self.rect.height = min(max(self.rect.height, min_y), max_y)
-
-
         self._redraw_background()
-
-        self._font = pygame.font.SysFont(*HUD_FONT)
-        self._update_text()
 
 
     def resize(self, dx, dy):
+        """Change size of the frame relatevly on deltas of X and Y.
         """
-        """
-        min_x, min_y = HUD_MIN_SIZE
-        max_x, max_y = HUD_MAX_SIZE
+        min_x, min_y = self.min_size
+        max_x, max_y = self.max_size
 
         new_width = min(max(self.rect.width + dx, min_x), max_x)
         new_height = min(max(self.rect.height + dy, min_y), max_y)
@@ -118,39 +85,21 @@ class InterfaceFrame(object):
 
 
     def move(self, dx, dy):
-        """
+        """Move frame relatevly on deltas of X and Y.
         """
         self.rect.x += dx
         self.rect.y += dy
 
 
-    def output(self, msg):
-        """
-        """
-        pass
-
-
     def draw(self, screen):
-        """
+        """Draw frame on the screen.
         """
         screen.blit(self._background, self.rect)
 
 
-    def is_resize_corner_selected(self, coords):
-        """
-        """
-        x, y = coords
-        if x > self.rect.x + self.rect.width - HUD_RESIZE_BUTTON_SIZE and \
-           x < self.rect.x + self.rect.width and \
-           y > self.rect.y + self.rect.height - HUD_RESIZE_BUTTON_SIZE and \
-           y < self.rect.y + self.rect.height:
-            return True
-        else:
-            return False
-
-
     def _redraw_background(self):
-        """
+        """Draw background on "_background_source" surface.
+        Set "_background" attribute to actual part of it.
         """
         width = self.rect.width
         height = self.rect.height
@@ -159,10 +108,10 @@ class InterfaceFrame(object):
         surface.fill(self._background_color)
 
         # draw top side of the HUD
-        hud_top_side_len = width - HUD_PARTS_RECTS[TOP_LEFT].width \
-                                             - HUD_PARTS_RECTS[TOP_RIGHT].width
+        hud_top_side_len = width - self.parts_rects[TOP_LEFT].width \
+                                            - self.parts_rects[TOP_RIGHT].width
         plank_width, _ = self._tileset[UP].get_size()
-        x = HUD_PARTS_RECTS[TOP_LEFT].width
+        x = self.parts_rects[TOP_LEFT].width
         y = 0
         while hud_top_side_len > 0:
             surface.blit(self._tileset[UP], (x, y))
@@ -170,10 +119,10 @@ class InterfaceFrame(object):
             hud_top_side_len -= plank_width
 
         # draw bottom side of the HUD
-        hud_bottom_side_len = width - HUD_PARTS_RECTS[BOTTOM_LEFT].width \
-                                          - HUD_PARTS_RECTS[BOTTOM_RIGHT].width
+        hud_bottom_side_len = width - self.parts_rects[BOTTOM_LEFT].width \
+                                         - self.parts_rects[BOTTOM_RIGHT].width
         plank_width, _ = self._tileset[DOWN].get_size()
-        x = HUD_PARTS_RECTS[BOTTOM_LEFT].width
+        x = self.parts_rects[BOTTOM_LEFT].width
         y = height - self._tileset[DOWN].get_size()[1]
         while hud_bottom_side_len > 0:
             surface.blit(self._tileset[DOWN], (x, y))
@@ -181,10 +130,10 @@ class InterfaceFrame(object):
             hud_bottom_side_len -= plank_width
 
         # draw left side of the HUD
-        hud_left_side_len = height - HUD_PARTS_RECTS[TOP_LEFT].height \
-                                          - HUD_PARTS_RECTS[BOTTOM_LEFT].height
+        hud_left_side_len = height - self.parts_rects[TOP_LEFT].height \
+                                         - self.parts_rects[BOTTOM_LEFT].height
         _, plank_height = self._tileset[LEFT].get_size()
-        y = HUD_PARTS_RECTS[TOP_LEFT].height
+        y = self.parts_rects[TOP_LEFT].height
         x = 0
         while hud_left_side_len > 0:
             surface.blit(self._tileset[LEFT], (x, y))
@@ -192,10 +141,10 @@ class InterfaceFrame(object):
             hud_left_side_len -= plank_height
 
         # draw right side of the HUD
-        hud_right_side_len = height - HUD_PARTS_RECTS[TOP_RIGHT].height \
-                                         - HUD_PARTS_RECTS[BOTTOM_RIGHT].height
+        hud_right_side_len = height - self.parts_rects[TOP_RIGHT].height \
+                                        - self.parts_rects[BOTTOM_RIGHT].height
         _, plank_height = self._tileset[RIGHT].get_size()
-        y = HUD_PARTS_RECTS[TOP_RIGHT].height
+        y = self.parts_rects[TOP_RIGHT].height
         x = width - self._tileset[RIGHT].get_size()[0]
         while hud_right_side_len > 0:
             surface.blit(self._tileset[RIGHT], (x, y))
@@ -207,7 +156,7 @@ class InterfaceFrame(object):
         surface.blit(self._tileset[TOP_RIGHT],
                            (width - self._tileset[TOP_RIGHT].get_size()[0], 0))
         surface.blit(self._tileset[BOTTOM_LEFT],
-                            (0, height - HUD_PARTS_RECTS[BOTTOM_LEFT].height))
+                            (0, height - self.parts_rects[BOTTOM_LEFT].height))
         surface.blit(self._tileset[BOTTOM_RIGHT],
                     (width - self._tileset[BOTTOM_RIGHT].get_size()[0],
                      height - self._tileset[BOTTOM_RIGHT].get_size()[1]))
@@ -216,23 +165,7 @@ class InterfaceFrame(object):
                                      (0, 0, self.rect.width, self.rect.height))
 
 
-    def _update_text(self):
-        """
-        """
-        width, height = self._background.get_size()
-        background = self._background.subsurface(
-                            (HUD_PADDING,
-                             HUD_PADDING,
-                             width - HUD_PADDING,
-                             height - HUD_PADDING))
-        textsurface = self._font.render('Hello world!',
-                                        False,
-                                        Color(250, 250, 0),
-                                        HUD_BACKGROUND_COLOR)
-        background.blit(textsurface, (0, 0))
-
-
     def __repr__(self):
         """Simple representation.
         """
-        return 'Chat HUD class instance.'
+        return 'Frame class instance.'

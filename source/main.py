@@ -10,7 +10,7 @@ import pygame
 
 from game_map import Map
 from char_classes import Player
-from interface.log import Hud
+from interface.log import Log
 from references._enums import *
 
 # ------------------------------ CONST ------------------------------------- #
@@ -58,7 +58,7 @@ class Main(object):
                              display_size=DISPLAY_SIZE)
         self.game_map.make_bottom_buffer(self.player.get_camera_pos())
 
-        self.hud = Hud(HUD_START_COORDS)
+        self.log_frame = Log(HUD_START_COORDS)
 
 
     def mainloop(self):
@@ -81,8 +81,8 @@ class Main(object):
                     return self
 
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if self.hud.rect.collidepoint(event.pos):
-                        if self.hud.is_resize_corner_selected(event.pos):
+                    if self.log_frame.rect.collidepoint(event.pos):
+                        if self.log_frame.is_resize_corner_selected(event.pos):
                             # resize HUD
                             resizing = True
                         else:
@@ -105,7 +105,7 @@ class Main(object):
                     elif event.key == pygame.K_DOWN:
                         key_bottom = True
                     elif event.key == pygame.K_d:
-                        print self.hud.rect
+                        print self.log_frame.rect
                     elif event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         print 'Exit'
@@ -142,9 +142,9 @@ class Main(object):
                     dx = current_mouse_pos[0] - mouse_pressed_pos[0]
                     dy = current_mouse_pos[1] - mouse_pressed_pos[1]
                     if dragging:
-                        self.hud.move(dx, dy)
+                        self.log_frame.move(dx, dy)
                     elif resizing:
-                        self.hud.resize(dx, dy)
+                        self.log_frame.resize(dx, dy)
                     mouse_pressed_pos = current_mouse_pos
 
 
@@ -158,7 +158,7 @@ class Main(object):
 
             # ~ 4. Interface drawing ~
 
-            self.hud.draw(self.screen)
+            self.log_frame.draw(self.screen)
 
             # ~ 5. Display updating ~
 

@@ -11,6 +11,7 @@ from pygame import Rect, Surface, Color
 
 from references._enums import *
 
+from frame import Frame
 
 # ------------------------------ CONST ------------------------------------- #
 
@@ -54,89 +55,62 @@ HUD_MAX_SIZE = (700, 600)
 HUD_MIN_SIZE = (300, 135)
 HUD_DEQUE_MAX_LEN = 10
 HUD_BACKGROUND_COLOR = Color(10, 10, 10)
-HUD_TEXT_COLORS = {}
+HUD_TEXT_COLOR = Color(230, 230, 0)
 HUD_RESIZE_BUTTON_SIZE = 20
 
 HUD_PADDING = 18
 HUD_FONT = ('Lucida Console', 15)
+HUD_LINE_SPACING = 2
 
 # ========================== HUD monitor class ============================== #
 
-class Hud(object):
-    """
+class Log(Frame):
+    """HUD log class.
+    It is made for logging in-game events in text form for player info.
     """
     def __init__(self, rect):
-        """ Load tileset for a game HUD.
-        Create Hud instance with default settings of tileset and limits.
-
+        """ Load tileset for a game HUD log.
+        Create Log instance with default settings of tileset and limits.
             rect:  x, y, width, height (on global screen)
         """
-        image = pygame.image.load(HUD_TILESET_PATH)
-        image_width, image_height = image.get_size()
-
-
-        self._tileset = {}
-        for q in (TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, UP,
-                                                            DOWN, LEFT, RIGHT):
-            _rect = HUD_PARTS_RECTS[q]
-            self._tileset[q] = image.subsurface(_rect).convert()
-
-        self._background_source = Surface(HUD_MAX_SIZE)
-
-        self._background = None
-        self._messages = deque()
-        self._background_color = HUD_BACKGROUND_COLOR
-
-        self.rect = Rect(rect)
-        min_x, min_y = HUD_MIN_SIZE
-        max_x, max_y = HUD_MAX_SIZE
-        self.rect.width = min(max(self.rect.width, min_x), max_x)
-        self.rect.height = min(max(self.rect.height, min_y), max_y)
-
-
-        self._redraw_background()
-
+        super(Log, self).__init__(
+            rect=rect,
+            tileset_path=HUD_TILESET_PATH,
+            parts_rects=HUD_PARTS_RECTS,
+            max_size=HUD_MAX_SIZE,
+            min_size=HUD_MIN_SIZE,
+            bg_color=HUD_BACKGROUND_COLOR,
+            padding=HUD_PADDING
+        )
+        self._messages = deque(maxlen=HUD_DEQUE_MAX_LEN)
         self._font = pygame.font.SysFont(*HUD_FONT)
-        self._update_text()
+
+        # TO DO: DEL
+        self._messages.extend(
+            q.strip() for q in
+            u'''Welcome to the printables page!
+            Here you’ll find various printouts that I’ve made for games.
+            For the non-word-list printables down below.
+            If you click the image, it will take you to the printable.
+            If you click the words under the image, it will take you to.
+            Post with instructions on how to use the printable.
+            Hopefully this page can help you find the game you’re looking for.
+            Happy playing!'''.splitlines()
+        )
+        # /TO DO: DEL
+
+        self._update_text_bottomed()
 
 
-    def resize(self, dx, dy):
+    def output(self, msg, tag=None):
+        """Output new message.
         """
-        """
-        min_x, min_y = HUD_MIN_SIZE
-        max_x, max_y = HUD_MAX_SIZE
-
-        new_width = min(max(self.rect.width + dx, min_x), max_x)
-        new_height = min(max(self.rect.height + dy, min_y), max_y)
-
-        if (self.rect.width != new_width or self.rect.height != new_height):
-            self.rect.width = new_width
-            self.rect.height = new_height
-            self._redraw_background()
-            self._update_text()
+        self._messages.appendleft((msg, tag))
+        self._update_text_bottomed()
 
 
-    def move(self, dx, dy):
-        """
-        """
-        self.rect.x += dx
-        self.rect.y += dy
-
-
-    def output(self, msg):
-        """
-        """
-        pass
-
-
-    def draw(self, screen):
-        """
-        """
-        screen.blit(self._background, self.rect)
-
-
-    def is_resize_button_pressed(self, coords):
-        """
+    def is_resize_corner_selected(self, coords):
+        """Check, if "coords" are in resize corner area.
         """
         x, y = coords
         if x > self.rect.x + self.rect.width - HUD_RESIZE_BUTTON_SIZE and \
@@ -148,91 +122,62 @@ class Hud(object):
             return False
 
 
-    def _redraw_background(self):
+    def _update_text_bottomed(self):
+        """Update text in the HUD log, redrawing them on log frame.
+        This method will align text to bottom of the log.
+        """
+        _width, _height = self._background.get_size()
+        text_frame = self._background.subsurface(
+                            (self.padding,
+                             self.padding,
+                             _width - self.padding * 2,
+                             _height - self.padding * 2))
+
+
+        font_height = self._font.size("Tg")[1]
+        text_width = text_frame.get_width()
+        text_height = text_frame.get_height()
+
+        position_y = text_height - font_height
+        min_position_y = - text_height
+
+        break_flag = False
+        for msg in self._messages:
+            print msg
+            for strings_surface in self._get_strings_surfaces_from_message(
+                            msg=msg, width=text_width, color=HUD_TEXT_COLOR):
+                text_frame.blit(strings_surface, (0, position_y))
+                position_y -= font_height + HUD_LINE_SPACING
+                if position_y < min_position_y:
+                    break_flag = True
+                    break
+            if break_flag:
+                break
+
+
+    def _get_strings_surfaces_from_message(self, msg, width, color):
         """
         """
-        width = self.rect.width
-        height = self.rect.height
-        surface = self._background_source
-
-        surface.fill(self._background_color)
-
-        # draw top side of the HUD
-        hud_top_side_len = width - HUD_PARTS_RECTS[TOP_LEFT].width \
-                                             - HUD_PARTS_RECTS[TOP_RIGHT].width
-        plank_width, _ = self._tileset[UP].get_size()
-        x = HUD_PARTS_RECTS[TOP_LEFT].width
-        y = 0
-        while hud_top_side_len > 0:
-            surface.blit(self._tileset[UP], (x, y))
-            x += plank_width
-            hud_top_side_len -= plank_width
-
-        # draw bottom side of the HUD
-        hud_bottom_side_len = width - HUD_PARTS_RECTS[BOTTOM_LEFT].width \
-                                          - HUD_PARTS_RECTS[BOTTOM_RIGHT].width
-        plank_width, _ = self._tileset[DOWN].get_size()
-        x = HUD_PARTS_RECTS[BOTTOM_LEFT].width
-        y = height - self._tileset[DOWN].get_size()[1]
-        while hud_bottom_side_len > 0:
-            surface.blit(self._tileset[DOWN], (x, y))
-            x += plank_width
-            hud_bottom_side_len -= plank_width
-
-        # draw left side of the HUD
-        hud_left_side_len = height - HUD_PARTS_RECTS[TOP_LEFT].height \
-                                          - HUD_PARTS_RECTS[BOTTOM_LEFT].height
-        _, plank_height = self._tileset[LEFT].get_size()
-        y = HUD_PARTS_RECTS[TOP_LEFT].height
-        x = 0
-        while hud_left_side_len > 0:
-            surface.blit(self._tileset[LEFT], (x, y))
-            y += plank_height
-            hud_left_side_len -= plank_height
-
-        # draw right side of the HUD
-        hud_right_side_len = height - HUD_PARTS_RECTS[TOP_RIGHT].height \
-                                         - HUD_PARTS_RECTS[BOTTOM_RIGHT].height
-        _, plank_height = self._tileset[RIGHT].get_size()
-        y = HUD_PARTS_RECTS[TOP_RIGHT].height
-        x = width - self._tileset[RIGHT].get_size()[0]
-        while hud_right_side_len > 0:
-            surface.blit(self._tileset[RIGHT], (x, y))
-            y += plank_height
-            hud_right_side_len -= plank_height
-
-        # draw corners
-        surface.blit(self._tileset[TOP_LEFT], (0, 0))
-        surface.blit(self._tileset[TOP_RIGHT],
-                           (width - self._tileset[TOP_RIGHT].get_size()[0], 0))
-        surface.blit(self._tileset[BOTTOM_LEFT],
-                            (0, height - HUD_PARTS_RECTS[BOTTOM_LEFT].height))
-        surface.blit(self._tileset[BOTTOM_RIGHT],
-                    (width - self._tileset[BOTTOM_RIGHT].get_size()[0],
-                     height - self._tileset[BOTTOM_RIGHT].get_size()[1]))
-
-        self._background = self._background_source.subsurface(
-                                     (0, 0, self.rect.width, self.rect.height))
-
-
-    def _update_text(self):
-        """
-        """
-        width, height = self._background.get_size()
-        background = self._background.subsurface(
-                            (HUD_PADDING,
-                             HUD_PADDING,
-                             width - HUD_PADDING,
-                             height - HUD_PADDING))
-        textsurface = self._font.render('Hello world!',
-                                        False,
-                                        Color(250, 250, 0),
-                                        HUD_BACKGROUND_COLOR)
-        background.blit(textsurface, (0, 0))
+        strings_surfaces = []
+        while msg:
+            q = 1
+            # determine maximum width of line
+            while self._font.size(msg[:q])[0] < width and q < len(msg):
+                q += 1
+            # if we've wrapped the msg, then adjust the wrap to the last word
+            if q < len(msg):
+                q = msg.rfind(" ", 0, q) + 1
+            # render the line
+            strings_surfaces.append(
+               self._font.render( msg[:q], False, color, HUD_BACKGROUND_COLOR))
+            # remove the msg we just blitted
+            msg = msg[q:]
+        strings_surfaces.reverse()
+        return strings_surfaces
 
 
     def __repr__(self):
         """Simple representation.
         """
-        return 'Chat HUD class instance.'
+        return 'HUD log class instance.'
 
