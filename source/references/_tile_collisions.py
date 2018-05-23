@@ -37,7 +37,6 @@ TILES_COLLISIONS = {
     308: {X: 0,  Y: 2,  WIDTH: 6,  HEIGHT: 7},     # red bar right
     222: {X: 0,  Y: 0,  WIDTH: 0,  HEIGHT: 6},     # high locker
     223: {X: 0,  Y: 0,  WIDTH: 0,  HEIGHT: 6},     # low locker
-    301: {X: 0,  Y: 0,  WIDTH: 0,  HEIGHT: 5},     # metal locker
     183: {X: 9,  Y: 2,  WIDTH: 17, HEIGHT: 7},     # flower 1
     184: {X: 9,  Y: 2,  WIDTH: 17, HEIGHT: 7},     # flower 2
     181: {X: 4,  Y: 0,  WIDTH: 9,  HEIGHT: 6},     # cooler
@@ -47,6 +46,19 @@ TILES_COLLISIONS = {
     349: {X: 0,  Y: 2,  WIDTH: 7,  HEIGHT: 5},     # left sofa top
     369: {X: 0,  Y: 2,  WIDTH: 7,  HEIGHT: 5},     # left sofa bottom
 }
+
+# big lockers
+for q in (301, 302, 461, 462, 463, 464, 465, 466,
+                                                634, 635, 636, 637, 638, 639,):
+    TILES_COLLISIONS[q] = {X: 0,  Y: 0,  WIDTH: 0,  HEIGHT: 5}
+
+# pult-left
+for q in (481, 501):
+    TILES_COLLISIONS[q] = {X: 0,  Y: 0,  WIDTH: 10,  HEIGHT: 0}
+
+# pult-right
+for q in (482, 502):
+    TILES_COLLISIONS[q] = {X: 10,  Y: 0,  WIDTH: 10,  HEIGHT: 0}
 
 # beds (all bounds are equal)
 for q in (351, 352, 353, 354, 355, 356, 357, 358,
@@ -74,7 +86,8 @@ for q in (341, 342, 343, 344):
     TILES_COLLISIONS[q] = {X: 2, Y: 0, WIDTH: 4, HEIGHT: 6}
 
 # mini-tubes (all bounds are equal)
-for q in (273, 274, 275, 276, 277, 293, 294, 295, 296, 297, 313, 314, 315):
+for q in (273, 274, 275, 276, 277, 293, 294, 295, 296, 297, 313, 314, 315,
+          536, 537, 538, 539, 540, 576, 577, 578, 556, 557, 558, 559, 560):
     TILES_COLLISIONS[q] = {X: 10, Y: 5, WIDTH: 20, HEIGHT: 7}
 
 

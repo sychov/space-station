@@ -10,35 +10,71 @@ ShowFileExtensions=FALSE
 ClassName=TProjectFilesNode
 
 [Project\ChildNodes\Node0\ChildNodes\Node0]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]_enums.py
+ClassName=TProjectFolderNode
+Name=space-station_sync
 
-[Project\ChildNodes\Node0\ChildNodes\Node1]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]_tile_collisions.py
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0]
+ClassName=TProjectFolderNode
+Name=source
 
-[Project\ChildNodes\Node0\ChildNodes\Node2]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]char_classes.py
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0]
+ClassName=TProjectFolderNode
+Name=interface
 
-[Project\ChildNodes\Node0\ChildNodes\Node3]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]game_map.py
+FileName=$[Project-Path]source\interface\frame.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node4]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]layer_cell.py
+FileName=$[Project-Path]source\interface\log.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node5]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]main.py
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes]
+Count=2
 
-[Project\ChildNodes\Node0\ChildNodes\Node6]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1]
+ClassName=TProjectFolderNode
+Name=references
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node0]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]objects_classes.py
+FileName=$[Project-Path]source\references\_enums.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node1]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\references\_tile_collisions.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes]
+Count=2
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\char_classes.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node3]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\game_map.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node4]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\layer_cell.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node5]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\main.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node6]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\objects_classes.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes]
+Count=7
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes]
+Count=1
 
 [Project\ChildNodes\Node0\ChildNodes]
-Count=7
+Count=1
 
 [Project\ChildNodes\Node1]
 ClassName=TProjectRunConfiguationsNode

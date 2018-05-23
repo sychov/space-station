@@ -9,33 +9,56 @@ from collections import deque
 import pygame
 from pygame import Rect, Surface, Color
 
-from _enums import *
+from references._enums import *
 
 
 # ------------------------------ CONST ------------------------------------- #
 
-HUD_TILESET_PATH = "interface/chat3.png"
+##HUD_TILESET_PATH = "interface/chat3.png"
+##
+##HUD_PARTS_RECTS = {
+##    TOP_LEFT:       Rect(0, 0, 60, 54),
+##    TOP_RIGHT:      Rect(140, 0, 85, 49),
+##    BOTTOM_LEFT:    Rect(0, 69, 50, 71),
+##    BOTTOM_RIGHT:   Rect(185, 67, 40, 73),
+##    UP:             Rect(62, 0, 51, 22),
+##    DOWN:           Rect(62, 124, 51, 16),
+##    LEFT:           Rect(0, 55, 19, 16),
+##    RIGHT:          Rect(204, 47, 21, 24),
+##}
+##
+##HUD_MAX_SIZE = (700, 700)
+##HUD_MIN_SIZE = (300, 130)
+##HUD_DEQUE_MAX_LEN = 10
+##HUD_BACKGROUND_COLOR = Color(0, 0, 0)
+##HUD_TEXT_COLORS = {}
+##HUD_RESIZE_BUTTON_SIZE = 20
+##
+##HUD_PADDING = 25
+##HUD_FONT = ('Comic Sans MS', 15)
+
+HUD_TILESET_PATH = "../graphics/interface/chat_border.png"
 
 HUD_PARTS_RECTS = {
-    TOP_LEFT:       Rect(0, 0, 60, 54),
-    TOP_RIGHT:      Rect(140, 0, 85, 49),
-    BOTTOM_LEFT:    Rect(0, 69, 50, 71),
-    BOTTOM_RIGHT:   Rect(185, 67, 40, 73),
-    UP:             Rect(62, 0, 51, 22),
-    DOWN:           Rect(62, 124, 51, 16),
-    LEFT:           Rect(0, 55, 19, 16),
-    RIGHT:          Rect(204, 47, 21, 24),
+    TOP_LEFT:       Rect(0, 0, 78, 35),
+    TOP_RIGHT:      Rect(219, 0, 45, 71),
+    BOTTOM_LEFT:    Rect(0, 137, 61, 61),
+    BOTTOM_RIGHT:   Rect(163, 134, 101, 64),
+    UP:             Rect(77, 0, 142, 7),
+    DOWN:           Rect(62, 192, 102, 6),
+    LEFT:           Rect(0, 34, 5, 104),
+    RIGHT:          Rect(258, 69, 6, 66),
 }
 
-HUD_MAX_SIZE = (700, 700)
-HUD_MIN_SIZE = (300, 130)
+HUD_MAX_SIZE = (700, 600)
+HUD_MIN_SIZE = (300, 135)
 HUD_DEQUE_MAX_LEN = 10
 HUD_BACKGROUND_COLOR = Color(10, 10, 10)
 HUD_TEXT_COLORS = {}
 HUD_RESIZE_BUTTON_SIZE = 20
 
-HUD_PADDING = 25
-HUD_FONT = ('Comic Sans MS', 15)
+HUD_PADDING = 18
+HUD_FONT = ('Lucida Console', 15)
 
 # ========================== HUD monitor class ============================== #
 

@@ -10,7 +10,7 @@ import pygame
 from pygame import sprite, draw
 from pygame import Surface, Rect, Color
 
-from _enums import *
+from references._enums import *
 
 # ================================= CONST =================================== #
 

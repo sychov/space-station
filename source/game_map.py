@@ -11,7 +11,7 @@ import pygame
 from pygame import Rect, Surface
 
 from layer_cell import LayerCell
-from _enums import *
+from references._enums import *
 
 
 # ============================ MAP CLASS ================================= #

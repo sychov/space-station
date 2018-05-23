@@ -10,19 +10,19 @@ import pygame
 
 from game_map import Map
 from char_classes import Player
-from hud import Hud
-from _enums import *
+from interface.log import Hud
+from references._enums import *
 
 # ------------------------------ CONST ------------------------------------- #
 
 DISPLAY_SIZE = (1024, 768)
 FPS = 183
 DOUBLE = True
-MAP_PATH = 'map.json'
-TILESET_PATH = "tilesets/TILES.png"
-CHARACTER_TILESET = 'chars/captain.png'
+MAP_PATH = '../gamedata/map/map.json'
+TILESET_PATH = "../graphics/tilesets/TILES.png"
+CHARACTER_TILESET = '../graphics/chars/captain.png'
 
-HUD_START_COORDS = (-13, 596, 497, 183)
+HUD_START_COORDS = (0, 633, 497, 135)
 
 
 DEBUG = True
@@ -82,7 +82,7 @@ class Main(object):
 
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if self.hud.rect.collidepoint(event.pos):
-                        if self.hud.is_resize_button_pressed(event.pos):
+                        if self.hud.is_resize_corner_selected(event.pos):
                             # resize HUD
                             resizing = True
                         else:
