@@ -9,7 +9,7 @@
 import pygame
 from pygame import Rect, Surface, Color
 
-from source.references._enums import *
+from references._enums import *
 
 
 # ========================== Frame class ============================== #

@@ -7,14 +7,12 @@
 
 import pyganim
 import pygame
-from pygame import sprite, draw
 from pygame import Surface, Rect, Color
 
 from references._enums import *
 
 # ================================= CONST =================================== #
 
-# ------------------------ TILESET ------------------------ #
 
 CHAR_SIZE = 42
 DELAY = 100
@@ -26,14 +24,11 @@ CHAR_INNER_COLLISION = {
 }
 BG_COLOR = Color("#888822")
 
-# ------------------------ OTHER -------------------------- #
-
-MOVE_SPEED = 2
 
 # ============================== CHAR CLASS ================================ #
 
 
-class Char(sprite.Sprite):
+class Char(pygame.sprite.Sprite):
     """ Char main class.
     Used for a player and for others "humanoids" in game.
     """
@@ -48,7 +43,7 @@ class Char(sprite.Sprite):
             id_:                    string identificator.
 
         """
-        sprite.Sprite.__init__(self)
+        pygame.sprite.Sprite.__init__(self)
 
         self.startX = start_x
         self.startY = start_y
@@ -144,122 +139,9 @@ class Char(sprite.Sprite):
             raise RuntimeError('ERROR: incorrect animation state!')
 
 
-    def _stop_moving(self):
-        """Change moving animation to idle in the same direction.
-        """
-        self.direction = IDLE + self.direction
-
-
     def __repr__(self):
         """Simple representation.
         """
         return 'Char sprite set: %s' % self.id_
 
 
-# ============================ PLAYER CLASS ================================= #
-
-
-class Player(Char):
-    """Player character.
-    """
-    def __init__(self, start_x, start_y, tileset_path, scale, display_size):
-        """ Init.
-
-            start_x, start_y:       starting char's coords on global map
-            tileset_path:           chars tileset file path
-            scale:                  game tile's scale param (1 or 2)
-            display_size:           (<screen width>, <screen height>)
-
-        """
-        self.debug_message = ''
-
-        super(Player, self).__init__(start_x, start_y, tileset_path,
-                                                               scale, 'Player')
-        self.camera_shift_x = self.rect.width / 2
-        self.camera_shift_y = self.rect.height / 2
-
-        x = (display_size[0] - self._inner_rect.width) / 2 - self._inner_rect.x
-        y = (display_size[1] - self._inner_rect.height)/ 2 - self._inner_rect.y
-        self.screen_coords = x, y
-
-
-    def get_camera_pos(self):
-        """Get linked to our player camera coords (center of the screen).
-        """
-        x = self.rect.x + self.camera_shift_x
-        y = self.rect.y + self.camera_shift_y
-        return x, y
-
-
-    def update(self, direction, game_map):
-        """Update player state.
-
-            direction       UP. DOWN, LEFT, RIGHT or IDLE
-            game_map:       Map class instance.
-
-        """
-        if direction in self.DIRECTIONS:
-            self.direction = direction
-            if direction == LEFT:
-                self.rect.x -= MOVE_SPEED
-            elif direction == RIGHT:
-                self.rect.x += MOVE_SPEED
-            if direction == UP:
-                self.rect.y -= MOVE_SPEED
-            elif direction == DOWN:
-                self.rect.y += MOVE_SPEED
-
-        elif direction == IDLE:
-            if self.direction in self.DIRECTIONS:
-                self._stop_moving()
-
-        if self._collide_map(game_map):
-            self._stop_moving()
-
-        self._redraw()
-
-
-    def _collide_map(self, game_map):
-        """Check collision with other objects (game map, borders of it etc).
-        Return True if collide, else False.
-
-            game_map:       Map class instance.
-
-        """
-        # check borders of the map
-        if not game_map.rect.contains(self.rect):
-            if self.direction == RIGHT:
-                self.rect.right = game_map.rect.right
-            elif self.direction == LEFT:
-                self.rect.left = game_map.rect.left
-            elif self.direction == UP:
-                self.rect.top = game_map.rect.top
-            elif self.direction == DOWN:
-                self.rect.bottom = game_map.rect.bottom
-            return True
-
-        # check nearest tiles
-        for floor_c, object_c in game_map.get_cells_to_verification(self.rect):
-            if not floor_c.is_walkable and self.rect.colliderect(floor_c):
-                if self.direction == RIGHT:
-                    self.rect.right = floor_c.rect.left
-                elif self.direction == LEFT:
-                    self.rect.left = floor_c.rect.right
-                elif self.direction == UP:
-                    self.rect.top = floor_c.rect.bottom
-                elif self.direction == DOWN:
-                    self.rect.bottom = floor_c.rect.top
-                return True
-
-            elif not object_c.is_walkable and self.rect.colliderect(object_c):
-                if self.direction == RIGHT:
-                    self.rect.right = object_c.rect.left
-                elif self.direction == LEFT:
-                    self.rect.left = object_c.rect.right
-                elif self.direction == UP:
-                    self.rect.top = object_c.rect.bottom
-                elif self.direction == DOWN:
-                    self.rect.bottom = object_c.rect.top
-                return True
-
-        return False

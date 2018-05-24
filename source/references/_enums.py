@@ -11,7 +11,13 @@ UP = 1
 DOWN = 2
 LEFT = 3
 RIGHT = 4
+
 IDLE = 5
+
+IDLE_UP = 6
+IDLE_DOWN = 7
+IDLE_LEFT = 8
+IDLE_RIGHT = 9
 
 # enum: directions advanced
 TOP_LEFT = 6

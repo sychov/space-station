@@ -8,8 +8,8 @@
 
 import pygame
 
-from game_map import Map
-from char_classes import Player
+from environment.game_map import Map
+from persons.player import Player
 from interface.log import Log
 from interface.frame_manager import FrameManager
 from references._enums import *
@@ -17,7 +17,7 @@ from references._enums import *
 # ------------------------------ CONST ------------------------------------- #
 
 DISPLAY_SIZE = (1024, 768)
-FPS = 1183
+FPS = 93
 DOUBLE = True
 MAP_PATH = '../gamedata/map/map.json'
 TILESET_PATH = "../graphics/tilesets/TILES.png"
@@ -70,9 +70,6 @@ class Main(object):
     def mainloop(self):
         """Start game main loop.
         """
-        key_right = key_left = key_top = key_bottom = False
-        mouse_pressed_pos = (0, 0)
-
         while True:
             self.timer.tick(FPS)
 
@@ -86,60 +83,23 @@ class Main(object):
                 if self.frames_manager.handle_event(event):
                     continue
 
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_LEFT:
-                        key_left = True
-                    elif event.key == pygame.K_RIGHT:
-                        key_right = True
-                    elif event.key == pygame.K_UP:
-                        key_top = True
-                    elif event.key == pygame.K_DOWN:
-                        key_bottom = True
-                    elif event.key == pygame.K_d:
-                        print self.log_frame.rect
-                    elif event.key == pygame.K_ESCAPE:
-                        self.quit()
+                if self.player.handle_event(event):
+                    continue
 
-                elif event.type == pygame.KEYUP:
-                    if event.key == pygame.K_RIGHT:
-                        key_right = False
-                    elif event.key == pygame.K_LEFT:
-                        key_left = False
-                    elif event.key == pygame.K_UP:
-                        key_top = False
-                    elif event.key == pygame.K_DOWN:
-                        key_bottom = False
-
-            # ~ 2. Keys handling ~
-
-            if key_bottom:
-                direction = DOWN
-            elif key_top:
-                direction = UP
-            elif key_left:
-                direction = LEFT
-            elif key_right:
-                direction = RIGHT
-            else:
-                direction = IDLE
-
-            # ~ 3. HUD updating handling ~
+            # ~ 2. Update ~
 
             self.frames_manager.update()
+            self.player.update(self.game_map)
 
-            # ~ 3. Game logics ~
+            # ~ 3. Draw ~
 
-            self.player.update(direction, self.game_map)
             camera_position = self.player.get_camera_pos()
             self.game_map.draw_bottom_layers(self.screen, camera_position)
             self.player.draw(self.screen)
             self.game_map.draw_top_layer(self.screen, camera_position)
-
-            # ~ 4. Interface drawing ~
-
             self.frames_manager.draw_frames(self.screen)
 
-            # ~ 5. Display updating ~
+            # ~ 4. Display updating ~
 
             if DEBUG:
                 debug_msg = '%s %s fps = %d' % (
