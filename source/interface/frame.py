@@ -41,6 +41,7 @@ class Frame(object):
         self.min_size = min_size
         self.padding = padding
         self._background_color = bg_color
+        self.events = {}
 
         # "_background_source" used as hidden canvas of maximum size, where
         # borders and background are drawn
@@ -162,6 +163,18 @@ class Frame(object):
 
         self._background = self._background_source.subsurface(
                                      (0, 0, self.rect.width, self.rect.height))
+
+
+    def handle_event(self, event):
+        """Event handling. Virtual method :)
+        """
+        return False
+
+
+    def update(self):
+        """Update frame state. Virtual method :)
+        """
+        return False
 
 
     def __repr__(self):

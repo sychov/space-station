@@ -11,6 +11,7 @@ import pygame
 from game_map import Map
 from char_classes import Player
 from interface.log import Log
+from interface.frame_manager import FrameManager
 from references._enums import *
 
 # ------------------------------ CONST ------------------------------------- #
@@ -23,7 +24,6 @@ TILESET_PATH = "../graphics/tilesets/TILES.png"
 CHARACTER_TILESET = '../graphics/chars/captain.png'
 
 HUD_START_COORDS = (0, 633, 497, 135)
-
 
 DEBUG = True
 DEBUG_COLOR = pygame.Color(0, 250, 0)
@@ -58,14 +58,19 @@ class Main(object):
                              display_size=DISPLAY_SIZE)
         self.game_map.make_bottom_buffer(self.player.get_camera_pos())
 
+        self.frames_manager = FrameManager()
         self.log_frame = Log(HUD_START_COORDS)
+        self.frames_manager.add_frame(self.log_frame)
 
+        # TO DO: DELETE NAHUY ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        self.frames_manager.add_frame(Log((10, 623, 497, 135)))
+        self.frames_manager.add_frame(Log((20, 613, 497, 135)))
+        # ---------------------
 
     def mainloop(self):
         """Start game main loop.
         """
         key_right = key_left = key_top = key_bottom = False
-        dragging = resizing = False
         mouse_pressed_pos = (0, 0)
 
         while True:
@@ -76,33 +81,10 @@ class Main(object):
             for event in pygame.event.get():
 
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    print 'Exit'
-                    return self
+                    self.quit()
 
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if self.log_frame.rect.collidepoint(event.pos):
-
-                        if event.button == 4:
-                            # scroll up
-                            self.log_frame.scroll_up()
-                        elif event.button == 5:
-                            # scroll down
-                            self.log_frame.scroll_down()
-
-                        elif self.log_frame.is_resize_corner_selected(event.pos):
-                            # resize HUD
-                            resizing = True
-                            mouse_pressed_pos = event.pos
-                        else:
-                            # move HUD
-                            dragging = True
-                            mouse_pressed_pos = event.pos
-
-                elif event.type == pygame.MOUSEBUTTONUP:
-                    if dragging or resizing:
-                        dragging = False
-                        resizing = False
+                if self.frames_manager.handle_event(event):
+                    continue
 
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
@@ -116,9 +98,7 @@ class Main(object):
                     elif event.key == pygame.K_d:
                         print self.log_frame.rect
                     elif event.key == pygame.K_ESCAPE:
-                        pygame.quit()
-                        print 'Exit'
-                        return self
+                        self.quit()
 
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_RIGHT:
@@ -143,20 +123,9 @@ class Main(object):
             else:
                 direction = IDLE
 
-            # ~ 3. HUD dragging handling ~
+            # ~ 3. HUD updating handling ~
 
-            if dragging or resizing:
-                current_mouse_pos = pygame.mouse.get_pos()
-                if current_mouse_pos != mouse_pressed_pos:
-                    dx = current_mouse_pos[0] - mouse_pressed_pos[0]
-                    dy = current_mouse_pos[1] - mouse_pressed_pos[1]
-                    if dragging:
-                        self.log_frame.move(dx, dy)
-                    elif resizing:
-                        self.log_frame.resize(dx, dy)
-                        self.log_frame.update_text(bottom_anchor=True)
-                    mouse_pressed_pos = current_mouse_pos
-
+            self.frames_manager.update()
 
             # ~ 3. Game logics ~
 
@@ -168,7 +137,7 @@ class Main(object):
 
             # ~ 4. Interface drawing ~
 
-            self.log_frame.draw(self.screen)
+            self.frames_manager.draw_frames(self.screen)
 
             # ~ 5. Display updating ~
 
@@ -182,6 +151,14 @@ class Main(object):
             pygame.display.update()
 
 
+    def quit(self):
+        """Exit from game.
+        """
+        pygame.quit()
+        print "The end."
+        raise SystemExit(0)
+
+
     def debug_outtext(self, msg, line=0):
         """Output line of text in a top left corner +20+20 with 25px interval.
         For debug purposes.
@@ -193,5 +170,6 @@ class Main(object):
 # --------------------------------- RUN ------------------------------------- #
 
 if __name__ == '__main__':
-    z = Main().mainloop()
+    z = Main()
+    z.mainloop()
 

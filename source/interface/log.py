@@ -92,35 +92,48 @@ class Log(Frame):
         self._font = pygame.font.SysFont(*HUD_FONT)
         self._current_message_index = None
         self._bottomed_message_index = None
+        self._up_to_last_string = False
+
+        self.events = {
+            pygame.MOUSEBUTTONUP: self._event_mousebutton_up,
+            pygame.MOUSEBUTTONDOWN: self._event_mousebutton_down
+        }
+
+        self.dragging = False
+        self.resizing = False
+        self.mouse_pressed_pos = None
+
 
         # TO DO: DEL
         from random import choice
         self._messages.extend(
             [(q.strip(), choice(HUD_TEXT_COLORS.keys())) for q in
-            u'''Привет!!
-            A session is a semi-permanent information interchange a user has with the federation.
-            Sessions are optional, every federation API can be used without any session open.
-            However, if the game desires to handle most of its online management on a Transaction Server.
-            Which adds security, performance, maintainability and fault.
-            Tolerance value to the game, the user is actually opening a Session.
-            If the game has no Transaction Server, it cannot have an open session.
-            Configuration of your game server
-            Session creation is intimately linked with the Transaction Server concept.
-            If you want to open a Session, you need to create a new configuration in Anubis.
-            For your client_id, where the transaction_type is “ts”.
-            Each room of every “TS” needs to have a maximum of one user.
-            For more information on how to configure your server, see the Anubis section.
-            Here you’ll find various printouts that I’ve made for games.
-            For the non-word-list printables down below.
-            If you click the image, it will take you to the printable.
-            If you click the words under the image, it will take you to.
-            Post with instructions on how to use the printable.
-            Hopefully this page can help you find the game you’re looking for.
-            Happy playing!'''.splitlines()]
+            u'''Летом его призвали в охрану.
+            Учебный пункт бл расположен на станции Иоссер.
+            Все делалось по команде: сон, обед, разговоры.
+            Говорили про водку, про хлеб, про коней, про шахтерские заработки.
+            Все это Густав ненавидел и разговаривал только по-своему.
+            Только по-эстонски.
+            Даже с караульными псами.
+            Кроме того, в одиночестве - пил, если мешали - дрался.
+            А также допускал - "инциденты женского порядка".
+            (По выражению замполита Хуриева.)
+            - До чего вы эгоцентричный, Пахапиль! - осторожно корил его замполит.
+            Густав смущался, просил лист бумаги и коряво выводил:
+            "Вчера, сего года, я злоупотребил алкогольный напиток.
+            После чего уронил в грязь солдатское достоинство.
+            Впредь обещаю. Рядовой Пахапиль".
+            После некоторого раздумья он всегда добавлял:
+            "Прошу не отказать".
+            Затем приходили деньги от тетушки Рээт.
+            Пахапиль брал в магазине литр шартреза и отправлялся на кладбище.
+            Там в зеленом полумраке белели кресты.
+            Дальше, на краю водоема, была запущенная могила и рядом - фанерный обелиск.
+            Пахапиль грузно садился на холмик, выпивал и курил.'''.splitlines()]
         )
         # /TO DO: DEL
 
-        self.update_text()
+        self._update_text()
 
 
     def output(self, msg, tag=None):
@@ -130,21 +143,34 @@ class Log(Frame):
         self._update_text_bottomed()
 
 
-    def is_resize_corner_selected(self, coords):
-        """Check, if "coords" are in resize corner area.
+    def handle_event(self, event):
+        """Main events handler.
         """
-        x, y = coords
-        if x > self.rect.x + self.rect.width - HUD_RESIZE_BUTTON_SIZE and \
-           x < self.rect.x + self.rect.width and \
-           y > self.rect.y + self.rect.height - HUD_RESIZE_BUTTON_SIZE and \
-           y < self.rect.y + self.rect.height:
-            return True
+        if event.type in self.events:
+            return self.events[event.type](event)
         else:
             return False
 
 
-    def update_text(self, bottom_anchor=False):
+    def update(self):
+        """Update frame state (dragging and resizing handling).
         """
+        if self.dragging or self.resizing:
+            current_mouse_pos = pygame.mouse.get_pos()
+            if current_mouse_pos != self.mouse_pressed_pos:
+                dx = current_mouse_pos[0] - self.mouse_pressed_pos[0]
+                dy = current_mouse_pos[1] - self.mouse_pressed_pos[1]
+                if self.dragging:
+                    self.move(dx, dy)
+                elif self.resizing:
+                    self.resize(dx, dy)
+                    self._update_text(bottom_anchor=True)
+                self.mouse_pressed_pos = current_mouse_pos
+
+
+    def _update_text(self, bottom_anchor=False):
+        """Update text in box.
+        If "bottom_anchor" == True, force to bottom align.
         """
         if bottom_anchor or self._current_message_index is None:
             self._update_text_bottomed()
@@ -172,45 +198,22 @@ class Log(Frame):
         position_y = 0
         max_position_y = text_height
 
-        # self._messages[self._current_message_index:]
+
         messages = islice(self._messages,
                           self._current_message_index,
                           len(self._messages))
+
+        self._up_to_last_string = False
         for msg, tag in messages:
             for strings_surface in self._get_strings_surfaces_from_message(
                             msg=msg,
                             width=text_width,
                             color=HUD_TEXT_COLORS[tag]):
-                text_frame.blit(strings_surface, (0, position_y))
-                position_y += font_height + HUD_LINE_SPACING
                 if position_y > max_position_y:
                     return
-
-
-    def scroll_up(self):
-        """
-        """
-        messages_count = len(self._messages)
-        if not messages_count or self._current_message_index == 0:
-            return
-
-        if self._current_message_index is None:
-            self._current_message_index = self._bottomed_message_index
-        else:
-            self._current_message_index -= 1
-        self.update_text()
-
-
-    def scroll_down(self):
-        """
-        """
-        messages_count = len(self._messages)
-        if not messages_count or self._current_message_index is None \
-                          or self._current_message_index == messages_count - 1:
-            return
-
-        self._current_message_index += 1
-        self.update_text()
+                text_frame.blit(strings_surface, (0, position_y))
+                position_y += font_height + HUD_LINE_SPACING
+        self._up_to_last_string = True
 
 
     def _update_text_bottomed(self):
@@ -232,6 +235,8 @@ class Log(Frame):
         position_y = text_height - font_height
         min_position_y = - font_height
 
+        self._up_to_last_string = True
+
         message_index = len(self._messages) - 1
         for msg, tag in reversed(self._messages):
             for strings_surface in reversed(
@@ -250,7 +255,12 @@ class Log(Frame):
 
 
     def _get_strings_surfaces_from_message(self, msg, width, color):
-        """
+        """Get list of surfaces, everyone is a fraphical string
+        of message (according to frame width).
+
+            msg:        string message
+            width:      width of textbox in pixels
+            color:      Color class instance
         """
         strings_surfaces = []
         while msg:
@@ -267,6 +277,88 @@ class Log(Frame):
             # remove the msg we just blitted
             msg = msg[q:]
         return strings_surfaces
+
+
+    def _event_mousebutton_up(self, event):
+        """Handle mouse button up event.
+        """
+        if self.dragging or self.resizing:
+            self.dragging = False
+            self.resizing = False
+            return True
+        else:
+            return False
+
+
+    def _event_mousebutton_down(self, event):
+        """Handle mouse button down event.
+        """
+        if self.rect.collidepoint(event.pos):
+
+            # mouse scroll up
+            if event.button == 4:
+                self._scroll_up()
+
+            # scroll down
+            elif event.button == 5:
+                self._scroll_down()
+
+            elif self._is_resize_corner_selected(event.pos):
+                # resize HUD
+                self.resizing = True
+                self.mouse_pressed_pos = event.pos
+
+            else:
+                # move HUD
+                self.dragging = True
+                self.mouse_pressed_pos = event.pos
+
+            return True
+
+        else:
+            return False
+
+
+    def _scroll_up(self):
+        """Scroll text content up.
+        """
+        messages_count = len(self._messages)
+        if not messages_count or \
+           self._current_message_index == 0:
+            return
+
+        if self._current_message_index is None:
+            self._current_message_index = self._bottomed_message_index
+        else:
+            self._current_message_index -= 1
+        self._update_text()
+
+
+    def _scroll_down(self):
+        """Scroll text content down.
+        """
+        messages_count = len(self._messages)
+        if not messages_count or \
+           self._current_message_index is None or \
+           self._up_to_last_string or \
+           self._current_message_index == messages_count - 1:
+            return
+
+        self._current_message_index += 1
+        self._update_text()
+
+
+    def _is_resize_corner_selected(self, coords):
+        """Check, if "coords" are in resize corner area.
+        """
+        x, y = coords
+        if x > self.rect.x + self.rect.width - HUD_RESIZE_BUTTON_SIZE and \
+           x < self.rect.x + self.rect.width and \
+           y > self.rect.y + self.rect.height - HUD_RESIZE_BUTTON_SIZE and \
+           y < self.rect.y + self.rect.height:
+            return True
+        else:
+            return False
 
 
     def __repr__(self):
