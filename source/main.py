@@ -16,7 +16,7 @@ from references._enums import *
 # ------------------------------ CONST ------------------------------------- #
 
 DISPLAY_SIZE = (1024, 768)
-FPS = 183
+FPS = 1183
 DOUBLE = True
 MAP_PATH = '../gamedata/map/map.json'
 TILESET_PATH = "../graphics/tilesets/TILES.png"
@@ -82,13 +82,22 @@ class Main(object):
 
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if self.log_frame.rect.collidepoint(event.pos):
-                        if self.log_frame.is_resize_corner_selected(event.pos):
+
+                        if event.button == 4:
+                            # scroll up
+                            self.log_frame.scroll_up()
+                        elif event.button == 5:
+                            # scroll down
+                            self.log_frame.scroll_down()
+
+                        elif self.log_frame.is_resize_corner_selected(event.pos):
                             # resize HUD
                             resizing = True
+                            mouse_pressed_pos = event.pos
                         else:
                             # move HUD
                             dragging = True
-                        mouse_pressed_pos = event.pos
+                            mouse_pressed_pos = event.pos
 
                 elif event.type == pygame.MOUSEBUTTONUP:
                     if dragging or resizing:
@@ -145,6 +154,7 @@ class Main(object):
                         self.log_frame.move(dx, dy)
                     elif resizing:
                         self.log_frame.resize(dx, dy)
+                        self.log_frame.update_text(bottom_anchor=True)
                     mouse_pressed_pos = current_mouse_pos
 
 

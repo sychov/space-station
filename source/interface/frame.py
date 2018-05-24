@@ -81,7 +81,6 @@ class Frame(object):
             self.rect.width = new_width
             self.rect.height = new_height
             self._redraw_background()
-            self._update_text()
 
 
     def move(self, dx, dy):

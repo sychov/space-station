@@ -41,4 +41,10 @@ USUAL = 41
 SPEECH = 42
 DANGER = 43
 
+# enum: text colors
+
+DANGER = 51
+SUCCESS = 52
+FAIL = 53
+
 
