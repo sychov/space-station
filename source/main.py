@@ -12,12 +12,13 @@ from environment.game_map import Map
 from persons.player import Player
 from interface.log import Log
 from interface.frame_manager import FrameManager
+from interface.storage import Storage
 from references._enums import *
 
 # ------------------------------ CONST ------------------------------------- #
 
 DISPLAY_SIZE = (1024, 768)
-FPS = 93
+FPS = 200
 DOUBLE = True
 MAP_PATH = '../gamedata/map/map.json'
 TILESET_PATH = "../graphics/tilesets/TILES.png"
@@ -62,10 +63,9 @@ class Main(object):
         self.log_frame = Log(HUD_START_COORDS)
         self.frames_manager.add_frame(self.log_frame)
 
-        # TO DO: DELETE NAHUY ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        self.frames_manager.add_frame(Log((10, 623, 497, 135)))
-        self.frames_manager.add_frame(Log((20, 613, 497, 135)))
-        # ---------------------
+        self.storage = Storage((300, 10, 300, 200))
+        self.frames_manager.add_frame(self.storage)
+
 
     def mainloop(self):
         """Start game main loop.
@@ -85,6 +85,18 @@ class Main(object):
 
                 if self.player.handle_event(event):
                     continue
+
+                # TO DO: to del !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_0:
+                        self.log_frame.output('Hello! simple text test!')
+                    elif event.key == pygame.K_9:
+                        self.log_frame.output('Hello! danger test!', DANGER)
+                    elif event.key == pygame.K_8:
+                        self.log_frame.output('Hello! succes text!', SUCCESS)
+                    elif event.key == pygame.K_7:
+                        self.log_frame.output('Hello! fail text test!', FAIL)
+
 
             # ~ 2. Update ~
 

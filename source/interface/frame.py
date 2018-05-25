@@ -35,13 +35,14 @@ class Frame(object):
         """
         # 1. ~ Init variables ~
 
-        self.parts_rects = parts_rects
         self.rect = Rect(rect)
-        self.max_size = max_size
-        self.min_size = min_size
         self.padding = padding
+
+        self._parts_rects = parts_rects
+        self._max_size = max_size
+        self._min_size = min_size
         self._background_color = bg_color
-        self.events = {}
+        self._events = {}
 
         # "_background_source" used as hidden canvas of maximum size, where
         # borders and background are drawn
@@ -51,19 +52,23 @@ class Frame(object):
         # actually drawn on screen
         self._background = None
 
+        self._dragging = False
+        self._resizing = False
+        self._mouse_pressed_pos = None
+
         # 2. ~ Load tiles ~
 
         self._tileset = {}
         image = pygame.image.load(tileset_path)
         for q in (UP, DOWN, LEFT, RIGHT,
                   TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT):
-            _rect = self.parts_rects[q]
+            _rect = self._parts_rects[q]
             self._tileset[q] = image.subsurface(_rect).convert()
 
         # 3. ~ Make background ~
 
-        min_x, min_y = self.min_size
-        max_x, max_y = self.max_size
+        min_x, min_y = self._min_size
+        max_x, max_y = self._max_size
         self.rect.width = min(max(self.rect.width, min_x), max_x)
         self.rect.height = min(max(self.rect.height, min_y), max_y)
         self._redraw_background()
@@ -71,9 +76,12 @@ class Frame(object):
 
     def resize(self, dx, dy):
         """Change size of the frame relatevly on deltas of X and Y.
+
+            dx:     delta on X
+            dy:     delta on Y
         """
-        min_x, min_y = self.min_size
-        max_x, max_y = self.max_size
+        min_x, min_y = self._min_size
+        max_x, max_y = self._max_size
 
         new_width = min(max(self.rect.width + dx, min_x), max_x)
         new_height = min(max(self.rect.height + dy, min_y), max_y)
@@ -86,6 +94,9 @@ class Frame(object):
 
     def move(self, dx, dy):
         """Move frame relatevly on deltas of X and Y.
+
+            dx:     delta on X
+            dy:     delta on Y
         """
         self.rect.x += dx
         self.rect.y += dy
@@ -93,8 +104,102 @@ class Frame(object):
 
     def draw(self, screen):
         """Draw frame on the screen.
+
+            screen:     display screen Surface
         """
         screen.blit(self._background, self.rect)
+
+
+    def add_event_handler(self, event_type, callback):
+        """Add event to be handled
+
+            event_type:     pygame event type (e.g. ygame.MOUSEBUTTONUP)
+            callback:       callback to execute
+        """
+        self._events[event_type] = callback
+
+
+    def handle_event(self, event):
+        """Main events handler.
+        To listen specific event by this method, add it to table through
+        add_event_handler() method.
+
+            event:      element got from pygame.event
+
+        Return True, if event was handled, else False.
+        """
+        if event.type in self._events:
+            return self._events[event.type](event)
+        else:
+            return False
+
+
+    def update(self):
+        """Update frame state. Purely virtual method :)
+        """
+        pass
+
+
+    def _update_dragging(self):
+        """Method for using in classes, descendants of Frame.
+        If dragging state was enabled, update frame's coords on screen.
+        """
+        if self._dragging:
+            current_mouse_pos = pygame.mouse.get_pos()
+            if current_mouse_pos != self._mouse_pressed_pos:
+                dx = current_mouse_pos[0] - self._mouse_pressed_pos[0]
+                dy = current_mouse_pos[1] - self._mouse_pressed_pos[1]
+                self.move(dx, dy)
+                self._mouse_pressed_pos = current_mouse_pos
+                return True
+        return False
+
+
+    def _update_resizing(self):
+        """Method for using in classes, descendants of Frame.
+        If resizing state was enabled, update frame's size.
+        """
+        if self._resizing:
+            current_mouse_pos = pygame.mouse.get_pos()
+            if current_mouse_pos != self._mouse_pressed_pos:
+                dx = current_mouse_pos[0] - self._mouse_pressed_pos[0]
+                dy = current_mouse_pos[1] - self._mouse_pressed_pos[1]
+                self.resize(dx, dy)
+                self._mouse_pressed_pos = current_mouse_pos
+                return True
+        return False
+
+
+    def _dragging_handled_off(self):
+        """Tries to disable dragging state.
+        Return True, if state was enabled (disabling was successful)
+        """
+        if self._dragging:
+            self._dragging = False
+            return True
+
+
+    def _resizing_handled_off(self):
+        """Tries to disable resizing state.
+        Return True, if state was enabled (disabling was successful)
+        """
+        if self._resizing:
+            self._resizing = False
+            return True
+
+
+    def _enable_dragging_state(self, mouse_pressed_pos):
+        """Enable dragging state.
+        """
+        self._dragging = True
+        self._mouse_pressed_pos = mouse_pressed_pos
+
+
+    def _enable_resizing_state(self, mouse_pressed_pos):
+        """Enable resizing state.
+        """
+        self._resizing = True
+        self._mouse_pressed_pos = mouse_pressed_pos
 
 
     def _redraw_background(self):
@@ -108,10 +213,10 @@ class Frame(object):
         surface.fill(self._background_color)
 
         # draw top side of the HUD
-        hud_top_side_len = width - self.parts_rects[TOP_LEFT].width \
-                                            - self.parts_rects[TOP_RIGHT].width
+        hud_top_side_len = width - self._parts_rects[TOP_LEFT].width \
+                                           - self._parts_rects[TOP_RIGHT].width
         plank_width, _ = self._tileset[UP].get_size()
-        x = self.parts_rects[TOP_LEFT].width
+        x = self._parts_rects[TOP_LEFT].width
         y = 0
         while hud_top_side_len > 0:
             surface.blit(self._tileset[UP], (x, y))
@@ -119,10 +224,10 @@ class Frame(object):
             hud_top_side_len -= plank_width
 
         # draw bottom side of the HUD
-        hud_bottom_side_len = width - self.parts_rects[BOTTOM_LEFT].width \
-                                         - self.parts_rects[BOTTOM_RIGHT].width
+        hud_bottom_side_len = width - self._parts_rects[BOTTOM_LEFT].width \
+                                        - self._parts_rects[BOTTOM_RIGHT].width
         plank_width, _ = self._tileset[DOWN].get_size()
-        x = self.parts_rects[BOTTOM_LEFT].width
+        x = self._parts_rects[BOTTOM_LEFT].width
         y = height - self._tileset[DOWN].get_size()[1]
         while hud_bottom_side_len > 0:
             surface.blit(self._tileset[DOWN], (x, y))
@@ -130,10 +235,10 @@ class Frame(object):
             hud_bottom_side_len -= plank_width
 
         # draw left side of the HUD
-        hud_left_side_len = height - self.parts_rects[TOP_LEFT].height \
-                                         - self.parts_rects[BOTTOM_LEFT].height
+        hud_left_side_len = height - self._parts_rects[TOP_LEFT].height \
+                                        - self._parts_rects[BOTTOM_LEFT].height
         _, plank_height = self._tileset[LEFT].get_size()
-        y = self.parts_rects[TOP_LEFT].height
+        y = self._parts_rects[TOP_LEFT].height
         x = 0
         while hud_left_side_len > 0:
             surface.blit(self._tileset[LEFT], (x, y))
@@ -141,10 +246,10 @@ class Frame(object):
             hud_left_side_len -= plank_height
 
         # draw right side of the HUD
-        hud_right_side_len = height - self.parts_rects[TOP_RIGHT].height \
-                                        - self.parts_rects[BOTTOM_RIGHT].height
+        hud_right_side_len = height - self._parts_rects[TOP_RIGHT].height \
+                                       - self._parts_rects[BOTTOM_RIGHT].height
         _, plank_height = self._tileset[RIGHT].get_size()
-        y = self.parts_rects[TOP_RIGHT].height
+        y = self._parts_rects[TOP_RIGHT].height
         x = width - self._tileset[RIGHT].get_size()[0]
         while hud_right_side_len > 0:
             surface.blit(self._tileset[RIGHT], (x, y))
@@ -156,7 +261,7 @@ class Frame(object):
         surface.blit(self._tileset[TOP_RIGHT],
                            (width - self._tileset[TOP_RIGHT].get_size()[0], 0))
         surface.blit(self._tileset[BOTTOM_LEFT],
-                            (0, height - self.parts_rects[BOTTOM_LEFT].height))
+                           (0, height - self._parts_rects[BOTTOM_LEFT].height))
         surface.blit(self._tileset[BOTTOM_RIGHT],
                     (width - self._tileset[BOTTOM_RIGHT].get_size()[0],
                      height - self._tileset[BOTTOM_RIGHT].get_size()[1]))
@@ -164,18 +269,7 @@ class Frame(object):
         self._background = self._background_source.subsurface(
                                      (0, 0, self.rect.width, self.rect.height))
 
-
-    def handle_event(self, event):
-        """Event handling. Virtual method :)
-        """
-        return False
-
-
-    def update(self):
-        """Update frame state. Virtual method :)
-        """
-        return False
-
+    # -------------------------------- #
 
     def __repr__(self):
         """Simple representation.

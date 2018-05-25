@@ -10,34 +10,10 @@ from itertools import islice
 import pygame
 from pygame import Rect, Surface, Color
 
+from frame import Frame
 from references._enums import *
 
-from frame import Frame
-
 # ------------------------------ CONST ------------------------------------- #
-
-##HUD_TILESET_PATH = "interface/chat3.png"
-##
-##HUD_PARTS_RECTS = {
-##    TOP_LEFT:       Rect(0, 0, 60, 54),
-##    TOP_RIGHT:      Rect(140, 0, 85, 49),
-##    BOTTOM_LEFT:    Rect(0, 69, 50, 71),
-##    BOTTOM_RIGHT:   Rect(185, 67, 40, 73),
-##    UP:             Rect(62, 0, 51, 22),
-##    DOWN:           Rect(62, 124, 51, 16),
-##    LEFT:           Rect(0, 55, 19, 16),
-##    RIGHT:          Rect(204, 47, 21, 24),
-##}
-##
-##HUD_MAX_SIZE = (700, 700)
-##HUD_MIN_SIZE = (300, 130)
-##HUD_DEQUE_MAX_LEN = 10
-##HUD_BACKGROUND_COLOR = Color(0, 0, 0)
-##HUD_TEXT_COLORS = {}
-##HUD_RESIZE_BUTTON_SIZE = 20
-##
-##HUD_PADDING = 25
-##HUD_FONT = ('Comic Sans MS', 15)
 
 HUD_TILESET_PATH = "../graphics/interface/chat_border.png"
 
@@ -68,7 +44,7 @@ HUD_PADDING = 18
 HUD_FONT = ('Lucida Console', 15)
 HUD_LINE_SPACING = 2
 
-# ========================== HUD monitor class ============================== #
+# ========================== LOG frame class ============================== #
 
 class Log(Frame):
     """HUD log class.
@@ -94,45 +70,10 @@ class Log(Frame):
         self._bottomed_message_index = None
         self._up_to_last_string = False
 
-        self.events = {
-            pygame.MOUSEBUTTONUP: self._event_mousebutton_up,
-            pygame.MOUSEBUTTONDOWN: self._event_mousebutton_down
-        }
-
-        self.dragging = False
-        self.resizing = False
-        self.mouse_pressed_pos = None
-
-
-        # TO DO: DEL
-        from random import choice
-        self._messages.extend(
-            [(q.strip(), choice(HUD_TEXT_COLORS.keys())) for q in
-            u'''Летом его призвали в охрану.
-            Учебный пункт бл расположен на станции Иоссер.
-            Все делалось по команде: сон, обед, разговоры.
-            Говорили про водку, про хлеб, про коней, про шахтерские заработки.
-            Все это Густав ненавидел и разговаривал только по-своему.
-            Только по-эстонски.
-            Даже с караульными псами.
-            Кроме того, в одиночестве - пил, если мешали - дрался.
-            А также допускал - "инциденты женского порядка".
-            (По выражению замполита Хуриева.)
-            - До чего вы эгоцентричный, Пахапиль! - осторожно корил его замполит.
-            Густав смущался, просил лист бумаги и коряво выводил:
-            "Вчера, сего года, я злоупотребил алкогольный напиток.
-            После чего уронил в грязь солдатское достоинство.
-            Впредь обещаю. Рядовой Пахапиль".
-            После некоторого раздумья он всегда добавлял:
-            "Прошу не отказать".
-            Затем приходили деньги от тетушки Рээт.
-            Пахапиль брал в магазине литр шартреза и отправлялся на кладбище.
-            Там в зеленом полумраке белели кресты.
-            Дальше, на краю водоема, была запущенная могила и рядом - фанерный обелиск.
-            Пахапиль грузно садился на холмик, выпивал и курил.'''.splitlines()]
-        )
-        # /TO DO: DEL
-
+        self.add_event_handler(pygame.MOUSEBUTTONUP,
+                               self._event_mousebutton_up)
+        self.add_event_handler(pygame.MOUSEBUTTONDOWN,
+                               self._event_mousebutton_down)
         self._update_text()
 
 
@@ -143,29 +84,12 @@ class Log(Frame):
         self._update_text_bottomed()
 
 
-    def handle_event(self, event):
-        """Main events handler.
-        """
-        if event.type in self.events:
-            return self.events[event.type](event)
-        else:
-            return False
-
-
     def update(self):
         """Update frame state (dragging and resizing handling).
         """
-        if self.dragging or self.resizing:
-            current_mouse_pos = pygame.mouse.get_pos()
-            if current_mouse_pos != self.mouse_pressed_pos:
-                dx = current_mouse_pos[0] - self.mouse_pressed_pos[0]
-                dy = current_mouse_pos[1] - self.mouse_pressed_pos[1]
-                if self.dragging:
-                    self.move(dx, dy)
-                elif self.resizing:
-                    self.resize(dx, dy)
-                    self._update_text(bottom_anchor=True)
-                self.mouse_pressed_pos = current_mouse_pos
+        self._update_dragging()
+        if self._update_resizing():
+            self._update_text(bottom_anchor=True)
 
 
     def _update_text(self, bottom_anchor=False):
@@ -197,7 +121,6 @@ class Log(Frame):
 
         position_y = 0
         max_position_y = text_height
-
 
         messages = islice(self._messages,
                           self._current_message_index,
@@ -279,12 +202,24 @@ class Log(Frame):
         return strings_surfaces
 
 
+    def _is_resize_corner_selected(self, coords):
+        """Check, if "coords" are in resize corner area.
+        """
+        x, y = coords
+        if x > self.rect.x + self.rect.width - HUD_RESIZE_BUTTON_SIZE and \
+           x < self.rect.x + self.rect.width and \
+           y > self.rect.y + self.rect.height - HUD_RESIZE_BUTTON_SIZE and \
+           y < self.rect.y + self.rect.height:
+            return True
+        else:
+            return False
+
+    # ---------------------- EVENTS ----------------------- #
+
     def _event_mousebutton_up(self, event):
         """Handle mouse button up event.
         """
-        if self.dragging or self.resizing:
-            self.dragging = False
-            self.resizing = False
+        if self._dragging_handled_off() or self._resizing_handled_off():
             return True
         else:
             return False
@@ -305,16 +240,13 @@ class Log(Frame):
 
             elif self._is_resize_corner_selected(event.pos):
                 # resize HUD
-                self.resizing = True
-                self.mouse_pressed_pos = event.pos
+                self._enable_resizing_state(event.pos)
 
             else:
                 # move HUD
-                self.dragging = True
-                self.mouse_pressed_pos = event.pos
+                self._enable_dragging_state(event.pos)
 
             return True
-
         else:
             return False
 
@@ -347,19 +279,7 @@ class Log(Frame):
         self._current_message_index += 1
         self._update_text()
 
-
-    def _is_resize_corner_selected(self, coords):
-        """Check, if "coords" are in resize corner area.
-        """
-        x, y = coords
-        if x > self.rect.x + self.rect.width - HUD_RESIZE_BUTTON_SIZE and \
-           x < self.rect.x + self.rect.width and \
-           y > self.rect.y + self.rect.height - HUD_RESIZE_BUTTON_SIZE and \
-           y < self.rect.y + self.rect.height:
-            return True
-        else:
-            return False
-
+    # -------------------------------- #
 
     def __repr__(self):
         """Simple representation.

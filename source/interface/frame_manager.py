@@ -76,7 +76,7 @@ class FrameManager(object):
         """
         events = set()
         for frame in self._frames:
-            registered_events = set(frame.events.keys())
+            registered_events = set(frame._events.keys())
             events.update(registered_events)
         self.events = events
 
