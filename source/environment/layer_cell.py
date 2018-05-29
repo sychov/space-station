@@ -33,9 +33,10 @@ class LayerCell(object):
     def initialize(cls, filename, size, scale, used_tiles):
         """ Load tileset for a game map.
 
-            filename:   name of tileset image
-            size:       size of 1 tile
-            scale:      1 or 2 (for 2x size, every pixel doubles)
+            filename:       name of tileset image
+            size:           size of 1 tile
+            scale:          1 or 2 (for 2x size, every pixel doubles)
+            used_tiles:     list of tiles numbers, used in game map
 
         Tileset must be single image. Tiles have to be supported
         by Tiled editor, order: from left to right, and from top to bottom.

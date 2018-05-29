@@ -53,4 +53,13 @@ DANGER = 51
 SUCCESS = 52
 FAIL = 53
 
+# enum: sprite size type
+
+SPRITE_1x1 = 61
+SPRITE_2x1 = 62
+SPRITE_1x2 = 63
+SPRITE_2x2 = 64
+
+
+
 

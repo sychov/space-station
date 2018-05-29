@@ -62,19 +62,21 @@ class Log(Frame):
             max_size=HUD_MAX_SIZE,
             min_size=HUD_MIN_SIZE,
             bg_color=HUD_BACKGROUND_COLOR,
-            padding=HUD_PADDING
         )
+        self._padding = HUD_PADDING
         self._messages = deque(maxlen=HUD_DEQUE_MAX_LEN)
         self._font = pygame.font.SysFont(*HUD_FONT)
         self._current_message_index = None
         self._bottomed_message_index = None
         self._up_to_last_string = False
+        self._update_text()
+
+        # ~ EVENTS ~
 
         self.add_event_handler(pygame.MOUSEBUTTONUP,
                                self._event_mousebutton_up)
         self.add_event_handler(pygame.MOUSEBUTTONDOWN,
                                self._event_mousebutton_down)
-        self._update_text()
 
 
     def output(self, msg, tag=None):
@@ -109,10 +111,10 @@ class Log(Frame):
         """
         _width, _height = self._background.get_size()
         text_frame = self._background.subsurface(
-                            (self.padding,
-                             self.padding,
-                             _width - self.padding * 2,
-                             _height - self.padding * 2))
+                            (self._padding,
+                             self._padding,
+                             _width - self._padding * 2,
+                             _height - self._padding * 2))
 
         text_frame.fill(HUD_BACKGROUND_COLOR)
         font_height = self._font.size("Tg")[1]
@@ -145,10 +147,10 @@ class Log(Frame):
         """
         _width, _height = self._background.get_size()
         text_frame = self._background.subsurface(
-                            (self.padding,
-                             self.padding,
-                             _width - self.padding * 2,
-                             _height - self.padding * 2))
+                            (self._padding,
+                             self._padding,
+                             _width - self._padding * 2,
+                             _height - self._padding * 2))
 
         text_frame.fill(HUD_BACKGROUND_COLOR)
         font_height = self._font.size("Tg")[1]

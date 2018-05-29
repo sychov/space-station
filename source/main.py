@@ -13,12 +13,13 @@ from persons.player import Player
 from interface.log import Log
 from interface.frame_manager import FrameManager
 from interface.storage import Storage
+from environment.inventory_object import InventorySprite
 from references._enums import *
 
 # ------------------------------ CONST ------------------------------------- #
 
 DISPLAY_SIZE = (1024, 768)
-FPS = 200
+FPS = 1200
 DOUBLE = True
 MAP_PATH = '../gamedata/map/map.json'
 TILESET_PATH = "../graphics/tilesets/TILES.png"
@@ -39,6 +40,8 @@ class Main(object):
     def __init__(self):
         """ Init.
         """
+        scale = 2 if DOUBLE else 1
+
         pygame.init()
         self.screen = pygame.display.set_mode(DISPLAY_SIZE)
 
@@ -51,11 +54,11 @@ class Main(object):
             map_path=MAP_PATH,
             tileset_path=TILESET_PATH,
             display_size_tuple=DISPLAY_SIZE,
-            scale=2 if DOUBLE else 1)
+            scale=scale)
 
         x, y = self.game_map.get_first_walkable_cell_coords()
         self.player = Player(x, y, CHARACTER_TILESET,
-                             scale=2 if DOUBLE else 1,
+                             scale=scale,
                              display_size=DISPLAY_SIZE)
         self.game_map.make_bottom_buffer(self.player.get_camera_pos())
 
@@ -63,8 +66,56 @@ class Main(object):
         self.log_frame = Log(HUD_START_COORDS)
         self.frames_manager.add_frame(self.log_frame)
 
-        self.storage = Storage((300, 10, 300, 200))
+
+        # TO DO: DEL !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        InventorySprite.add_sprites(
+            '../graphics/tilesets/items_1x1.png',
+            '1x1',
+            SPRITE_1x1,
+            scale
+        )
+
+        InventorySprite.add_sprites(
+            '../graphics/tilesets/items_1x2.png',
+            '1x2',
+            SPRITE_1x2,
+            scale
+        )
+
+        InventorySprite.add_sprites(
+            '../graphics/tilesets/items_2x1.png',
+            '2x1',
+            SPRITE_2x1,
+            scale
+        )
+
+        InventorySprite.add_sprites(
+            '../graphics/tilesets/items_2x2.png',
+            '2x2',
+            SPRITE_2x2,
+            scale
+        )
+
+        big_item = InventorySprite('2x2', 1)
+        medium_item = InventorySprite('2x1', 1)
+        medium_item2 = InventorySprite('1x2', 1)
+        small_item = InventorySprite('1x1', 1)
+        small_item2 = InventorySprite('1x1', 3)
+
+        self.storage = Storage((300, 10, 150, 100))
+        self.storage.add_item(small_item)
+        self.storage.add_item(medium_item)
+        self.storage.add_item(medium_item2)
+        self.storage._draw_items()
         self.frames_manager.add_frame(self.storage)
+
+
+        self.storage2 = Storage((500, 10, 150, 100))
+        self.storage2.add_item(small_item2)
+        self.storage2.add_item(big_item)
+        self.storage2._draw_items()
+        self.frames_manager.add_frame(self.storage2)
 
 
     def mainloop(self):

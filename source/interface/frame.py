@@ -19,7 +19,7 @@ class Frame(object):
     Used as base to make any custom windows in-game.
     """
     def __init__(self, rect, tileset_path, parts_rects, max_size, min_size,
-                                                            bg_color, padding):
+                                                                     bg_color):
         """ Load tileset for a game HUD.
         Create Hud instance with default settings of tileset and limits.
 
@@ -36,7 +36,6 @@ class Frame(object):
         # 1. ~ Init variables ~
 
         self.rect = Rect(rect)
-        self.padding = padding
 
         self._parts_rects = parts_rects
         self._max_size = max_size
