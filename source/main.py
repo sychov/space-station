@@ -13,7 +13,7 @@ from persons.player import Player
 from interface.log import Log
 from interface.frame_manager import FrameManager
 from interface.storage import Storage
-from environment.inventory_object import InventorySprite
+from environment.inventory_object import InventoryObject
 from references._enums import *
 
 # ------------------------------ CONST ------------------------------------- #
@@ -69,52 +69,52 @@ class Main(object):
 
         # TO DO: DEL !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        InventorySprite.add_sprites(
+        InventoryObject.add_sprites(
             '../graphics/tilesets/items_1x1.png',
             '1x1',
             SPRITE_1x1,
             scale
         )
 
-        InventorySprite.add_sprites(
+        InventoryObject.add_sprites(
             '../graphics/tilesets/items_1x2.png',
             '1x2',
             SPRITE_1x2,
             scale
         )
 
-        InventorySprite.add_sprites(
+        InventoryObject.add_sprites(
             '../graphics/tilesets/items_2x1.png',
             '2x1',
             SPRITE_2x1,
             scale
         )
 
-        InventorySprite.add_sprites(
+        InventoryObject.add_sprites(
             '../graphics/tilesets/items_2x2.png',
             '2x2',
             SPRITE_2x2,
             scale
         )
 
-        big_item = InventorySprite('2x2', 1)
-        medium_item = InventorySprite('2x1', 1)
-        medium_item2 = InventorySprite('1x2', 1)
-        small_item = InventorySprite('1x1', 1)
-        small_item2 = InventorySprite('1x1', 3)
+        big_item = InventoryObject('2x2', 1)
+        medium_item = InventoryObject('2x1', 1)
+        medium_item2 = InventoryObject('1x2', 1)
+        small_item = InventoryObject('1x1', 1)
+        small_item2 = InventoryObject('1x1', 3)
 
         self.storage = Storage((300, 10, 150, 100))
         self.storage.add_item(small_item)
         self.storage.add_item(medium_item)
         self.storage.add_item(medium_item2)
-        self.storage._draw_items()
+        self.storage._draw_storage_items()
         self.frames_manager.add_frame(self.storage)
 
 
         self.storage2 = Storage((500, 10, 150, 100))
         self.storage2.add_item(small_item2)
         self.storage2.add_item(big_item)
-        self.storage2._draw_items()
+        self.storage2._draw_storage_items()
         self.frames_manager.add_frame(self.storage2)
 
 

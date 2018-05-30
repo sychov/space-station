@@ -12,7 +12,7 @@ from references._enums import *
 
 # ==================== Inventory object class ============================== #
 
-class InventorySprite(object):
+class InventoryObject(object):
     """ Single sprite of the inventory object.
     Class must be initialized through:
 
