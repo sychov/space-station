@@ -38,8 +38,10 @@ STORAGE_TOP_LEFT = (24, 29)
 CELL_SIZE = 64
 
 LINE_COLOR = Color(0, 140, 140)
-OUTLINE_COLOR = Color(155, 83, 0)
+OUTLINE_COLOR = Color(110, 110, 110)
 CELLS_MATRIX = (2, 4)
+
+AVAILABLE_COLOR = Color(0, 70, 70)
 
 # =========================== Storage cell class =========================== #
 
@@ -160,7 +162,7 @@ class Storage(Frame):
         item_type = item.type
         for y in xrange(self._height_in_cells):
             for x in xrange(self._width_in_cells):
-                if self._is_cell_available_for(x, y, item_type):
+                if self._get_cell_available_for(x, y, item_type):
                     # for 1x1 sprites:
                     if item_type == SPRITE_1x1:
                         self._storage_cells[y][x].put_item(item)
@@ -201,39 +203,77 @@ class Storage(Frame):
         super(Storage, self).draw(screen)
         if self._dragged_item:
             x, y = pygame.mouse.get_pos()
-            x -= self._dragged_item['half_width']
-            y -= self._dragged_item['half_height']
-            screen.blit(self._dragged_item['image'], (x, y))
+            x -= self._dragged_item[DI_HALF_IMAGE_WIDTH]
+            y -= self._dragged_item[DI_HALF_IMAGE_HEIGHT]
+            screen.blit(self._dragged_item[DI_IMAGE], (x, y))
 
 
-    def _is_cell_available_for(self, x, y, sprite_type):
+    def update(self):
+        """Update frame state (dragging and resizing handling).
+        """
+        self._update_dragging() or self._update_dragging_item()
+
+
+    def bind_external_storage_search(self, external_method):
+        """Bind external method "_get_target_storage()" to instance.
+        """
+        self._get_target_storage = external_method
+
+
+    def redraw_storage(self):
+        """
+        """
+        self._draw_storage_grid()
+        self._draw_storage_items()
+        if self._dragged_item:
+            self._draw_dragged_item()
+
+
+    def _get_target_storage(self):
+        """External method.
+        Must be binded through "bind_external_storage_search()" method
+        before using.
+        """
+        raise RuntimeError('External method _get_target_storage() '
+                           'not binded!')
+
+
+    def _get_cell_available_for(self, x, y, sprite_type):
         """Check, if item with "sprite_type" size can be put to cell
-        with x, y coords.
+        with x, y coords (counting around ones).
         """
         if not self._storage_cells[y][x].is_empty():
-            return False
+            return None
 
         # for 1x1 sprites:
         if sprite_type == SPRITE_1x1:
-            return True
+            return [(x, y)]
 
         # for 2x1 sprites:
-        elif sprite_type == SPRITE_2x1 and x + 1 < self._width_in_cells and \
-                                            self._storage_cells[y][x + 1].is_empty():
-            return True
+        elif sprite_type == SPRITE_2x1:
+            if  x + 1 < self._width_in_cells and \
+                                      self._storage_cells[y][x + 1].is_empty():
+                return [(x, y), (x + 1, y)]
+            elif x - 1 >= 0 and self._storage_cells[y][x - 1].is_empty():
+                return [(x - 1, y), (x, y)]
 
         # for 1x2 sprites:
-        elif sprite_type == SPRITE_1x2 and y + 1 < self._height_in_cells and \
-                                            self._storage_cells[y + 1][x].is_empty():
-            return True
+        elif sprite_type == SPRITE_1x2:
+            if y + 1 < self._height_in_cells and \
+                                    self._storage_cells[y + 1][x].is_empty():
+                return [(x, y), (x, y + 1)]
+            elif y - 1 >= 0 and self._storage_cells[y - 1][x].is_empty():
+                return [(x, y - 1), (x, y)]
 
         # for 2x2 sprites:
-        elif sprite_type == SPRITE_2x2 and \
-                    y + 1 < self._height_in_cells and x + 1 < self._width_in_cells and \
-                    self._storage_cells[y][x + 1].is_empty() and \
-                    self._storage_cells[y + 1][x].is_empty() and \
-                    self._storage_cells[y + 1][x + 1].is_empty():
-            return True
+##        elif sprite_type == SPRITE_2x2 and \
+##                    y + 1 < self._height_in_cells and \
+##                    x + 1 < self._width_in_cells and \
+##                    self._storage_cells[y][x + 1].is_empty() and \
+##                    self._storage_cells[y + 1][x].is_empty() and \
+##                    self._storage_cells[y + 1][x + 1].is_empty():
+##            return True
+        return False
 
 
     def _draw_storage_items(self):
@@ -299,14 +339,16 @@ class Storage(Frame):
         """Return coords of cell, if was clicked to it.
         Else returns None.
         """
+        x, y = click_pos
+        relative_pos = x - self.rect.x, y - self.rect.y
         for rect, coords in self._storage_cells_areas:
-            if rect.collidepoint(click_pos):
+            if rect.collidepoint(relative_pos):
                 return coords
         else:
             return None
 
 
-    def _start_item_dragging(self, x, y):
+    def _start_item_dragging(self, x, y, mouse_pos):
         """Mark cell's item by (x, y) coords as "dragged" one.
         Item is drawn as outlined, fill metadata for dragged item.
         """
@@ -319,24 +361,31 @@ class Storage(Frame):
         mask = pygame.mask.from_surface(image)
         outline_list = mask.outline()
         self._dragged_item = {
-            'outline_image':  Surface(image.get_size()),
-            'image': image,
-            'x': x,
-            'y': y,
-            'half_width': image.get_width() / 2,
-            'half_height': image.get_height() / 2,
+            DI_OUTLINED_IMAGE:  Surface(image.get_size()),
+            DI_IMAGE: image,
+            DI_CELL_X: x,
+            DI_CELL_Y: y,
+            DI_HALF_IMAGE_WIDTH: image.get_width() / 2,
+            DI_HALF_IMAGE_HEIGHT: image.get_height() / 2,
+            DI_LAST_MOUSE_POS: mouse_pos,
+            DI_TARGET_CELLS_LIST: None,
+            DI_TARGET_STORAGE: None,
+            DI_SPRITE_TYPE: cell.inventory_item.type
         }
-        pygame.draw.lines(self._dragged_item['outline_image'], OUTLINE_COLOR,
-                                                        True, outline_list, 1)
+        pygame.draw.lines(self._dragged_item[DI_OUTLINED_IMAGE],
+                          OUTLINE_COLOR,
+                          True,
+                          outline_list,
+                          1)
         self._draw_dragged_item()
 
 
     def _draw_dragged_item(self):
         """Draw dragged item in storage.
         """
-        x = self._dragged_item['x']
-        y = self._dragged_item['y']
-        image = self._dragged_item['outline_image']
+        x = self._dragged_item[DI_CELL_X]
+        y = self._dragged_item[DI_CELL_Y]
+        image = self._dragged_item[DI_OUTLINED_IMAGE]
         width, height = image.get_size()
         cell_rect = Rect(
             self._storage_rect.x + x * self._cell_size,
@@ -363,10 +412,80 @@ class Storage(Frame):
         Return True, if state was enabled (disabling was successful)
         """
         if self._dragged_item:
+            if self._dragged_item[DI_TARGET_CELLS_LIST]:
+                self._dragged_item[DI_TARGET_STORAGE].redraw_storage()
             self._dragged_item = None
-            self._draw_storage_grid()
-            self._draw_storage_items()
+            self.redraw_storage()
             return True
+
+
+    def _update_dragging_item(self):
+        """
+        """
+        # nothing to handle, if no item is dragging
+        dragged_item = self._dragged_item
+        if not dragged_item:
+            return False
+
+        # handled, if nothing was changed
+        current_mouse_pos = pygame.mouse.get_pos()
+        if current_mouse_pos == dragged_item[DI_LAST_MOUSE_POS]:
+            return True
+        else:
+            dragged_item[DI_LAST_MOUSE_POS] = current_mouse_pos
+
+        # ~ 1. Get last and current cells/storage pairs ~
+
+        last_cells = dragged_item[DI_TARGET_CELLS_LIST]
+        last_storage = dragged_item[DI_TARGET_STORAGE]
+
+        current_cells = None
+        current_storage = None
+
+        storage = self._get_target_storage(current_mouse_pos)
+        if storage:
+            coords = storage._get_cell_coords_by_click_pos(current_mouse_pos)
+            if coords:
+                x, y = coords
+                cells_list = storage._get_cell_available_for(
+                                           x, y, dragged_item[DI_SPRITE_TYPE])
+                if cells_list:
+                    current_cells = cells_list
+                    current_storage = storage
+
+        # ~ 2. Handle changes ~
+
+        # handled, if all cells are the same ~
+        if (current_cells == last_cells) and (current_storage == last_storage):
+            return True
+
+        # redraw last storage, if something was changed
+        if last_cells:
+            last_storage.redraw_storage()
+
+        # mark cells, if we have new ones
+        if current_cells:
+            current_storage._mark_available_cells(cells_list)
+
+        # update dragging item state
+        dragged_item[DI_TARGET_CELLS_LIST] = current_cells
+        dragged_item[DI_TARGET_STORAGE] = current_storage
+        return True
+
+
+    def _mark_available_cells(self, cell_list):
+        """
+        """
+        for rect, coords in self._storage_cells_areas:
+            if coords in cell_list:
+                inner_rect = (
+                    rect.x + 2,
+                    rect.y + 2,
+                    rect.width - 4,
+                    rect.height - 4,
+                )
+                self._background.fill(AVAILABLE_COLOR, inner_rect)
+
 
     # ---------------------- EVENTS ----------------------- #
 
@@ -392,15 +511,13 @@ class Storage(Frame):
             if not in_border_rect.collidepoint(event.pos):
                 self._enable_dragging_state(event.pos)
             else:
-                x, y = event.pos
-                relative_pos = x - self.rect.x, y - self.rect.y
-                cell_coords = self._get_cell_coords_by_click_pos(relative_pos)
+                cell_coords = self._get_cell_coords_by_click_pos(event.pos)
                 if not cell_coords:
                     return True
 
                 x, y = cell_coords
                 if not self._storage_cells[y][x].is_empty():
-                    self._start_item_dragging(x, y)
+                    self._start_item_dragging(x, y, event.pos)
 
             return True
         else:

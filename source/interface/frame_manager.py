@@ -5,6 +5,7 @@
  Description:
 ----------------------------------------------------------"""
 
+from storage import Storage
 
 from references._enums import *
 
@@ -27,6 +28,9 @@ class FrameManager(object):
         else:
             self._frames.insert(0, frame)
         self._update_events()
+
+        if isinstance(frame, Storage):
+            frame.bind_external_storage_search(self._get_storage_in_position)
 
 
     def delete_frame(self, frame):
@@ -79,4 +83,20 @@ class FrameManager(object):
             registered_events = set(frame._events.keys())
             events.update(registered_events)
         self.events = events
+
+
+    def _get_storage_in_position(self, pos):
+        """Scan for first frame collided given mouse position.
+        If this frame is Storage, return it.
+        """
+        for frame in reversed(self._frames):
+            if frame.rect.collidepoint(pos):
+                break
+        else:
+            return None
+
+        if isinstance(frame, Storage):
+            return frame
+        else:
+            return None
 
