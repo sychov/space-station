@@ -117,6 +117,8 @@ class Main(object):
         self.storage2._draw_storage_items()
         self.frames_manager.add_frame(self.storage2)
 
+      # TO DO: /DEL !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
     def mainloop(self):
         """Start game main loop.
