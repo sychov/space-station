@@ -408,7 +408,6 @@ class Storage(Frame):
         Item is drawn as outlined, fill metadata for dragged item.
         """
         self.sound_library.play('item_pick.wav')
-        print 1
         cell = self._storage_cells[y][x]
 
         if cell.is_dumb:

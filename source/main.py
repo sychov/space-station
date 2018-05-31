@@ -43,7 +43,7 @@ class Main(object):
         """
         scale = 2 if DOUBLE else 1
 
-        pygame.mixer.pre_init(44100, -16, 2, 512)
+        pygame.mixer.pre_init(44100, -16, 2, 1024)
         pygame.mixer.init()
         pygame.init()
 
