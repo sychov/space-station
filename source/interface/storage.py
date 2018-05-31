@@ -10,6 +10,7 @@ import pygame
 from pygame import Rect, Surface, Color
 
 from frame import Frame
+from sounds.sound_library import SoundLibrary
 from references._enums import *
 
 
@@ -102,6 +103,8 @@ class Storage(Frame):
         """
         rect:  x, y, width, height (on global screen)
         """
+        self.sound_library = SoundLibrary.get_instance()
+
         # numbers of cells by horizontal and vertical coords
         self._width_in_cells, self._height_in_cells = CELLS_MATRIX
 
@@ -404,6 +407,8 @@ class Storage(Frame):
         """Mark cell's item by (x, y) coords as "dragged" one.
         Item is drawn as outlined, fill metadata for dragged item.
         """
+        self.sound_library.play('item_pick.wav')
+        print 1
         cell = self._storage_cells[y][x]
 
         if cell.is_dumb:
@@ -471,6 +476,7 @@ class Storage(Frame):
         Move item, if it have to do this.
         """
         if self._dragged_item:
+            self.sound_library.play('item_put.wav')
             cells = self._dragged_item[DI_TARGET_CELLS_LIST]
             storage = self._dragged_item[DI_TARGET_STORAGE]
             if cells and storage:

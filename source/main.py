@@ -8,6 +8,7 @@
 
 import pygame
 
+from sounds.sound_library import SoundLibrary
 from environment.game_map import Map
 from persons.player import Player
 from interface.log import Log
@@ -42,11 +43,17 @@ class Main(object):
         """
         scale = 2 if DOUBLE else 1
 
+        pygame.mixer.pre_init(44100, -16, 2, 512)
+        pygame.mixer.init()
         pygame.init()
+
         self.screen = pygame.display.set_mode(DISPLAY_SIZE)
 
         if DEBUG:
             self.debug_text = pygame.font.SysFont('Comic Sans MS', 20)
+
+
+        SoundLibrary('../sounds')
 
         self.timer = pygame.time.Clock()
 
