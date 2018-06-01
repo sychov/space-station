@@ -14,86 +14,10 @@ from sounds.sound_library import SoundLibrary
 from references._enums import *
 
 
-# =========================== Storage cell class =========================== #
-
-
-class StorageCell(object):
-    """Very simple class for cell content of Storage
-    """
-    def __init__(self):
-        """Create empty cell.
-        """
-        self.clear()
-
-
-    def is_empty(self, self_item=None):
-        """Return True, if cell is empty, else False.
-        """
-        if self.inventory_item and self.inventory_item != self_item:
-            return False
-        else:
-            return True
-
-
-    def put_item(self, item, is_dumb=False):
-        """Fill cell with item (main part or dumb one).
-
-            item:          Inventory object
-            is_dumb:       True, for upper-left corner, False for others
-        """
-        self.inventory_item = item
-        self.is_dumb = is_dumb
-
-
-    def clear(self):
-        """Make cell clear.
-        """
-        self.inventory_item = None
-        self.is_dumb = False
-
-
-    def __repr__(self):
-        """Simple representation.
-        """
-        if not self.inventory_item:
-            return 'Empty cell'
-        elif self.is_dumb:
-            return 'Dumb cell of %s' % str(self.inventory_item)
-        else:
-            return 'Cell of %s' % str(self.inventory_item)
-
-
 # ========================= Storage config class ========================== #
 
 
 class StorageConfig(object):
-    """Small class for Storage class configuration purposes.
-    """
-    def __init__(self, frame_config, grid_size, grid_top_left_corner,
-                        grid_line_color, item_outline_color, cell_avail_color):
-        """
-        Creates simple config object for Storage class:
-
-            frame_config:           FrameConfig instance
-            grid_size:              (<cells count by X>, <cells count by Y>)
-            grid_top_left_corner:   (x, y) shift from top-level corner,
-                                    where cells grid begins
-            grid_line_color:        Color inst, of cells grid lines
-            item_outline_color:     Color inst, of item's outline
-            cell_avail_color:       Color inst, of available cell's marking
-        """
-        self.frame_config = frame_config
-        self.grid_size = grid_size
-        self.grid_top_left_corner = grid_top_left_corner
-        self.grid_line_color = grid_line_color
-        self.outline_color = item_outline_color
-        self.cell_avail_color = cell_avail_color
-
-
-# ========================= Storage content class ========================== #
-
-
-class StorageContent(object):
     """Small class for Storage class configuration purposes.
     """
     def __init__(self, frame_config, grid_size, grid_top_left_corner,
@@ -138,19 +62,23 @@ class Storage(Frame):
         cls._cell_size = size
 
 
-    def __init__(self, rect, storage_config):
+    def __init__(self, rect, storage_config, storage_content):
         """
-        rect:  x, y, width, height (on global screen)
+            rect:  x, y, width, height (on global screen)
+            storage_config
+            storage_content
         """
-        # ~ 1. Init base attributes ~
-
-        self._sound_library = SoundLibrary.get_instance()
-
         if not self._cell_size:
             raise RuntimeError('Set Storage cell size first!')
 
-        # numbers of cells by horizontal and vertical coords
-        self._width_in_cells, self._height_in_cells = storage_config.grid_size
+        # ~ 1. Init base attributes ~
+
+        self.content = storage_content
+        if (self.content.width, self.content.height
+                            ) != storage_config.grid_size:
+            raise RuntimeError('Incorrect size of Storage content!')
+
+        self._sound_library = SoundLibrary.get_instance()
 
         # metadata about item, currently dragged. None, if no item dragging
         self._dragged_item = None
@@ -159,22 +87,16 @@ class Storage(Frame):
         self._item_outline_color = storage_config.outline_color
         self._available_cell_color = storage_config.cell_avail_color
 
-        # ~ 2. Form storage content ~
-
-        self._storage_cells = [
-            [StorageCell() for x in xrange(self._width_in_cells)]
-                           for y in xrange(self._height_in_cells)]
-
-        # ~ 3. Create Frame object ~
+        # ~ 2. Create Frame object ~
 
         padding = storage_config.frame_config.padding
         start_x, start_y = storage_config.grid_top_left_corner
 
         final_rect = Rect(rect)
-        width_grid = self._cell_size * self._width_in_cells
+        width_grid = self._cell_size * self.content.width
         if final_rect.width < width_grid + start_x + padding:
             final_rect.width = width_grid + start_x + padding
-        height_grid = self._cell_size* self._height_in_cells
+        height_grid = self._cell_size* self.content.height
         if final_rect.height < height_grid + start_y + padding:
             final_rect.height = height_grid + start_y + padding
 
@@ -187,7 +109,7 @@ class Storage(Frame):
         super(Storage, self).__init__(rect=final_rect,
                                       frame_config=storage_config.frame_config)
 
-        # ~ 4. Draw grid ~
+        # ~ 3. Draw grid ~
 
         self._draw_storage_grid()
 
@@ -197,77 +119,6 @@ class Storage(Frame):
                                self._event_mousebutton_up)
         self.add_event_handler(pygame.MOUSEBUTTONDOWN,
                                self._event_mousebutton_down)
-
-
-    def add_item(self, item):
-        """Try to add item to storage with non-defined placement.
-        Return True, if item was added and False
-        """
-        item_type = item.type
-        for y in xrange(self._height_in_cells):
-            for x in xrange(self._width_in_cells):
-                if self._get_cell_available_for(x, y, item):
-                    # for 1x1 sprites:
-                    if item_type == SPRITE_1x1:
-                        self._storage_cells[y][x].put_item(item)
-                        return True
-
-                    # for 2x1 sprites:
-                    elif item_type == SPRITE_2x1:
-                        self._storage_cells[y][x].put_item(item)
-                        self._storage_cells[y][x + 1].put_item(
-                                                            item, is_dumb=True)
-                        return True
-
-                    # for 1x2 sprites:
-                    elif item_type == SPRITE_1x2:
-                        self._storage_cells[y][x].put_item(item)
-                        self._storage_cells[y + 1][x].put_item(
-                                                            item, is_dumb=True)
-                        return True
-
-                    # for 2x2 sprites:
-                    elif item_type == SPRITE_2x2:
-                        self._storage_cells[y][x].put_item(item)
-                        self._storage_cells[y + 1][x].put_item(
-                                                            item, is_dumb=True)
-                        self._storage_cells[y][x + 1].put_item(
-                                                            item, is_dumb=True)
-                        self._storage_cells[y + 1][x + 1].put_item(
-                                                            item, is_dumb=True)
-                        return True
-        return False
-
-
-    def remove_item(self, item):
-        """Remove item from storage cells.
-        """
-        for row in self._storage_cells:
-            for cell in row:
-                if cell.inventory_item == item:
-                    cell.clear()
-
-
-    def add_item_to_specific_cells(self, item, cells):
-        """Try to add item to storage defined placement (specific cells).
-        Return True, if item was added and False
-        """
-        upper_left_cell = min(cells)
-        item_type = item.type
-
-        # check, if all cells are ready to put item into
-        for cell in cells:
-            x, y = cell
-            if not self._storage_cells[y][x].is_empty(self_item=item):
-                return False
-
-        # put item
-        for cell in cells:
-            x, y = cell
-            is_dumb = cell != upper_left_cell
-            self._storage_cells[y][x].put_item(item, is_dumb=is_dumb)
-
-        return True
 
 
     def draw(self, screen):
@@ -314,70 +165,12 @@ class Storage(Frame):
                            'not binded!')
 
 
-    def _get_cell_available_for(self, x, y, item):
-        """Check, if item with "sprite_type" size can be put to cell
-        with x, y coords (counting around ones).
-        """
-        if not self._storage_cells[y][x].is_empty(self_item=item):
-            return None
-
-        sprite_type = item.type
-
-        # for 1x1 sprites:
-        if sprite_type == SPRITE_1x1:
-            return [(x, y)]
-
-        # for 2x1 sprites:
-        elif sprite_type == SPRITE_2x1:
-            if  x + 1 < self._width_in_cells and \
-                        self._storage_cells[y][x + 1].is_empty(self_item=item):
-                return [(x, y), (x + 1, y)]
-            elif x - 1 >= 0 and \
-                        self._storage_cells[y][x - 1].is_empty(self_item=item):
-                return [(x - 1, y), (x, y)]
-
-        # for 1x2 sprites:
-        elif sprite_type == SPRITE_1x2:
-            if y + 1 < self._height_in_cells and \
-                        self._storage_cells[y + 1][x].is_empty(self_item=item):
-                return [(x, y), (x, y + 1)]
-            elif y - 1 >= 0 and \
-                        self._storage_cells[y - 1][x].is_empty(self_item=item):
-                return [(x, y - 1), (x, y)]
-
-        # for 2x2 sprites:
-        elif sprite_type == SPRITE_2x2:
-            if y + 1 < self._height_in_cells:
-                if x + 1 < self._width_in_cells and \
-                   self._storage_cells[y][x + 1].is_empty(self_item=item) and \
-                   self._storage_cells[y + 1][x].is_empty(self_item=item) and \
-                   self._storage_cells[y + 1][x + 1].is_empty(self_item=item):
-                    return [(x, y), (x + 1, y), (x, y + 1), (x + 1, y + 1)]
-                elif x - 1 >= 0 and \
-                   self._storage_cells[y][x - 1].is_empty(self_item=item) and \
-                   self._storage_cells[y + 1][x].is_empty(self_item=item) and \
-                   self._storage_cells[y + 1][x - 1].is_empty(self_item=item):
-                    return [(x - 1, y), (x, y), (x - 1, y + 1), (x, y + 1)]
-            if y - 1 >= 0:
-                if x + 1 < self._width_in_cells and \
-                   self._storage_cells[y][x + 1].is_empty(self_item=item) and \
-                   self._storage_cells[y - 1][x].is_empty(self_item=item) and \
-                   self._storage_cells[y - 1][x + 1].is_empty(self_item=item):
-                    return [(x, y - 1), (x + 1, y - 1), (x, y), (x + 1, y)]
-                elif x - 1 >= 0 and \
-                   self._storage_cells[y][x - 1].is_empty(self_item=item) and \
-                   self._storage_cells[y - 1][x].is_empty(self_item=item) and \
-                   self._storage_cells[y - 1][x - 1].is_empty(self_item=item):
-                    return [(x - 1, y - 1), (x, y - 1), (x - 1, y), (x, y)]
-        return None
-
-
     def _draw_storage_items(self):
         """Draw items in storage.
         """
-        for y in xrange(self._height_in_cells):
-            for x in xrange(self._width_in_cells):
-                cell = self._storage_cells[y][x]
+        for y in xrange(self.content.height):
+            for x in xrange(self.content.width):
+                cell = self.content.storage_cells[y][x]
                 if not cell.is_empty() and not cell.is_dumb:
                     self._background.blit(
                         cell.inventory_item.image,
@@ -393,7 +186,7 @@ class Storage(Frame):
                                                          self._storage_rect, 1)
 
         _x = self._storage_rect.x + self._cell_size
-        for x in xrange(self._width_in_cells - 1):
+        for x in xrange(self.content.width - 1):
             pygame.draw.line(
                 self._background,
                 self._line_color,
@@ -403,7 +196,7 @@ class Storage(Frame):
             )
 
         _y = self._storage_rect.y + self._cell_size
-        for y in xrange(self._height_in_cells - 1):
+        for y in xrange(self.content.height - 1):
             pygame.draw.line(
                 self._background,
                 self._line_color,
@@ -422,8 +215,8 @@ class Storage(Frame):
         cell_size = self._cell_size
         _x = self._storage_rect.x
         _y = self._storage_rect.y
-        for y in xrange(self._height_in_cells):
-            for x in xrange(self._width_in_cells):
+        for y in xrange(self.content.height):
+            for x in xrange(self.content.width):
                 rect = Rect(_x + x * cell_size,
                             _y + y * cell_size,
                             cell_size,
@@ -450,10 +243,10 @@ class Storage(Frame):
         Item is drawn as outlined, fill metadata for dragged item.
         """
         self._sound_library.play('item_pick.wav')
-        cell = self._storage_cells[y][x]
+        cell = self.content.storage_cells[y][x]
 
         if cell.is_dumb:
-            cell, (x, y) = self._get_main_item_cell(cell)
+            cell, (x, y) = self.content.get_main_item_cell(cell)
 
         image = cell.inventory_item.image
         mask = pygame.mask.from_surface(image)
@@ -502,16 +295,6 @@ class Storage(Frame):
         cell_place.blit(image, (1, 1))
 
 
-    def _get_main_item_cell(self, cell):
-        """Return "main" cell it's coords for chosen "dumb".
-        """
-        for y, row in enumerate(self._storage_cells):
-            for x, some_cell in enumerate(row):
-                if not some_cell.is_dumb and \
-                               some_cell.inventory_item == cell.inventory_item:
-                    return some_cell, (x, y)
-
-
     def _dragging_item_handled_off(self):
         """Tries to disable dragging item state.
         Return True, if state was enabled (disabling was successful).
@@ -524,12 +307,12 @@ class Storage(Frame):
             if cells and storage:
                 item = self._dragged_item[DI_ITEM]
                 if storage == self:
-                    self.remove_item(item)
-                    self.add_item_to_specific_cells(item, cells)
+                    self.content.remove_item(item)
+                    self.content.add_item_to_specific_cells(item, cells)
                 else:
-                    storage.add_item_to_specific_cells(item, cells)
+                    storage.content.add_item_to_specific_cells(item, cells)
                     storage.redraw_storage()
-                    self.remove_item(item)
+                    self.content.remove_item(item)
                 self.redraw_storage()
 
             self._dragged_item = None
@@ -567,7 +350,7 @@ class Storage(Frame):
             coords = storage._get_cell_coords_by_click_pos(current_mouse_pos)
             if coords:
                 x, y = coords
-                cells_list = storage._get_cell_available_for(
+                cells_list = storage.content.get_cell_available_for(
                                                    x, y, dragged_item[DI_ITEM])
                 if cells_list:
                     current_cells = cells_list
@@ -636,7 +419,7 @@ class Storage(Frame):
                     return True
 
                 x, y = cell_coords
-                if not self._storage_cells[y][x].is_empty():
+                if not self.content.storage_cells[y][x].is_empty():
                     self._start_item_dragging(x, y, event.pos)
 
             return True

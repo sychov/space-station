@@ -42,9 +42,10 @@ STORAGE_GONFIG = StorageConfig(
 class WoodenShelfStorage(Storage):
     """Storage interface for wood locker
     """
-    def __init__(self, rect):
+    def __init__(self, rect, storage_content):
         """Init.
         """
-        super(WoodenShelfStorage, self).__init__(rect, STORAGE_GONFIG)
+        super(WoodenShelfStorage, self).__init__(
+                                         rect, STORAGE_GONFIG, storage_content)
 
 

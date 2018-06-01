@@ -42,9 +42,10 @@ STORAGE_GONFIG = StorageConfig(
 class LockerStorage(Storage):
     """Storage interface for metal locker
     """
-    def __init__(self, rect):
+    def __init__(self, rect, storage_content):
         """Init.
         """
-        super(LockerStorage, self).__init__(rect, STORAGE_GONFIG)
+        super(LockerStorage, self).__init__(
+                                         rect, STORAGE_GONFIG, storage_content)
 
 

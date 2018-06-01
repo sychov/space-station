@@ -33,7 +33,7 @@ class FrameManager(object):
             frame.bind_external_storage_search(self._get_storage_in_position)
 
 
-    def delete_frame(self, frame):
+    def remove_frame(self, frame):
         """Delete frame from manager's list.
         """
         self._frames.remove(frame)

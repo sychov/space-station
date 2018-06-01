@@ -13,10 +13,16 @@ from environment.game_map import Map
 from persons.player import Player
 from interface.log import Log
 from interface.frame_manager import FrameManager
-from interface.storage import Storage, StorageConfig
+from interface.storage import Storage
+from models.storage_content import StorageContent
 from interface.frame import FrameConfig
 from environment.inventory_object import InventoryObject
 from references._enums import *
+
+# TO DO: del !!!
+from interface.locker_storage import LockerStorage
+from interface.wood_shelf_storage import WoodenShelfStorage
+import gc
 
 # ------------------------------ CONST ------------------------------------- #
 
@@ -109,23 +115,20 @@ class Main(object):
         small_item = InventoryObject('1x1', 1)
         small_item2 = InventoryObject('1x1', 3)
 
-        from interface.locker_storage import LockerStorage
-        from interface.wood_shelf_storage import WoodenShelfStorage
+        self.storage_content = StorageContent(2, 4)
+        self.storage_content.add_item(small_item)
+        self.storage_content.add_item(medium_item)
+        self.storage_content.add_item(medium_item2)
 
-        self.storage = LockerStorage((300, 10, 150, 100))
-        self.storage.add_item(small_item)
-        self.storage.add_item(medium_item)
-        self.storage.add_item(medium_item2)
-        self.storage._draw_storage_items()
+        self.storage = LockerStorage((300, 10, 150, 100), self.storage_content)
+        self.storage.redraw_storage()
         self.frames_manager.add_frame(self.storage)
 
+        self.storage_content2 = StorageContent(3, 5)
+        self.storage_content2.add_item(small_item2)
+        self.storage_content2.add_item(big_item)
 
-        self.storage2 = WoodenShelfStorage((500, 10, 150, 100))
-        self.storage2.add_item(small_item2)
-        self.storage2.add_item(big_item)
-        self.storage2._draw_storage_items()
-        self.frames_manager.add_frame(self.storage2)
-
+        self.inventory_enabled = False
       # TO DO: /DEL !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
@@ -158,6 +161,20 @@ class Main(object):
                         self.log_frame.output('Hello! succes text!', SUCCESS)
                     elif event.key == pygame.K_7:
                         self.log_frame.output('Hello! fail text test!', FAIL)
+                    elif event.key == pygame.K_i:
+                        if self.inventory_enabled:
+                            self.frames_manager.remove_frame(self.inventory)
+                            self.inventory = None
+                            gc.collect()
+                            self.inventory_enabled = False
+                        else:
+                            self.inventory = WoodenShelfStorage(
+                                (500, 10, 150, 100),
+                                self.storage_content2)
+                            self.inventory.redraw_storage()
+                            self.frames_manager.add_frame(self.inventory)
+                            self.inventory_enabled = True
+                # TO DO: to del !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
             # ~ 2. Update ~
