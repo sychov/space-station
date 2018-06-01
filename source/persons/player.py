@@ -33,8 +33,6 @@ class Player(Char):
             display_size:           (<screen width>, <screen height>)
 
         """
-        self.debug_message = ''
-
         super(Player, self).__init__(start_x, start_y, tileset_path,
                                                                scale, 'Player')
         self.camera_shift_x = self.rect.width / 2

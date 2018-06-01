@@ -41,7 +41,6 @@ class Map(object):
         """
         # 1. Initialize basic attributes
 
-        self.debug_message = ''
         self.display_width, self.display_height = display_size_tuple
         self.scale = scale
         self.bottom_buffer = {

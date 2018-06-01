@@ -9,40 +9,10 @@
 import pygame
 from pygame import Rect, Surface, Color
 
-from frame import Frame
+from frame import Frame, FrameConfig
 from sounds.sound_library import SoundLibrary
 from references._enums import *
 
-
-# ------------------------------ CONST ------------------------------------- #
-
-TILESET_PATH = "../graphics/interface/blue_scifi_border.png"
-
-PARTS_RECTS = {
-    TOP_LEFT:       Rect(0, 0, 60, 54),
-    TOP_RIGHT:      Rect(140, 0, 85, 49),
-    BOTTOM_LEFT:    Rect(0, 69, 50, 71),
-    BOTTOM_RIGHT:   Rect(185, 67, 40, 73),
-    UP:             Rect(62, 0, 51, 22),
-    DOWN:           Rect(62, 124, 51, 16),
-    LEFT:           Rect(0, 55, 19, 16),
-    RIGHT:          Rect(204, 47, 21, 24),
-}
-
-MAX_SIZE = (700, 700)
-MIN_SIZE = (150, 130)
-BACKGROUND_COLOR = Color(0, 0, 0)
-
-PADDING = 25
-
-STORAGE_TOP_LEFT = (24, 29)
-CELL_SIZE = 64
-
-LINE_COLOR = Color(0, 140, 140)
-OUTLINE_COLOR = Color(110, 110, 110)
-CELLS_MATRIX = (2, 4)
-
-AVAILABLE_COLOR = Color(0, 70, 70)
 
 # =========================== Storage cell class =========================== #
 
@@ -93,43 +63,120 @@ class StorageCell(object):
             return 'Cell of %s' % str(self.inventory_item)
 
 
+# ========================= Storage config class ========================== #
+
+
+class StorageConfig(object):
+    """Small class for Storage class configuration purposes.
+    """
+    def __init__(self, frame_config, grid_size, grid_top_left_corner,
+                        grid_line_color, item_outline_color, cell_avail_color):
+        """
+        Creates simple config object for Storage class:
+
+            frame_config:           FrameConfig instance
+            grid_size:              (<cells count by X>, <cells count by Y>)
+            grid_top_left_corner:   (x, y) shift from top-level corner,
+                                    where cells grid begins
+            grid_line_color:        Color inst, of cells grid lines
+            item_outline_color:     Color inst, of item's outline
+            cell_avail_color:       Color inst, of available cell's marking
+        """
+        self.frame_config = frame_config
+        self.grid_size = grid_size
+        self.grid_top_left_corner = grid_top_left_corner
+        self.grid_line_color = grid_line_color
+        self.outline_color = item_outline_color
+        self.cell_avail_color = cell_avail_color
+
+
+# ========================= Storage content class ========================== #
+
+
+class StorageContent(object):
+    """Small class for Storage class configuration purposes.
+    """
+    def __init__(self, frame_config, grid_size, grid_top_left_corner,
+                        grid_line_color, item_outline_color, cell_avail_color):
+        """
+        Creates simple config object for Storage class:
+
+            frame_config:           FrameConfig instance
+            grid_size:              (<cells count by X>, <cells count by Y>)
+            grid_top_left_corner:   (x, y) shift from top-level corner,
+                                    where cells grid begins
+            grid_line_color:        Color inst, of cells grid lines
+            item_outline_color:     Color inst, of item's outline
+            cell_avail_color:       Color inst, of available cell's marking
+        """
+        self.frame_config = frame_config
+        self.grid_size = grid_size
+        self.grid_top_left_corner = grid_top_left_corner
+        self.grid_line_color = grid_line_color
+        self.outline_color = item_outline_color
+        self.cell_avail_color = cell_avail_color
+
+
 # ============================= Storage class ============================= #
 
 
 class Storage(Frame):
     """Base Storage class.
     """
-    def __init__(self, rect):
+    _cell_size = None
+
+
+    @classmethod
+    def set_cell_size(cls, size):
+        """
+        """
+        if cls._cell_size:
+            raise RuntimeError('Cell size is already set!')
+        if cls != Storage:
+            raise RuntimeError('Cell size must be set through '
+                               'Storage.set_cell_size() method!')
+        cls._cell_size = size
+
+
+    def __init__(self, rect, storage_config):
         """
         rect:  x, y, width, height (on global screen)
         """
-        self.sound_library = SoundLibrary.get_instance()
+        # ~ 1. Init base attributes ~
+
+        self._sound_library = SoundLibrary.get_instance()
+
+        if not self._cell_size:
+            raise RuntimeError('Set Storage cell size first!')
 
         # numbers of cells by horizontal and vertical coords
-        self._width_in_cells, self._height_in_cells = CELLS_MATRIX
+        self._width_in_cells, self._height_in_cells = storage_config.grid_size
 
-        # content of storage - 2x dimension array of StorageCell inst.
+        # metadata about item, currently dragged. None, if no item dragging
+        self._dragged_item = None
+
+        self._line_color = storage_config.grid_line_color
+        self._item_outline_color = storage_config.outline_color
+        self._available_cell_color = storage_config.cell_avail_color
+
+        # ~ 2. Form storage content ~
+
         self._storage_cells = [
             [StorageCell() for x in xrange(self._width_in_cells)]
                            for y in xrange(self._height_in_cells)]
 
-        start_x, start_y = STORAGE_TOP_LEFT
-        self._cell_size = CELL_SIZE
-        self._padding = PADDING
+        # ~ 3. Create Frame object ~
 
-        # metadata about item, currently dragged
-        # None, if no item is being dragged
-        self._dragged_item = None
-
-        # ~ Create Frame object ~
+        padding = storage_config.frame_config.padding
+        start_x, start_y = storage_config.grid_top_left_corner
 
         final_rect = Rect(rect)
         width_grid = self._cell_size * self._width_in_cells
-        if final_rect.width < width_grid + start_x + PADDING:
-            final_rect.width = width_grid + start_x + PADDING
+        if final_rect.width < width_grid + start_x + padding:
+            final_rect.width = width_grid + start_x + padding
         height_grid = self._cell_size* self._height_in_cells
-        if final_rect.height < height_grid + start_y + PADDING:
-            final_rect.height = height_grid + start_y + PADDING
+        if final_rect.height < height_grid + start_y + padding:
+            final_rect.height = height_grid + start_y + padding
 
         # rect of storage cells area
         self._storage_rect = Rect(start_x, start_y, width_grid, height_grid)
@@ -137,16 +184,10 @@ class Storage(Frame):
         # list of tuples (Rect, (x,y)) for every storage cell
         self._storage_cells_areas = self._get_storage_cells_areas()
 
-        super(Storage, self).__init__(
-            rect=final_rect,
-            tileset_path=TILESET_PATH,
-            parts_rects=PARTS_RECTS,
-            max_size=MAX_SIZE,
-            min_size=MIN_SIZE,
-            bg_color=BACKGROUND_COLOR,
-        )
+        super(Storage, self).__init__(rect=final_rect,
+                                      frame_config=storage_config.frame_config)
 
-        # ~ Draw grid ~
+        # ~ 4. Draw grid ~
 
         self._draw_storage_grid()
 
@@ -347,14 +388,15 @@ class Storage(Frame):
     def _draw_storage_grid(self):
         """Draw storage items grid.
         """
-        self._background.fill(BACKGROUND_COLOR, self._storage_rect)
-        pygame.draw.rect(self._background, LINE_COLOR, self._storage_rect, 1)
+        self._background.fill(self._background_color, self._storage_rect)
+        pygame.draw.rect(self._background, self._line_color,
+                                                         self._storage_rect, 1)
 
         _x = self._storage_rect.x + self._cell_size
         for x in xrange(self._width_in_cells - 1):
             pygame.draw.line(
                 self._background,
-                LINE_COLOR,
+                self._line_color,
                 (_x + x * self._cell_size, self._storage_rect.y),
                 (_x + x * self._cell_size, self._storage_rect.y +
                                                     self._storage_rect.height),
@@ -364,7 +406,7 @@ class Storage(Frame):
         for y in xrange(self._height_in_cells - 1):
             pygame.draw.line(
                 self._background,
-                LINE_COLOR,
+                self._line_color,
                 (self._storage_rect.x, _y + y * self._cell_size),
                 (self._storage_rect.x + self._storage_rect.width,
                                                      _y + y * self._cell_size),
@@ -407,7 +449,7 @@ class Storage(Frame):
         """Mark cell's item by (x, y) coords as "dragged" one.
         Item is drawn as outlined, fill metadata for dragged item.
         """
-        self.sound_library.play('item_pick.wav')
+        self._sound_library.play('item_pick.wav')
         cell = self._storage_cells[y][x]
 
         if cell.is_dumb:
@@ -429,15 +471,16 @@ class Storage(Frame):
             DI_TARGET_STORAGE: None,
         }
         outlined_image = self._dragged_item[DI_OUTLINED_IMAGE]
-        pygame.draw.lines(outlined_image, OUTLINE_COLOR, True, outline_list, 1)
+        pygame.draw.lines(outlined_image, self._item_outline_color,
+                                                         True, outline_list, 1)
 
         # draw cell borders
-        if width > CELL_SIZE:
-            pygame.draw.line(outlined_image, LINE_COLOR,
-                                   (CELL_SIZE - 1, 0), (CELL_SIZE - 1, height))
-        if height > CELL_SIZE:
-            pygame.draw.line(outlined_image, LINE_COLOR,
-                                    (0, CELL_SIZE - 1), (width, CELL_SIZE - 1))
+        if width > self._cell_size:
+            pygame.draw.line(outlined_image, self._line_color,
+                       (self._cell_size - 1, 0), (self._cell_size - 1, height))
+        if height > self._cell_size:
+            pygame.draw.line(outlined_image, self._line_color,
+                        (0, self._cell_size - 1), (width, self._cell_size - 1))
 
         self._draw_dragged_item()
 
@@ -475,7 +518,7 @@ class Storage(Frame):
         Move item, if it have to do this.
         """
         if self._dragged_item:
-            self.sound_library.play('item_put.wav')
+            self._sound_library.play('item_put.wav')
             cells = self._dragged_item[DI_TARGET_CELLS_LIST]
             storage = self._dragged_item[DI_TARGET_STORAGE]
             if cells and storage:
@@ -561,7 +604,7 @@ class Storage(Frame):
                     rect.width - 1,
                     rect.height - 1,
                 )
-                self._background.fill(AVAILABLE_COLOR, inner_rect)
+                self._background.fill(self._available_cell_color, inner_rect)
 
 
     # ---------------------- EVENTS ----------------------- #

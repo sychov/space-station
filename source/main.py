@@ -13,7 +13,8 @@ from environment.game_map import Map
 from persons.player import Player
 from interface.log import Log
 from interface.frame_manager import FrameManager
-from interface.storage import Storage
+from interface.storage import Storage, StorageConfig
+from interface.frame import FrameConfig
 from environment.inventory_object import InventoryObject
 from references._enums import *
 
@@ -42,18 +43,16 @@ class Main(object):
         """ Init.
         """
         scale = 2 if DOUBLE else 1
+        Storage.set_cell_size(32 * scale)
 
+        SoundLibrary('../sounds')
         pygame.mixer.pre_init(44100, -16, 2, 1024)
         pygame.mixer.init()
         pygame.init()
 
         self.screen = pygame.display.set_mode(DISPLAY_SIZE)
-
         if DEBUG:
             self.debug_text = pygame.font.SysFont('Comic Sans MS', 20)
-
-
-        SoundLibrary('../sounds')
 
         self.timer = pygame.time.Clock()
 
@@ -110,7 +109,10 @@ class Main(object):
         small_item = InventoryObject('1x1', 1)
         small_item2 = InventoryObject('1x1', 3)
 
-        self.storage = Storage((300, 10, 150, 100))
+        from interface.locker_storage import LockerStorage
+        from interface.wood_shelf_storage import WoodenShelfStorage
+
+        self.storage = LockerStorage((300, 10, 150, 100))
         self.storage.add_item(small_item)
         self.storage.add_item(medium_item)
         self.storage.add_item(medium_item2)
@@ -118,7 +120,7 @@ class Main(object):
         self.frames_manager.add_frame(self.storage)
 
 
-        self.storage2 = Storage((500, 10, 150, 100))
+        self.storage2 = WoodenShelfStorage((500, 10, 150, 100))
         self.storage2.add_item(small_item2)
         self.storage2.add_item(big_item)
         self.storage2._draw_storage_items()
@@ -174,10 +176,7 @@ class Main(object):
             # ~ 4. Display updating ~
 
             if DEBUG:
-                debug_msg = '%s %s fps = %d' % (
-                                self.player.debug_message,
-                                self.game_map.debug_message,
-                                self.timer.get_fps())
+                debug_msg = 'fps = %d' % self.timer.get_fps()
                 self.debug_outtext(debug_msg, 0)
 
             pygame.display.update()
@@ -195,8 +194,9 @@ class Main(object):
         """Output line of text in a top left corner +20+20 with 25px interval.
         For debug purposes.
         """
-        textsurface = self.debug_text.render(msg, False, DEBUG_COLOR)
-        self.screen.blit(textsurface, (20, 20 + line * 25))
+        if DEBUG:
+            textsurface = self.debug_text.render(msg, False, DEBUG_COLOR)
+            self.screen.blit(textsurface, (20, 20 + line * 25))
 
 
 # --------------------------------- RUN ------------------------------------- #

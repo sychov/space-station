@@ -12,40 +12,74 @@ from pygame import Rect, Surface, Color
 from references._enums import *
 
 
+# ======================== Frame config class ========================= #
+
+
+class FrameConfig(object):
+    """Small class for Frame class configuration purposes.
+    """
+    def __init__(self, tileset_path, part_rects, padding=1, max_size=None,
+                                       min_size=None, bg_color=Color(0, 0, 0)):
+        """
+        Creates simple config object for Frame class:
+
+            tileset_path:   full path to tileset file
+            part_rects:     dictionary, where keys are directions and corners
+                            enums (UP, BOTTOM_LEFT, etc), and values are
+                            Rect instances
+            padding:        padding from all border's sides in pixels
+            max_size:       (x, y), maximum frame size
+            min_size:       (x, y), minimum frame size
+            bg_color:       Color instance, for background re-filling
+        """
+        self.tileset_path = tileset_path
+        self.part_rects = part_rects
+        self.padding = padding
+        self.max_size = max_size
+        self.min_size = min_size
+        self.bg_color = bg_color
+
+
 # ========================== Frame class ============================== #
+
 
 class Frame(object):
     """Parent frame class.
     Used as base to make any custom windows in-game.
     """
-    def __init__(self, rect, tileset_path, parts_rects, max_size, min_size,
-                                                                     bg_color):
+    _cached_tilesets = {}
+
+    def __init__(self, rect, frame_config):
         """ Load tileset for a game HUD.
         Create Hud instance with default settings of tileset and limits.
 
             rect:           x, y, width, height (position on global screen);
-            tileset_path:   full path to tileset file
-            parts_rects:    dictionary, where keys are directions and corners
-                            enums (UP, BOTTOM_LEFT, etc), and values are
-                            Rect instances
-            max_size:       x, y
-            min_size:       x, y
-            bg_color:       Color instance
-            padding:        int, in pixels, both for X and Y paddings
+
         """
         # 1. ~ Init variables ~
 
         self.rect = Rect(rect)
 
-        self._parts_rects = parts_rects
-        self._max_size = max_size
-        self._min_size = min_size
-        self._background_color = bg_color
+        self._parts_rects = frame_config.part_rects
+        self._background_color = frame_config.bg_color
+
+        if frame_config.max_size:
+            self._max_size = frame_config.max_size
+        else:
+            self._max_size = (self.rect.width, self.rect.height)
+
+        if frame_config.min_size:
+            self._min_size = frame_config.min_size
+        else:
+            self._min_size = (self.rect.width, self.rect.height)
+
+        self._padding = frame_config.padding
+
         self._events = {}
 
         # "_background_source" used as hidden canvas of maximum size, where
         # borders and background are drawn
-        self._background_source = Surface(max_size)
+        self._background_source = Surface(self._max_size)
 
         # "_background" used as a part of "_background_source", that is
         # actually drawn on screen
@@ -57,12 +91,16 @@ class Frame(object):
 
         # 2. ~ Load tiles ~
 
-        self._tileset = {}
-        image = pygame.image.load(tileset_path)
-        for q in (UP, DOWN, LEFT, RIGHT,
-                  TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT):
-            _rect = self._parts_rects[q]
-            self._tileset[q] = image.subsurface(_rect).convert()
+        if frame_config.tileset_path in Frame._cached_tilesets:
+            self._tileset = Frame._cached_tilesets[frame_config.tileset_path]
+        else:
+            self._tileset = {}
+            image = pygame.image.load(frame_config.tileset_path)
+            for q in (UP, DOWN, LEFT, RIGHT,
+                      TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT):
+                _rect = self._parts_rects[q]
+                self._tileset[q] = image.subsurface(_rect).convert()
+            Frame._cached_tilesets[frame_config.tileset_path] = self._tileset
 
         # 3. ~ Make background ~
 

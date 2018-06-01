@@ -10,28 +10,32 @@ from itertools import islice
 import pygame
 from pygame import Rect, Surface, Color
 
-from frame import Frame
+from frame import Frame, FrameConfig
 from references._enums import *
 
 # ------------------------------ CONST ------------------------------------- #
 
-HUD_TILESET_PATH = "../graphics/interface/chat_border.png"
+FRAME_CONFIG = FrameConfig(
+    tileset_path="../graphics/interface/chat_border.png",
+    part_rects={
+        TOP_LEFT:       Rect(0, 0, 78, 35),
+        TOP_RIGHT:      Rect(219, 0, 45, 71),
+        BOTTOM_LEFT:    Rect(0, 137, 61, 61),
+        BOTTOM_RIGHT:   Rect(163, 134, 101, 64),
+        UP:             Rect(77, 0, 142, 7),
+        DOWN:           Rect(62, 192, 102, 6),
+        LEFT:           Rect(0, 34, 5, 104),
+        RIGHT:          Rect(258, 69, 6, 66),
+    },
+    padding=18,
+    max_size=(700, 600),
+    min_size=(300, 135),
+    bg_color=Color(10, 10, 10)
+)
 
-HUD_PARTS_RECTS = {
-    TOP_LEFT:       Rect(0, 0, 78, 35),
-    TOP_RIGHT:      Rect(219, 0, 45, 71),
-    BOTTOM_LEFT:    Rect(0, 137, 61, 61),
-    BOTTOM_RIGHT:   Rect(163, 134, 101, 64),
-    UP:             Rect(77, 0, 142, 7),
-    DOWN:           Rect(62, 192, 102, 6),
-    LEFT:           Rect(0, 34, 5, 104),
-    RIGHT:          Rect(258, 69, 6, 66),
-}
+# ------------ LOG specific consts: ---------- #
 
-HUD_MAX_SIZE = (700, 600)
-HUD_MIN_SIZE = (300, 135)
 HUD_DEQUE_MAX_LEN = 30
-HUD_BACKGROUND_COLOR = Color(10, 10, 10)
 HUD_TEXT_COLORS = {
     None: Color(200, 200, 200),
     DANGER: Color(230, 0, 0),
@@ -40,11 +44,12 @@ HUD_TEXT_COLORS = {
 }
 HUD_RESIZE_BUTTON_SIZE = 20
 
-HUD_PADDING = 18
 HUD_FONT = ('Lucida Console', 15)
 HUD_LINE_SPACING = 2
 
+
 # ========================== LOG frame class ============================== #
+
 
 class Log(Frame):
     """HUD log class.
@@ -55,15 +60,9 @@ class Log(Frame):
         Create Log instance with default settings of tileset and limits.
             rect:  x, y, width, height (on global screen)
         """
-        super(Log, self).__init__(
-            rect=rect,
-            tileset_path=HUD_TILESET_PATH,
-            parts_rects=HUD_PARTS_RECTS,
-            max_size=HUD_MAX_SIZE,
-            min_size=HUD_MIN_SIZE,
-            bg_color=HUD_BACKGROUND_COLOR,
-        )
-        self._padding = HUD_PADDING
+
+        super(Log, self).__init__(rect=rect, frame_config=FRAME_CONFIG)
+
         self._messages = deque(maxlen=HUD_DEQUE_MAX_LEN)
         self._font = pygame.font.SysFont(*HUD_FONT)
         self._current_message_index = None
@@ -116,7 +115,7 @@ class Log(Frame):
                              _width - self._padding * 2,
                              _height - self._padding * 2))
 
-        text_frame.fill(HUD_BACKGROUND_COLOR)
+        text_frame.fill(self._background_color)
         font_height = self._font.size("Tg")[1]
         text_width = text_frame.get_width()
         text_height = text_frame.get_height()
@@ -152,7 +151,7 @@ class Log(Frame):
                              _width - self._padding * 2,
                              _height - self._padding * 2))
 
-        text_frame.fill(HUD_BACKGROUND_COLOR)
+        text_frame.fill(self._background_color)
         font_height = self._font.size("Tg")[1]
         text_width = text_frame.get_width()
         text_height = text_frame.get_height()
@@ -198,7 +197,8 @@ class Log(Frame):
                 q = msg.rfind(" ", 0, q) + 1
             # render the line
             strings_surfaces.append(
-               self._font.render( msg[:q], False, color, HUD_BACKGROUND_COLOR))
+                self._font.render(
+                    msg[:q], False, color, self._background_color))
             # remove the msg we just blitted
             msg = msg[q:]
         return strings_surfaces
