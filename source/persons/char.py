@@ -34,10 +34,10 @@ class Char(pygame.sprite.Sprite):
     """
     DIRECTIONS = (UP, RIGHT, DOWN, LEFT)
 
-    def __init__(self, start_x, start_y, tileset_path, scale, id_):
+    def __init__(self, coords, tileset_path, scale, id_):
         """ Init.
 
-            start_x, start_y:       starting char's coords
+            coords:                 starting coords (X, Y) on global map
             tileset_path:           chars tileset file path
             scale:                  game tile's scale param (1 or 2)
             id_:                    string identificator.
@@ -45,8 +45,6 @@ class Char(pygame.sprite.Sprite):
         """
         pygame.sprite.Sprite.__init__(self)
 
-        self.startX = start_x
-        self.startY = start_y
         self.size = CHAR_SIZE * scale
         self.direction = DOWN
         self.id_ = id_
@@ -59,10 +57,9 @@ class Char(pygame.sprite.Sprite):
             CHAR_INNER_COLLISION[HEIGHT] * scale)
 
         # real rect of character
-        self.rect = Rect(self.startX,
-                         self.startY,
-                         self._inner_rect.width,
-                         self._inner_rect.height)
+        start_x, start_y = coords
+        self.rect = Rect(start_x, start_y, self._inner_rect.width,
+                                                       self._inner_rect.height)
 
         # ~ image & animation ~
 

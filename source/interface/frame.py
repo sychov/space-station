@@ -44,8 +44,9 @@ class FrameConfig(object):
 
 
 class Frame(object):
-    """Parent frame class.
-    Used as base to make any custom windows in-game.
+    """Base frame class.
+    Used as a base to make any custom windows in-game.
+    Handles movement and resizing, if it needs to.
     """
     _cached_tilesets = {}
 

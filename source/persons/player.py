@@ -24,17 +24,16 @@ MOVE_SPEED = 2
 class Player(Char):
     """Player character.
     """
-    def __init__(self, start_x, start_y, tileset_path, scale, display_size):
+    def __init__(self, coords, tileset_path, scale, display_size):
         """ Init.
 
-            start_x, start_y:       starting char's coords on global map
+            coords:                 starting coords (X, Y) on global map
             tileset_path:           chars tileset file path
             scale:                  game tile's scale param (1 or 2)
             display_size:           (<screen width>, <screen height>)
 
         """
-        super(Player, self).__init__(start_x, start_y, tileset_path,
-                                                               scale, 'Player')
+        super(Player, self).__init__(coords, tileset_path, scale, 'Player')
         self.camera_shift_x = self.rect.width / 2
         self.camera_shift_y = self.rect.height / 2
 

@@ -13,6 +13,7 @@ from pygame import Rect, Surface, Color
 from frame import Frame, FrameConfig
 from references._enums import *
 
+
 # ------------------------------ CONST ------------------------------------- #
 
 FRAME_CONFIG = FrameConfig(
@@ -35,36 +36,36 @@ FRAME_CONFIG = FrameConfig(
 
 # ------------ LOG specific consts: ---------- #
 
-HUD_DEQUE_MAX_LEN = 30
-HUD_TEXT_COLORS = {
+DEQUE_MAX_LEN = 30
+TEXT_COLORS = {
     None: Color(200, 200, 200),
     DANGER: Color(230, 0, 0),
     SUCCESS: Color(0, 230, 0),
     FAIL: Color(230, 230, 0),
 }
-HUD_RESIZE_BUTTON_SIZE = 20
+RESIZE_BUTTON_SIZE = 20
 
-HUD_FONT = ('Lucida Console', 15)
-HUD_LINE_SPACING = 2
+FONT = ('Lucida Console', 15)
+LINE_SPACING = 2
 
 
 # ========================== LOG frame class ============================== #
 
 
 class Log(Frame):
-    """HUD log class.
+    """Log class.
     It is made for logging in-game events in text form for player info.
     """
     def __init__(self, rect):
-        """ Load tileset for a game HUD log.
+        """ Load tileset for a player's log.
         Create Log instance with default settings of tileset and limits.
             rect:  x, y, width, height (on global screen)
         """
 
         super(Log, self).__init__(rect=rect, frame_config=FRAME_CONFIG)
 
-        self._messages = deque(maxlen=HUD_DEQUE_MAX_LEN)
-        self._font = pygame.font.SysFont(*HUD_FONT)
+        self._messages = deque(maxlen=DEQUE_MAX_LEN)
+        self._font = pygame.font.SysFont(*FONT)
         self._current_message_index = None
         self._bottomed_message_index = None
         self._up_to_last_string = False
@@ -104,7 +105,7 @@ class Log(Frame):
 
 
     def _update_text_topped(self):
-        """Update text in the HUD log, redrawing them on log frame.
+        """Update text in the log, redrawing them on log frame.
         This method will align text to the top of the log by current
         message index.
         """
@@ -132,16 +133,16 @@ class Log(Frame):
             for strings_surface in self._get_strings_surfaces_from_message(
                             msg=msg,
                             width=text_width,
-                            color=HUD_TEXT_COLORS[tag]):
+                            color=TEXT_COLORS[tag]):
                 if position_y > max_position_y:
                     return
                 text_frame.blit(strings_surface, (0, position_y))
-                position_y += font_height + HUD_LINE_SPACING
+                position_y += font_height + LINE_SPACING
         self._up_to_last_string = True
 
 
     def _update_text_bottomed(self):
-        """Update text in the HUD log, redrawing them on log frame.
+        """Update text in the log, redrawing them on log frame.
         This method will align text to bottom of the log.
         """
         _width, _height = self._background.get_size()
@@ -167,9 +168,9 @@ class Log(Frame):
                     self._get_strings_surfaces_from_message(
                             msg=msg,
                             width=text_width,
-                            color=HUD_TEXT_COLORS[tag])):
+                            color=TEXT_COLORS[tag])):
                 text_frame.blit(strings_surface, (0, position_y))
-                position_y -= font_height + HUD_LINE_SPACING
+                position_y -= font_height + LINE_SPACING
                 if position_y < min_position_y:
                     self._current_message_index = None
                     # update last shown message index
@@ -208,9 +209,9 @@ class Log(Frame):
         """Check, if "coords" are in resize corner area.
         """
         x, y = coords
-        if x > self.rect.x + self.rect.width - HUD_RESIZE_BUTTON_SIZE and \
+        if x > self.rect.x + self.rect.width - RESIZE_BUTTON_SIZE and \
            x < self.rect.x + self.rect.width and \
-           y > self.rect.y + self.rect.height - HUD_RESIZE_BUTTON_SIZE and \
+           y > self.rect.y + self.rect.height - RESIZE_BUTTON_SIZE and \
            y < self.rect.y + self.rect.height:
             return True
         else:
@@ -241,11 +242,11 @@ class Log(Frame):
                 self._scroll_down()
 
             elif self._is_resize_corner_selected(event.pos):
-                # resize HUD
+                # resize
                 self._enable_resizing_state(event.pos)
 
             else:
-                # move HUD
+                # move
                 self._enable_dragging_state(event.pos)
 
             return True
@@ -286,5 +287,5 @@ class Log(Frame):
     def __repr__(self):
         """Simple representation.
         """
-        return 'HUD log class instance.'
+        return 'Log class instance.'
 

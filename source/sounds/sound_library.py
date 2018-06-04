@@ -7,7 +7,7 @@
 
 import os
 
-from pygame.mixer import Sound
+import pygame
 
 
 class SoundLibrary(object):
@@ -59,7 +59,7 @@ class SoundLibrary(object):
         """
         if sound_path not in self._sounds:
             path = os.path.join(self._sounds_path, sound_path)
-            self._sounds[sound_path] = Sound(path)
+            self._sounds[sound_path] = pygame.mixer.Sound(path)
         return self._sounds[sound_path]
 
 
