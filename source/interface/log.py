@@ -4,6 +4,7 @@
  Description:
 ----------------------------------------------------------"""
 
+import os
 from collections import deque
 from itertools import islice
 
@@ -12,12 +13,13 @@ from pygame import Rect, Surface, Color
 
 from frame import Frame, FrameConfig
 from references._enums import *
+from references._pathes import INTERFACE_DIR
 
 
 # ------------------------------ CONST ------------------------------------- #
 
 FRAME_CONFIG = FrameConfig(
-    tileset_path="../graphics/interface/chat_border.png",
+    tileset_path=os.path.join(INTERFACE_DIR, "chat_border.png"),
     part_rects={
         TOP_LEFT:       Rect(0, 0, 78, 35),
         TOP_RIGHT:      Rect(219, 0, 45, 71),

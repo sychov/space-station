@@ -5,6 +5,7 @@
  Description:
 ----------------------------------------------------------"""
 
+import os
 
 from pygame import Rect, Color
 
@@ -12,10 +13,11 @@ from interface.storage import Storage, StorageConfig
 from interface.frame import FrameConfig
 
 from references._enums import *
+from references._pathes import INTERFACE_DIR
 
 
 FRAME_CONFIG = FrameConfig(
-    tileset_path="../graphics/interface/blue_scifi_border.png",
+    tileset_path=os.path.join(INTERFACE_DIR, "blue_scifi_border.png"),
     part_rects={
         TOP_LEFT:       Rect(0, 0, 60, 54),
         TOP_RIGHT:      Rect(140, 0, 85, 49),

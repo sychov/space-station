@@ -5,15 +5,13 @@
  Description:
 ----------------------------------------------------------"""
 
-
 import pygame
 
-from sounds.sound_library import SoundLibrary
 from environment.game_map import Map
 from persons.player import Player
 from interface.hud import Hud
-
-from references._enums import *
+from sounds.sound_library import SoundLibrary
+from references._pathes import MAP_PATH, MAP_TILES_PATH, PLAYER_TILES_PATH
 
 
 # ------------------------------ CONST ------------------------------------- #
@@ -22,10 +20,6 @@ DISPLAY_SIZE = (1024, 768)
 FPS_LIMIT = 120
 DOUBLE = True
 DEBUG = True
-
-MAP_PATH = '../gamedata/map/map.json'
-TILESET_PATH = "../graphics/tilesets/TILES.png"
-CHARACTER_TILESET = '../graphics/chars/captain.png'
 
 # ================================ MAIN ==================================== #
 
@@ -48,20 +42,19 @@ class Main(object):
         # ~ 2. Set attr components ~
 
         self.screen = pygame.display.set_mode(DISPLAY_SIZE)
-        self.sound_library = SoundLibrary('../sounds')
         self.hud = Hud(cell_size=scale * 32)
 
         self.timer = pygame.time.Clock()
 
         self.game_map = Map(
             map_path=MAP_PATH,
-            tileset_path=TILESET_PATH,
+            tileset_path=MAP_TILES_PATH,
             display_size_tuple=DISPLAY_SIZE,
             scale=scale)
 
         self.player = Player(
             coords=self.game_map.get_first_walkable_cell_coords(),
-            tileset_path=CHARACTER_TILESET,
+            tileset_path=PLAYER_TILES_PATH,
             scale=scale,
             display_size=DISPLAY_SIZE)
 

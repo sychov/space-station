@@ -9,15 +9,12 @@ import os
 
 import pygame
 
+from references._pathes import SOUNDS_DIR
+
 
 class SoundLibrary(object):
     """Class for in-game sounds collection.
-    Works like singleton, but need to be initialized through first
-    instance creating:
-
-        SoundLibrary(<path to sounds dir>)
-
-    Later, instances are got through:
+    Works like singleton, instances are got through:
 
         SoundLibrary.get_instance()
     """
@@ -26,10 +23,10 @@ class SoundLibrary(object):
     @staticmethod
     def get_instance():
         """Returns instance of SoundLibrary class.
-        Raise error, if it was not initialized yet.
+        Creates, if doesn't created yet.
         """
         if not SoundLibrary._instance:
-            raise RuntimeError("SoundLibrary not initialized yet!")
+            return SoundLibrary(SOUNDS_DIR)
         else:
             return SoundLibrary._instance
 

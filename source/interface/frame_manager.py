@@ -7,8 +7,6 @@
 
 from storage import Storage
 
-from references._enums import *
-
 
 class FrameManager(object):
     """Simple class of frames aggregation.

@@ -142,32 +142,33 @@ class Hud(object):
         """ JUST FOR TESTING !!!!
         TO DO: DEL IT !!!!
         """
+        from references._pathes import MAIN_DIR
         from environment.inventory_object import InventoryObject
         from models.storage_content import StorageContent
 
         InventoryObject.add_sprites(
-            '../graphics/tilesets/items_1x1.png',
+            MAIN_DIR + '/graphics/tilesets/items_1x1.png',
             '1x1',
             SPRITE_1x1,
             2
         )
 
         InventoryObject.add_sprites(
-            '../graphics/tilesets/items_1x2.png',
+            MAIN_DIR + '/graphics/tilesets/items_1x2.png',
             '1x2',
             SPRITE_1x2,
             2
         )
 
         InventoryObject.add_sprites(
-            '../graphics/tilesets/items_2x1.png',
+            MAIN_DIR + '/graphics/tilesets/items_2x1.png',
             '2x1',
             SPRITE_2x1,
             2
         )
 
         InventoryObject.add_sprites(
-            '../graphics/tilesets/items_2x2.png',
+            MAIN_DIR + '/graphics/tilesets/items_2x2.png',
             '2x2',
             SPRITE_2x2,
             2
