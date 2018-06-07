@@ -10,14 +10,13 @@ import pygame
 from environment.game_map import Map
 from persons.player import Player
 from interface.hud import Hud
-from sounds.sound_library import SoundLibrary
 from references._pathes import MAP_PATH, MAP_TILES_PATH, PLAYER_TILES_PATH
 
 
 # ------------------------------ CONST ------------------------------------- #
 
 DISPLAY_SIZE = (1024, 768)
-FPS_LIMIT = 120
+FPS_LIMIT = 200
 DOUBLE = True
 DEBUG = True
 
@@ -42,7 +41,7 @@ class Main(object):
         # ~ 2. Set attr components ~
 
         self.screen = pygame.display.set_mode(DISPLAY_SIZE)
-        self.hud = Hud(cell_size=scale * 32)
+        self.hud = Hud(display_size=DISPLAY_SIZE, scale=scale)
 
         self.timer = pygame.time.Clock()
 
@@ -92,6 +91,7 @@ class Main(object):
             self.game_map.draw_bottom_layers(self.screen, camera_position)
             self.player.draw(self.screen)
             self.game_map.draw_top_layer(self.screen, camera_position)
+
             self.hud.draw(self.screen)
 
             # ~ 4. Display updating ~

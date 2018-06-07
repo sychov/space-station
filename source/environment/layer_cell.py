@@ -11,7 +11,7 @@ from references._tile_collisions import TILES_COLLISIONS
 from references._enums import *
 
 
-# ========================== LAYER CELL CLASS ============================== #
+# ======================== BASE LAYER CELL CLASS ============================ #
 
 class LayerCell(object):
     """ Single cell of the game map layer.
@@ -71,13 +71,11 @@ class LayerCell(object):
         del image
 
 
-    def __init__(self, x, y, tile_number, is_walkable=True):
+    def __init__(self, x, y, tile_number):
         """ Layer's cell creation.
 
             x, y:           tile coors on game map
             tile_number:    number of tile in _tileset list.
-            is_walkable:    boolean value, could this tile be walked
-                            through, or not.
         """
         if not self._is_class_initialized:
             raise RuntimeError('Impossible to use insances before class '
@@ -93,6 +91,33 @@ class LayerCell(object):
             self.rect.y += special[Y] * self._scale
             self.rect.width -= special[WIDTH] * self._scale
             self.rect.height -= special[HEIGHT] * self._scale
+
+
+    def __repr__(self):
+        """Simple representation.
+        """
+        return 'Cell #%d' % self.tile_number
+
+
+# ======================== FLOOR CELL CLASS ============================ #
+
+
+class FloorCell(LayerCell):
+    """ Single cell of the game map floor layer.
+    Remember, that base class must be initialized through
+
+        LayerCell.initialize()
+
+    """
+    def __init__(self, x, y, tile_number, is_walkable=True):
+        """ Layer's cell creation.
+
+            x, y:           tile coors on game map
+            tile_number:    number of tile in _tileset list.
+            is_walkable:    boolean value, could this tile be walked
+                            through, or not.
+        """
+        super(FloorCell, self).__init__(x, y, tile_number)
         self.is_walkable = is_walkable
 
 
@@ -100,3 +125,36 @@ class LayerCell(object):
         """Simple representation.
         """
         return 'Cell #%d, free: %s' % (self.tile_number, str(self.is_walkable))
+
+
+# ======================== OBJECT CELL CLASS ============================ #
+
+
+class ObjectCell(LayerCell):
+    """ Single cell of the game map object layer.
+    Remember, that base class must be initialized through
+
+        LayerCell.initialize()
+
+    """
+    def __init__(self, x, y, tile_number, is_walkable=True, is_usable=False):
+        """ Layer's cell creation.
+
+            x, y:           tile coors on game map
+            tile_number:    number of tile in _tileset list.
+            is_walkable:    boolean value, could this tile be walked
+                            through, or not.
+            is_usable:      boolean value, could this tile be used
+                            by player, or not.
+        """
+        super(ObjectCell, self).__init__(x, y, tile_number)
+        self.is_walkable = is_walkable
+        self.is_usable = is_usable
+
+
+    def __repr__(self):
+        """Simple representation.
+        """
+        return 'Cell #%d, usable: %s' % (self.tile_number, str(self.is_usable))
+
+

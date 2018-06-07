@@ -10,7 +10,7 @@ import json
 import pygame
 from pygame import Rect, Surface
 
-from layer_cell import LayerCell
+from layer_cell import LayerCell, ObjectCell, FloorCell
 from references._enums import *
 
 
@@ -25,11 +25,15 @@ class Map(object):
     DECOR_LAYER_NUM = 1
     OBJECTS_LAYER_NUM = 2
     TOP_LAYER_NUM = 3
+    OBJ_MARKS_LAYER_NUM = 4
 
     # tiles indexies:
     STOPPABLES_FLOOR = (3, 2)
     WALKABLE_OBJ = 0
-    DOORS = (94, 108)
+
+    # special object indexes offset (additional tileset starting index - 1)
+    OBJECT_INDEXIES_OFFSET = 1280
+
 
     def __init__(self, map_path, tileset_path, display_size_tuple, scale=1):
         """ Init.
@@ -58,6 +62,9 @@ class Map(object):
         self.tile_size = tile_size_origin * scale
         used_tiles = self._get_tiles_set_from_layers(layers)
         LayerCell.initialize(tileset_path, tile_size_origin, scale, used_tiles)
+
+        self._objects_dict = self._get_objects_indexes_from_layer(
+                                              layers[self.OBJ_MARKS_LAYER_NUM])
 
         self.layer_floor = self._get_map_from_layer(
                             layers[self.FLOOR_LAYER_NUM], LAYER_FLOOR)
@@ -294,15 +301,19 @@ class Map(object):
                 ...
             ]
         """
+        objects = self._objects_dict.keys()
         layer_map, row, x, y = [], [], 0, 0
         for tile_num in layer['data']:
             if layer_type == LAYER_FLOOR:
                 is_walkable = tile_num not in self.STOPPABLES_FLOOR
+                cell = FloorCell(x, y, tile_num, is_walkable)
             elif layer_type == LAYER_OBJECTS:
                 is_walkable = tile_num == self.WALKABLE_OBJ
+                is_usable = (x, y) in objects
+                cell = ObjectCell(x, y, tile_num, is_walkable, is_usable)
             else:
                 is_walkable = True
-            cell = LayerCell(x, y, tile_num, is_walkable)
+                cell = LayerCell(x, y, tile_num)
             row.append(cell)
 
             x += 1
@@ -325,4 +336,22 @@ class Map(object):
         for layer in layers_list:
             tiles.update(set(layer['data']))
         return tiles
+
+
+    def _get_objects_indexes_from_layer(self, layer):
+        """Scan layer for tiles numbers.
+        Those tile numbers actually are indexies to mark special objects.
+
+            layer:        dictionary of Tiled JSON map format with layer data
+
+        Return dictionary, where key is tuple of coords (X, Y), and
+        value is index of the tile.
+        """
+        width = layer['width']
+        objects = {}
+        for q, tile_num in enumerate(layer['data']):
+            if tile_num:
+                y, x = divmod(q, width)
+                objects[(x, y)] = tile_num - self.OBJECT_INDEXIES_OFFSET
+        return objects
 

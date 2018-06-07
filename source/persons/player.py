@@ -10,7 +10,7 @@ from pygame import Rect
 
 from char import Char
 from references._enums import *
-
+from misc.events import enable_action_interface, disable_action_interface
 
 # ================================= CONST =================================== #
 
@@ -42,6 +42,9 @@ class Player(Char):
         self.screen_coords = x, y
 
         self.key_left = self.key_right = self.key_top = self.key_bottom = False
+
+        self._current_object_selected = None
+        self._is_object_action_interface_on = False
 
 
     def get_camera_pos(self):
@@ -87,7 +90,8 @@ class Player(Char):
 
 
     def handle_event(self, event):
-        """
+        """Handle event.
+        If event is handled, return True, else False.
         """
         if event.type == pygame.KEYDOWN:
 
@@ -133,9 +137,8 @@ class Player(Char):
         Return True if collide, else False.
 
             game_map:       Map class instance.
-
         """
-        # check borders of the map
+        # 1. Check borders of the map
         if not game_map.rect.contains(self.rect):
             if self.direction == RIGHT:
                 self.rect.right = game_map.rect.right
@@ -147,28 +150,104 @@ class Player(Char):
                 self.rect.bottom = game_map.rect.bottom
             return True
 
-        # check nearest tiles
+        # 2. Check nearest tiles
+
+        is_usable_found = False
+        is_player_stopped = False
+        stop_border = None
+
         for floor_c, object_c in game_map.get_cells_to_verification(self.rect):
+
+            # - check floor tiles walkability:
             if not floor_c.is_walkable and self.rect.colliderect(floor_c):
                 if self.direction == RIGHT:
-                    self.rect.right = floor_c.rect.left
+                    stop_border = floor_c.rect.left
                 elif self.direction == LEFT:
-                    self.rect.left = floor_c.rect.right
+                    stop_border = floor_c.rect.right
                 elif self.direction == UP:
-                    self.rect.top = floor_c.rect.bottom
+                    stop_border = floor_c.rect.bottom
                 elif self.direction == DOWN:
-                    self.rect.bottom = floor_c.rect.top
-                return True
+                    stop_border = floor_c.rect.top
+                is_player_stopped = True
 
+            # - check object walkability:
             elif not object_c.is_walkable and self.rect.colliderect(object_c):
                 if self.direction == RIGHT:
-                    self.rect.right = object_c.rect.left
+                    stop_border = object_c.rect.left
                 elif self.direction == LEFT:
-                    self.rect.left = object_c.rect.right
+                    stop_border = object_c.rect.right
                 elif self.direction == UP:
-                    self.rect.top = object_c.rect.bottom
+                    stop_border = object_c.rect.bottom
                 elif self.direction == DOWN:
-                    self.rect.bottom = object_c.rect.top
-                return True
+                    stop_border = object_c.rect.top
+                is_player_stopped = True
 
-        return False
+                # - check object usability:
+                if object_c.is_usable and not is_usable_found:
+                    point = self._get_sensitive_point(self.direction)
+                    if object_c.rect.collidepoint(point):
+                        if self._is_object_action_interface_on and \
+                                     self._current_object_selected == object_c:
+                            # don't need to re-enable interface on the same obj
+                            continue
+                        else:
+                            self._enable_actions_interface(object_c)
+                            is_usable_found = True
+
+        if is_player_stopped:
+            # stop to border
+            if self.direction == RIGHT:
+                self.rect.right = stop_border
+            elif self.direction == LEFT:
+                self.rect.left = stop_border
+            elif self.direction == UP:
+                self.rect.top = stop_border
+            elif self.direction == DOWN:
+                self.rect.bottom = stop_border
+            return True
+        else:
+            # we don't need action interface, when moving
+            if self._is_object_action_interface_on:
+                self._disable_actions_interface()
+            return False
+
+
+    def _enable_actions_interface(self, obj):
+        """Enable interface of player's action buttons.
+        """
+        pygame.event.post(
+            enable_action_interface(
+                direction=self.direction,
+                actions_list=[ACTION_GOOD, ACTION_BAD, ACTION_USE]))
+
+        self._is_object_action_interface_on = True
+        self._current_object_selected = obj
+
+
+
+    def _disable_actions_interface(self):
+        """Disable interface of player's action buttons.
+        """
+        pygame.event.post(disable_action_interface())
+
+        self._is_object_action_interface_on = False
+        self._current_object_selected == None
+
+
+    def _get_sensitive_point(self, direction):
+        """Get point in the middle of collision box side, to
+        check, if player could use map object.
+        """
+        x, y, width, height = self.rect
+        half_width = width / 2
+        half_height = height / 2
+        if direction == LEFT:
+            return (x, y + half_height)
+        elif direction == RIGHT:
+            return (x + width, y + half_height)
+        elif direction == UP:
+            return (x + half_width, y)
+        elif direction == DOWN:
+            return (x + half_width, y + height)
+
+

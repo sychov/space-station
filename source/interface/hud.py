@@ -13,6 +13,7 @@ from log import Log
 from frame_manager import FrameManager
 from storage import Storage
 from frame import FrameConfig
+from actions import ActionInterface
 from references._enums import *
 
 # for test only:
@@ -21,6 +22,8 @@ from storages.wooden_box import WoodenShelfStorage
 
 
 # ------------------------------ CONST ------------------------------------- #
+
+CELL_SIZE = 32
 
 LOG_START_COORDS = (0, 633, 497, 135)
 
@@ -35,10 +38,10 @@ class Hud(object):
     Contains all frames, indicators and other in-game info in
     action phase.
     """
-    def __init__(self, cell_size):
+    def __init__(self, display_size, scale):
         """Init.
         """
-        Storage.set_cell_size(cell_size)
+        Storage.set_cell_size(CELL_SIZE * scale)
 
         self._frames_manager = FrameManager()
         self._debug_text = pygame.font.SysFont(*DEBUG_FONT)
@@ -46,8 +49,12 @@ class Hud(object):
         self.log_frame = Log(LOG_START_COORDS)
         self._frames_manager.add_frame(self.log_frame)
 
+        self._action_interface = ActionInterface(display_size, scale)
+
+
+        # ---------------- testing, del later ----------------------------- #
         self._pseudo_inventory_enabled = False      # TEST! DELETE LATER !!!!
-        self._init_TEST_storages()                  # TEST! DELETE LATER !!!!
+        self._init_TEST_storages(scale)             # TEST! DELETE LATER !!!!
 
 
     def handle_event(self, event):
@@ -55,7 +62,8 @@ class Hud(object):
         """
         return self._frames_manager.handle_event(event) or \
                self._handle_TEST_pseudo_inventory_events(event) or \
-               self._handle_TEST_log_events(event)
+               self._handle_TEST_log_events(event) or \
+               self._action_interface.handle_event(event)
 
 
     def update(self, debug_text=None):
@@ -71,6 +79,7 @@ class Hud(object):
     def draw(self, screen):
         """Draw HUD components.
         """
+        self._action_interface.draw(screen)
         self._frames_manager.draw_frames(screen)
         self._debug_outtext(screen)
 
@@ -131,14 +140,14 @@ class Hud(object):
                 self._pseudo_inventory_enabled = False
             else:
                 self.pseudo_inventory = WoodenShelfStorage(
-                    (500, 10, 150, 100),
+                    (500, 10, 0, 0),
                     self.pseudo_inventory_content)
                 self.pseudo_inventory.redraw_storage()
                 self._frames_manager.add_frame(self.pseudo_inventory)
                 self._pseudo_inventory_enabled = True
 
 
-    def _init_TEST_storages(self):
+    def _init_TEST_storages(self, scale):
         """ JUST FOR TESTING !!!!
         TO DO: DEL IT !!!!
         """
@@ -150,28 +159,28 @@ class Hud(object):
             MAIN_DIR + '/graphics/tilesets/items_1x1.png',
             '1x1',
             SPRITE_1x1,
-            2
+            scale
         )
 
         InventoryObject.add_sprites(
             MAIN_DIR + '/graphics/tilesets/items_1x2.png',
             '1x2',
             SPRITE_1x2,
-            2
+            scale
         )
 
         InventoryObject.add_sprites(
             MAIN_DIR + '/graphics/tilesets/items_2x1.png',
             '2x1',
             SPRITE_2x1,
-            2
+            scale
         )
 
         InventoryObject.add_sprites(
             MAIN_DIR + '/graphics/tilesets/items_2x2.png',
             '2x2',
             SPRITE_2x2,
-            2
+            scale
         )
 
         big_item = InventoryObject('2x2', 1)
@@ -185,7 +194,7 @@ class Hud(object):
         storage_content.add_item(medium_item)
         storage_content.add_item(medium_item2)
 
-        storage = LockerStorage((300, 10, 150, 100), storage_content)
+        storage = LockerStorage((120, 10, 0, 0), storage_content)
         storage.redraw_storage()
         self._frames_manager.add_frame(storage)
 

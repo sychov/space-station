@@ -21,3 +21,5 @@ INTERFACE_DIR = os.path.join(MAIN_DIR, 'graphics', 'interface')
 MAP_PATH = os.path.join(MAIN_DIR, 'gamedata', 'map', 'map.json')
 MAP_TILES_PATH = os.path.join(MAIN_DIR, 'graphics', 'tilesets', 'TILES.png')
 PLAYER_TILES_PATH = os.path.join(MAIN_DIR, 'graphics', 'chars', 'captain.png')
+ACTIONS_TILES_PATH = os.path.join(MAIN_DIR, 'graphics', 'tilesets',
+                                                            'action_icons.png')

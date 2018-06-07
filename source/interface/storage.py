@@ -75,7 +75,7 @@ class Storage(Frame):
 
         self.content = storage_content
         if (self.content.width, self.content.height
-                            ) != storage_config.grid_size:
+                                                 ) != storage_config.grid_size:
             raise RuntimeError('Incorrect size of Storage content!')
 
         self._sound_library = SoundLibrary.get_instance()
