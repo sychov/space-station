@@ -7,9 +7,10 @@
 
 
 from environment.objects.metal_locker import MetalLocker
+from environment.objects.wooden_locker import WoodenLocker
 
 
-map_obj_classes = {
-    'matal_locker': MetalLocker,
-
+OBJECTS_CLASSES = {
+    'blue_metal_locker': MetalLocker,
+    'wooden_locker': WoodenLocker,
 }

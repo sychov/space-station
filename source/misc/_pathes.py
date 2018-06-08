@@ -23,6 +23,11 @@ else:
 SOUNDS_DIR = os.path.join(MAIN_DIR, 'sounds')
 INTERFACE_DIR = os.path.join(MAIN_DIR, 'graphics', 'interface')
 
+# ------ variation patterns ------- #
+
+OBJECT_TEXT_PATH_PATTERN = os.path.join(MAIN_DIR, 'gamedata', 'text',
+                                                          'objects', '%s.json')
+
 # ------ files ------- #
 
 MAP_PATH = os.path.join(MAIN_DIR, 'gamedata', 'map', 'map.json')
@@ -32,3 +37,5 @@ ACTIONS_TILES_PATH = os.path.join(MAIN_DIR, 'graphics', 'tilesets',
                                                             'action_icons.png')
 
 MAP_OBJECTS_CONFIG = os.path.join(MAIN_DIR, 'gamedata', 'map_objects.json')
+
+

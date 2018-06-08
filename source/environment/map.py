@@ -10,6 +10,7 @@ import json
 import pygame
 from pygame import Rect, Surface
 
+from objects_manager import ObjectsManager
 from map_cells import LayerCell, ObjectCell, FloorCell
 from misc._enums import *
 
@@ -51,6 +52,8 @@ class Map(object):
             CAMERA_COORDS: (0, 0),
             SURFACE: Surface((self.display_width * 3, self.display_height * 3))
         }
+
+        self.objects_manager = ObjectsManager()
 
         # 2. Load map
 

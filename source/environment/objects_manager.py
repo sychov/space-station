@@ -8,26 +8,49 @@
 
 import json
 
-from misc._game_map_objects_types import map_obj_classes
+from objects._types_table import OBJECTS_CLASSES
+from objects.base import BaseObject
 from misc._pathes import MAP_OBJECTS_CONFIG
 
 
-class MapObjectsManager(object):
+# ---------------------------------- Const ----------------------------- #
+
+LOCALE = 'rus'
+
+# ----------------------------- ObjectsManager ------------------------- #
+
+
+class ObjectsManager(object):
     """
     """
     def __init__(self):
         """
         """
-        self._objects = []
+        self._objects = {}
+        BaseObject.set_locale(LOCALE)
 
+        try:
+            configuration = self._get_configuration()
+        except:
+            raise RuntimeError('Error reading JSON objects configuration (%s)!'
+                                                          % MAP_OBJECTS_CONFIG)
 
-    def create_object(self, object_index):
-        """
-        """
-        pass
+        for key, value in configuration.items():
+            index = int(key)
+            id_ = value['class']
+            class_ = OBJECTS_CLASSES[id_]
+            kwargs = value['args']
+            try:
+                self._objects[index] = class_(id_=id_, **kwargs)
+            except:
+                raise RuntimeError('Error creating object '
+                                         '#%d (%s)!' % (index, value['class']))
 
 
     def _get_configuration(self):
         """
         """
-        self._configuration = json.loads()
+        with open(MAP_OBJECTS_CONFIG, 'r') as f:
+            configuration = json.load(f)
+        return configuration
+

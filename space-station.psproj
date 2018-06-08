@@ -55,8 +55,12 @@ FileName=$[Project-Path]source\environment\objects\base.py
 ClassName=TProjectFileNode
 FileName=$[Project-Path]source\environment\objects\metal_locker.py
 
+[Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node1\ChildNodes\Node3]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\environment\objects\wooden_locker.py
+
 [Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node1\ChildNodes]
-Count=3
+Count=4
 
 [Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node2]
 ClassName=TProjectFileNode

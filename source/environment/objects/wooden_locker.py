@@ -9,12 +9,12 @@
 from base import BaseObject
 
 
-class MetalLocker(BaseObject):
+class WoodenLocker(BaseObject):
     """
     """
     def __init__(self, id_, description, **kwargs):
         """
         """
-        super(MetalLocker, self).__init__(
+        super(WoodenLocker, self).__init__(
             id_=id_,
             description=description)
