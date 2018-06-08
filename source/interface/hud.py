@@ -11,10 +11,10 @@ import pygame
 
 from log import Log
 from frame_manager import FrameManager
-from storage import Storage
+from storages.base import Storage
 from frame import FrameConfig
 from actions import ActionInterface
-from references._enums import *
+from misc._enums import *
 
 # for test only:
 from storages.metal_locker import LockerStorage
@@ -151,9 +151,9 @@ class Hud(object):
         """ JUST FOR TESTING !!!!
         TO DO: DEL IT !!!!
         """
-        from references._pathes import MAIN_DIR
-        from environment.inventory_object import InventoryObject
-        from models.storage_content import StorageContent
+        from misc._pathes import MAIN_DIR
+        from environment.items.base import InventoryObject
+        from environment.storage_container import StorageContent
 
         InventoryObject.add_sprites(
             MAIN_DIR + '/graphics/tilesets/items_1x1.png',

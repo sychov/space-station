@@ -7,10 +7,10 @@
 
 import pygame
 
-from environment.game_map import Map
-from persons.player import Player
+from environment.map import Map
+from chars.player import Player
 from interface.hud import Hud
-from references._pathes import MAP_PATH, MAP_TILES_PATH, PLAYER_TILES_PATH
+from misc._pathes import MAP_PATH, MAP_TILES_PATH, PLAYER_TILES_PATH
 
 
 # ------------------------------ CONST ------------------------------------- #

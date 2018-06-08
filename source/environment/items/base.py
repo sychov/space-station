@@ -7,7 +7,7 @@
 import pygame
 from pygame import Rect
 
-from references._enums import *
+from misc._enums import *
 
 
 # ==================== Inventory object class ============================== #

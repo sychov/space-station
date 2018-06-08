@@ -5,7 +5,7 @@
  Description:
 ----------------------------------------------------------"""
 
-from storage import Storage
+from storages.base import Storage
 
 
 class FrameManager(object):

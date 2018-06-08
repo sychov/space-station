@@ -9,9 +9,9 @@
 import pygame
 from pygame import Rect, Surface, Color
 
-from frame import Frame, FrameConfig
+from interface.frame import Frame, FrameConfig
 from sounds.sound_library import SoundLibrary
-from references._enums import *
+from misc._enums import *
 
 
 # ========================= Storage config class ========================== #

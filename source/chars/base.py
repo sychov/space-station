@@ -9,7 +9,7 @@ import pyganim
 import pygame
 from pygame import Surface, Rect, Color
 
-from references._enums import *
+from misc._enums import *
 
 # ================================= CONST =================================== #
 
@@ -28,7 +28,7 @@ BG_COLOR = Color("#888822")
 # ============================== CHAR CLASS ================================ #
 
 
-class Char(pygame.sprite.Sprite):
+class BaseChar(pygame.sprite.Sprite):
     """ Char main class.
     Used for a player and for others "humanoids" in game.
     """

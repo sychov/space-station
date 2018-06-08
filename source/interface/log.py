@@ -12,8 +12,8 @@ import pygame
 from pygame import Rect, Surface, Color
 
 from frame import Frame, FrameConfig
-from references._enums import *
-from references._pathes import INTERFACE_DIR
+from misc._enums import *
+from misc._pathes import INTERFACE_DIR
 
 
 # ------------------------------ CONST ------------------------------------- #
@@ -76,9 +76,10 @@ class Log(Frame):
         # ~ EVENTS ~
 
         self.add_event_handler(pygame.MOUSEBUTTONUP,
-                               self._event_mousebutton_up)
+                                                self._event_mousebutton_up)
         self.add_event_handler(pygame.MOUSEBUTTONDOWN,
-                               self._event_mousebutton_down)
+                                                self._event_mousebutton_down)
+        self.add_event_handler(pygame.USEREVENT, self._custom_event)
 
 
     def output(self, msg, tag=None):
@@ -251,6 +252,16 @@ class Log(Frame):
                 # move
                 self._enable_dragging_state(event.pos)
 
+            return True
+        else:
+            return False
+
+
+    def _custom_event(self, event):
+        """Handle some custom event.
+        """
+        if event.custom_type == EVENT_PLAYER_MESSAGE_TO_LOG:
+            self.output(event.message, tag=event.message_type)
             return True
         else:
             return False

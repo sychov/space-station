@@ -10,8 +10,8 @@ import json
 import pygame
 from pygame import Rect, Surface
 
-from layer_cell import LayerCell, ObjectCell, FloorCell
-from references._enums import *
+from map_cells import LayerCell, ObjectCell, FloorCell
+from misc._enums import *
 
 
 # ============================ MAP CLASS ================================= #

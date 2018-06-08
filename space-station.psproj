@@ -11,138 +11,158 @@ ClassName=TProjectFilesNode
 
 [Project\ChildNodes\Node0\ChildNodes\Node0]
 ClassName=TProjectFolderNode
-Name=source
+Name=chars
 
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\chars\base.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\chars\player.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes]
+Count=2
+
+[Project\ChildNodes\Node0\ChildNodes\Node1]
 ClassName=TProjectFolderNode
 Name=environment
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]source\environment\game_map.py
+[Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node0]
+ClassName=TProjectFolderNode
+Name=items
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1]
+[Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node0\ChildNodes\Node0]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]source\environment\inventory_object.py
+FileName=$[Project-Path]source\environment\items\base.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2]
+[Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node0\ChildNodes]
+Count=1
+
+[Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node1]
+ClassName=TProjectFolderNode
+Name=objects
+
+[Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node1\ChildNodes\Node0]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]source\environment\layer_cell.py
+FileName=$[Project-Path]source\environment\objects\_types_table.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes]
+[Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node1\ChildNodes\Node1]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\environment\objects\base.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node1\ChildNodes\Node2]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\environment\objects\metal_locker.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node1\ChildNodes]
 Count=3
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1]
+[Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node2]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\environment\_tile_collisions.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node3]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\environment\map.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node4]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\environment\map_cells.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node5]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\environment\objects_manager.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node6]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\environment\storage_container.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes]
+Count=7
+
+[Project\ChildNodes\Node0\ChildNodes\Node2]
 ClassName=TProjectFolderNode
 Name=interface
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node0]
+[Project\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0]
 ClassName=TProjectFolderNode
 Name=storages
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node0\ChildNodes\Node0]
+[Project\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node0]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\interface\storages\base.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node1]
 ClassName=TProjectFileNode
 FileName=$[Project-Path]source\interface\storages\metal_locker.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node0\ChildNodes\Node1]
+[Project\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node2]
 ClassName=TProjectFileNode
 FileName=$[Project-Path]source\interface\storages\wooden_box.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node0\ChildNodes]
-Count=2
+[Project\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes]
+Count=3
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node1]
+[Project\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node1]
 ClassName=TProjectFileNode
 FileName=$[Project-Path]source\interface\actions.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node2]
+[Project\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node2]
 ClassName=TProjectFileNode
 FileName=$[Project-Path]source\interface\frame.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node3]
+[Project\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node3]
 ClassName=TProjectFileNode
 FileName=$[Project-Path]source\interface\frame_manager.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node4]
+[Project\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node4]
 ClassName=TProjectFileNode
 FileName=$[Project-Path]source\interface\hud.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node5]
+[Project\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node5]
 ClassName=TProjectFileNode
 FileName=$[Project-Path]source\interface\log.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node6]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]source\interface\storage.py
+[Project\ChildNodes\Node0\ChildNodes\Node2\ChildNodes]
+Count=6
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes]
-Count=7
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2]
+[Project\ChildNodes\Node0\ChildNodes\Node3]
 ClassName=TProjectFolderNode
 Name=misc
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0]
+[Project\ChildNodes\Node0\ChildNodes\Node3\ChildNodes\Node0]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\misc\_enums.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node3\ChildNodes\Node1]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\misc\_pathes.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node3\ChildNodes\Node2]
 ClassName=TProjectFileNode
 FileName=$[Project-Path]source\misc\events.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes]
-Count=1
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node3]
-ClassName=TProjectFolderNode
-Name=persons
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node3\ChildNodes\Node0]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]source\persons\char.py
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node3\ChildNodes\Node1]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]source\persons\player.py
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node3\ChildNodes]
-Count=2
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node4]
-ClassName=TProjectFolderNode
-Name=references
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node4\ChildNodes\Node0]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]source\references\_enums.py
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node4\ChildNodes\Node1]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]source\references\_pathes.py
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node4\ChildNodes\Node2]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]source\references\_tile_collisions.py
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node4\ChildNodes]
+[Project\ChildNodes\Node0\ChildNodes\Node3\ChildNodes]
 Count=3
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node5]
+[Project\ChildNodes\Node0\ChildNodes\Node4]
 ClassName=TProjectFolderNode
 Name=sounds
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node5\ChildNodes\Node0]
+[Project\ChildNodes\Node0\ChildNodes\Node4\ChildNodes\Node0]
 ClassName=TProjectFileNode
 FileName=$[Project-Path]source\sounds\sound_library.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node5\ChildNodes]
+[Project\ChildNodes\Node0\ChildNodes\Node4\ChildNodes]
 Count=1
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node6]
+[Project\ChildNodes\Node0\ChildNodes\Node5]
 ClassName=TProjectFileNode
 FileName=$[Project-Path]source\main.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes]
-Count=7
-
 [Project\ChildNodes\Node0\ChildNodes]
-Count=1
+Count=6
 
 [Project\ChildNodes\Node1]
 ClassName=TProjectRunConfiguationsNode

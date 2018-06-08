@@ -9,7 +9,7 @@ import os
 
 import pygame
 
-from references._pathes import SOUNDS_DIR
+from misc._pathes import SOUNDS_DIR
 
 
 class SoundLibrary(object):

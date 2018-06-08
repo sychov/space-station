@@ -8,9 +8,9 @@
 import pygame
 from pygame import Rect
 
-from char import Char
-from references._enums import *
-from misc.events import enable_action_interface, disable_action_interface
+from base import BaseChar
+from misc._enums import *
+from misc.events import events
 
 # ================================= CONST =================================== #
 
@@ -21,7 +21,7 @@ MOVE_SPEED = 2
 # ============================ PLAYER CLASS ================================= #
 
 
-class Player(Char):
+class Player(BaseChar):
     """Player character.
     """
     def __init__(self, coords, tileset_path, scale, display_size):
@@ -133,12 +133,16 @@ class Player(Char):
 
 
     def _collide_map(self, game_map):
-        """Check collision with other objects (game map, borders of it etc).
+        """Check collision with other objects (game map borders,
+        non-walkable floor cells and object cells).
+        If collide with non-walkable, return to last possible position.
+        If collide with usable object, show actions interface.
         Return True if collide, else False.
 
             game_map:       Map class instance.
         """
-        # 1. Check borders of the map
+        # 1. Check borders of the map.
+
         if not game_map.rect.contains(self.rect):
             if self.direction == RIGHT:
                 self.rect.right = game_map.rect.right
@@ -170,7 +174,7 @@ class Player(Char):
                     stop_border = floor_c.rect.top
                 is_player_stopped = True
 
-            # - check object walkability:
+            # - if ok, check object walkability:
             elif not object_c.is_walkable and self.rect.colliderect(object_c):
                 if self.direction == RIGHT:
                     stop_border = object_c.rect.left
@@ -182,20 +186,21 @@ class Player(Char):
                     stop_border = object_c.rect.top
                 is_player_stopped = True
 
-                # - check object usability:
+                # - check object usability, if non-walkable:
                 if object_c.is_usable and not is_usable_found:
                     point = self._get_sensitive_point(self.direction)
                     if object_c.rect.collidepoint(point):
                         if self._is_object_action_interface_on and \
                                      self._current_object_selected == object_c:
-                            # don't need to re-enable interface on the same obj
+                            # don't need to re-enable action interface
+                            # alredy opened for the same object
                             continue
                         else:
                             self._enable_actions_interface(object_c)
                             is_usable_found = True
 
         if is_player_stopped:
-            # stop to border
+            # stop to border value:
             if self.direction == RIGHT:
                 self.rect.right = stop_border
             elif self.direction == LEFT:
@@ -215,10 +220,9 @@ class Player(Char):
     def _enable_actions_interface(self, obj):
         """Enable interface of player's action buttons.
         """
-        pygame.event.post(
-            enable_action_interface(
-                direction=self.direction,
-                actions_list=[ACTION_GOOD, ACTION_BAD, ACTION_USE]))
+        events.enable_action_interface(
+            direction=self.direction,
+            actions_list=[ACTION_GOOD, ACTION_BAD, ACTION_USE])
 
         self._is_object_action_interface_on = True
         self._current_object_selected = obj
@@ -228,7 +232,7 @@ class Player(Char):
     def _disable_actions_interface(self):
         """Disable interface of player's action buttons.
         """
-        pygame.event.post(disable_action_interface())
+        events.disable_action_interface()
 
         self._is_object_action_interface_on = False
         self._current_object_selected == None

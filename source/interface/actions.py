@@ -8,8 +8,9 @@
 import pygame
 from pygame import Surface, Rect
 
-from references._enums import *
-from references._pathes import ACTIONS_TILES_PATH
+from misc.events import events
+from misc._enums import *
+from misc._pathes import ACTIONS_TILES_PATH
 
 
 # ================================= CONST =================================== #

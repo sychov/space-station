@@ -7,8 +7,8 @@
 import pygame
 from pygame import Rect
 
-from references._tile_collisions import TILES_COLLISIONS
-from references._enums import *
+from _tile_collisions import TILES_COLLISIONS
+from misc._enums import *
 
 
 # ======================== BASE LAYER CELL CLASS ============================ #
