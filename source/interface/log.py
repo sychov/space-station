@@ -261,7 +261,9 @@ class Log(Frame):
         """Handle some custom event.
         """
         if event.custom_type == EVENT_PLAYER_MESSAGE_TO_LOG:
-            self.output(event.message, tag=event.message_type)
+            if (not event.once) or (not self._messages) or \
+                                     (self._messages[-1][0] != event.message):
+                self.output(event.message, tag=event.message_type)
             return True
         else:
             return False

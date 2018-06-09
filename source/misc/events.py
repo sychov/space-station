@@ -44,7 +44,8 @@ class CustomEvents(object):
 
     # ----------------------------- Log ------------------------------ #
 
-    def put_message_to_players_log(self, message, message_type=None):
+    def put_message_to_players_log(self, message, message_type=None,
+                                                                   once=False):
         """Event for ActionInterface class.
         Disable action buttons near player's image.
         """
@@ -52,7 +53,8 @@ class CustomEvents(object):
             USEREVENT,
             custom_type=EVENT_PLAYER_MESSAGE_TO_LOG,
             message=message,
-            message_type=message_type
+            message_type=message_type,
+            once=once
         ))
 
     # ------------- #

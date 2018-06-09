@@ -137,24 +137,28 @@ class ObjectCell(LayerCell):
         LayerCell.initialize()
 
     """
-    def __init__(self, x, y, tile_number, is_walkable=True, is_usable=False):
+    def __init__(self, x, y, tile_number, is_walkable=True):
         """ Layer's cell creation.
 
             x, y:           tile coors on game map
             tile_number:    number of tile in _tileset list.
             is_walkable:    boolean value, could this tile be walked
                             through, or not.
-            is_usable:      boolean value, could this tile be used
-                            by player, or not.
         """
         super(ObjectCell, self).__init__(x, y, tile_number)
         self.is_walkable = is_walkable
-        self.is_usable = is_usable
+        self.object = None
+
+
+    def link_to_object(self, object_):
+        """
+        """
+        self.object = object_
 
 
     def __repr__(self):
         """Simple representation.
         """
-        return 'Cell #%d, usable: %s' % (self.tile_number, str(self.is_usable))
+        return 'Cell #%d, free: %s' % (self.tile_number, str(self.is_walkable))
 
 

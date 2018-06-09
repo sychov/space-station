@@ -47,6 +47,15 @@ class ObjectsManager(object):
                                          '#%d (%s)!' % (index, value['class']))
 
 
+    def get_object_by_index(self, index):
+        """
+        """
+        if index in self._objects:
+            return self._objects[index]
+        else:
+            return None
+
+
     def _get_configuration(self):
         """
         """

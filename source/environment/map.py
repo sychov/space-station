@@ -66,9 +66,6 @@ class Map(object):
         used_tiles = self._get_tiles_set_from_layers(layers)
         LayerCell.initialize(tileset_path, tile_size_origin, scale, used_tiles)
 
-        self._objects_dict = self._get_objects_indexes_from_layer(
-                                              layers[self.OBJ_MARKS_LAYER_NUM])
-
         self.layer_floor = self._get_map_from_layer(
                             layers[self.FLOOR_LAYER_NUM], LAYER_FLOOR)
         self.layer_floor_decor = self._get_map_from_layer(
@@ -81,7 +78,15 @@ class Map(object):
         self.map_height_in_tiles = len(self.layer_floor)
         self.map_width_in_tiles = len(self.layer_floor[0])
 
-        # 3. Form whole map rectangle borders (1 cell is border)
+        # 3. Link objects with map cells.
+
+        objects_dict = self._get_objects_indexes_from_layer(
+                                              layers[self.OBJ_MARKS_LAYER_NUM])
+        for ((x, y), index) in objects_dict.items():
+            self.layer_objects[y][x].link_to_object(
+                               self.objects_manager.get_object_by_index(index))
+
+        # 4. Form whole map rectangle borders (1 cell is border)
 
         min_x = min_y = self.tile_size
         width = self.tile_size * (self.map_width_in_tiles - 2)
@@ -304,7 +309,6 @@ class Map(object):
                 ...
             ]
         """
-        objects = self._objects_dict.keys()
         layer_map, row, x, y = [], [], 0, 0
         for tile_num in layer['data']:
             if layer_type == LAYER_FLOOR:
@@ -312,8 +316,7 @@ class Map(object):
                 cell = FloorCell(x, y, tile_num, is_walkable)
             elif layer_type == LAYER_OBJECTS:
                 is_walkable = tile_num == self.WALKABLE_OBJ
-                is_usable = (x, y) in objects
-                cell = ObjectCell(x, y, tile_num, is_walkable, is_usable)
+                cell = ObjectCell(x, y, tile_num, is_walkable)
             else:
                 is_walkable = True
                 cell = LayerCell(x, y, tile_num)

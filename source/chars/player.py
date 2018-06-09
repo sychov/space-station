@@ -187,7 +187,7 @@ class Player(BaseChar):
                 is_player_stopped = True
 
                 # - check object usability, if non-walkable:
-                if object_c.is_usable and not is_usable_found:
+                if (object_c.object is not None) and (not is_usable_found):
                     point = self._get_sensitive_point(self.direction)
                     if object_c.rect.collidepoint(point):
                         if self._is_object_action_interface_on and \
@@ -198,6 +198,10 @@ class Player(BaseChar):
                         else:
                             self._enable_actions_interface(object_c)
                             is_usable_found = True
+                            events.put_message_to_players_log(
+                                object_c.object.description,
+                                message_type=None,
+                                once=True)
 
         if is_player_stopped:
             # stop to border value:
