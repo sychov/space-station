@@ -196,7 +196,7 @@ class Player(BaseChar):
                             # alredy opened for the same object
                             continue
                         else:
-                            self._enable_actions_interface(object_c)
+                            self._enable_actions_interface(object_c.object)
                             is_usable_found = True
                             events.put_message_to_players_log(
                                 object_c.object.description,
@@ -226,7 +226,7 @@ class Player(BaseChar):
         """
         events.enable_action_interface(
             direction=self.direction,
-            actions_list=[ACTION_GOOD, ACTION_BAD, ACTION_USE])
+            object_=obj)
 
         self._is_object_action_interface_on = True
         self._current_object_selected = obj

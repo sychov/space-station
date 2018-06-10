@@ -5,7 +5,10 @@
  Description:
 ----------------------------------------------------------"""
 
+import pygame
+
 from storages.base import Storage
+from misc._enums import *
 
 
 class FrameManager(object):
@@ -58,6 +61,12 @@ class FrameManager(object):
         if event.type not in self.events:
             return False
 
+        if event.type == pygame.USEREVENT and \
+                               event.custom_type == EVENT_SHOW_INTERFACE_FRAME:
+
+            self.add_frame(event.frame)
+            return True
+
         for frame in reversed(self._frames):
             if frame.handle_event(event):
                 self.move_frame_to_top(frame)
@@ -74,7 +83,7 @@ class FrameManager(object):
 
 
     def _update_events(self):
-        """update set of events, handled by frames in manager.
+        """Update set of events, handled by frames in manager.
         """
         events = set()
         for frame in self._frames:

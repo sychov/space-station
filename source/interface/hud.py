@@ -17,7 +17,6 @@ from actions import ActionInterface
 from misc._enums import *
 
 # for test only:
-from storages.metal_locker import LockerStorage
 from storages.wooden_box import WoodenShelfStorage
 
 
@@ -25,7 +24,7 @@ from storages.wooden_box import WoodenShelfStorage
 
 CELL_SIZE = 32
 
-LOG_START_COORDS = (0, 633, 497, 135)
+LOG_START_COORDS = (0, 505, 497, 135)
 
 DEBUG_FONT = ('Comic Sans MS', 20)
 DEBUG_COLOR = pygame.Color(0, 250, 0)
@@ -156,20 +155,6 @@ class Hud(object):
         from environment.storage_container import StorageContent
 
         InventoryObject.add_sprites(
-            MAIN_DIR + '/graphics/tilesets/items_1x1.png',
-            '1x1',
-            SPRITE_1x1,
-            scale
-        )
-
-        InventoryObject.add_sprites(
-            MAIN_DIR + '/graphics/tilesets/items_1x2.png',
-            '1x2',
-            SPRITE_1x2,
-            scale
-        )
-
-        InventoryObject.add_sprites(
             MAIN_DIR + '/graphics/tilesets/items_2x1.png',
             '2x1',
             SPRITE_2x1,
@@ -183,24 +168,9 @@ class Hud(object):
             scale
         )
 
-        big_item = InventoryObject('2x2', 1)
-        medium_item = InventoryObject('2x1', 1)
-        medium_item2 = InventoryObject('1x2', 1)
-        small_item = InventoryObject('1x1', 1)
-        small_item2 = InventoryObject('1x1', 3)
-
-        storage_content = StorageContent(2, 4)
-        storage_content.add_item(small_item)
-        storage_content.add_item(medium_item)
-        storage_content.add_item(medium_item2)
-
-        storage = LockerStorage((120, 10, 0, 0), storage_content)
-        storage.redraw_storage()
-        self._frames_manager.add_frame(storage)
-
+        big_item = InventoryObject('2x2', 2)
+        medium_item = InventoryObject('2x1', 2)
         self.pseudo_inventory_content = StorageContent(3, 3)
-        self.pseudo_inventory_content.add_item(small_item2)
+        self.pseudo_inventory_content.add_item(medium_item)
         self.pseudo_inventory_content.add_item(big_item)
-
-
 

@@ -15,7 +15,7 @@ from misc._pathes import MAP_PATH, MAP_TILES_PATH, PLAYER_TILES_PATH
 
 # ------------------------------ CONST ------------------------------------- #
 
-DISPLAY_SIZE = (1024, 768)
+DISPLAY_SIZE = (1024, 640)
 FPS_LIMIT = 200
 DOUBLE = True
 DEBUG = True

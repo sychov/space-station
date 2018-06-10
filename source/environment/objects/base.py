@@ -8,6 +8,7 @@
 import json
 
 from misc._pathes import OBJECT_TEXT_PATH_PATTERN
+from misc._enums import *
 
 
 class BaseObject(object):
@@ -16,6 +17,7 @@ class BaseObject(object):
     _locale = None
     _text = None
     description = '~ none ~'
+    _actions_list = [ACTION_GOOD, ACTION_BAD, ACTION_USE]
 
     def __init__(self, id_, description):
         """
@@ -39,4 +41,29 @@ class BaseObject(object):
         """
         with open(OBJECT_TEXT_PATH_PATTERN % BaseObject._locale) as f:
                 BaseObject._text = json.load(f)
+
+
+    def get_actions_list(self):
+        """
+        """
+        return self._actions_list
+
+
+    def player_acts_good(self):
+        """
+        """
+        pass
+
+
+    def player_acts_bad(self):
+        """
+        """
+        pass
+
+
+    def player_acts_use(self):
+        """
+        """
+        pass
+
 

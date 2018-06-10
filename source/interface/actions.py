@@ -15,9 +15,11 @@ from misc._pathes import ACTIONS_TILES_PATH
 
 # ================================= CONST =================================== #
 
-
 TILE_WIDTH = 25
 
+FORCE_KEY = pygame.K_c
+USE_KEY = pygame.K_x
+HELP_KEY = pygame.K_z
 
 # ===================== ACTION_INTERFACE CLASS ============================== #
 
@@ -114,17 +116,19 @@ class ActionInterface(pygame.sprite.Sprite):
 
         self._direction = RIGHT
         self._is_active = False
-        self._iconset = []
-        self._events = [pygame.USEREVENT]
+        self._selected_object = None
+        self._actions_list = []
+        self._events = [pygame.USEREVENT, pygame.KEYDOWN]
         self._custom_events = [
             EVENT_DISABLE_ACTION_INTERFACE,
             EVENT_ENABLE_ACTION_INTERFACE]
 
 
-    def _enable(self, direction, icon_set):
+    def _enable(self, direction, object_):
         """Enable action buttons.
         """
-        self._iconset = icon_set
+        self._selected_object = object_
+        self._actions_list = object_.get_actions_list()
         self._direction = direction
         self._is_active = True
 
@@ -140,25 +144,49 @@ class ActionInterface(pygame.sprite.Sprite):
 
             screen:     screen Surface
         """
-        if self._is_active and self._iconset:
-            positions = self._positions[len(self._iconset)]
-            for icon, coords in zip(self._iconset, positions[self._direction]):
+        if self._is_active and self._actions_list:
+            positions = self._positions[len(self._actions_list)]
+            for icon, coords in zip(self._actions_list,
+                                                   positions[self._direction]):
                 screen.blit(self._tileset[icon], coords)
 
 
     def handle_event(self, event):
         """Returns True, if event handled. Else False.
         """
+        # proceed handled events only:
         if event.type not in self._events:
             return False
 
-        if event.custom_type not in self._custom_events:
+        # if keydown event, proceed action keys:
+        elif event.type == pygame.KEYDOWN:
+
+            if event.key not in (FORCE_KEY, USE_KEY, HELP_KEY):
+                return False
+
+            elif event.key == FORCE_KEY:
+                self._selected_object.player_acts_bad()
+
+            elif event.key == USE_KEY:
+                self._selected_object.player_acts_use()
+
+            elif event.key == HELP_KEY:
+                self._selected_object.player_acts_good()
+
+        # if user event, proceed enabling/disableing interface:
+        elif event.type == pygame.USEREVENT:
+
+            if event.custom_type == EVENT_ENABLE_ACTION_INTERFACE:
+                self._enable(event.direction, event.object_)
+                return True
+
+            elif event.custom_type == EVENT_DISABLE_ACTION_INTERFACE:
+                self._disable()
+                return True
+
+            else:
+                return False
+
+        # don't proceed anything else.
+        else:
             return False
-
-        if event.custom_type == EVENT_ENABLE_ACTION_INTERFACE:
-            self._enable(event.direction, event.actions_list)
-        elif event.custom_type == EVENT_DISABLE_ACTION_INTERFACE:
-            self._disable()
-
-        return True
-

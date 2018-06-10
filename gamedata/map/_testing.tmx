@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="40" height="3" tilewidth="32" tileheight="32" nextobjectid="1">
- <tileset firstgid="1" source="tilesets/tiles.tsx"/>
+<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="40" height="3" tilewidth="32" tileheight="32" infinite="0" nextobjectid="1">
+ <tileset firstgid="1" source="../../graphics/tilesets/tiles.tsx"/>
  <layer name="Слой тайлов 1" width="40" height="3">
   <data encoding="csv">
 461,462,463,464,465,466,481,482,449,351,352,353,354,355,356,357,358,0,536,537,538,539,540,576,577,578,0,614,615,616,617,618,619,0,581,621,622,582,0,0,

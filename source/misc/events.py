@@ -18,7 +18,7 @@ class CustomEvents(object):
     """
     # ----------------------- ActionInterface --------------------------- #
 
-    def enable_action_interface(self, direction, actions_list):
+    def enable_action_interface(self, direction, object_):
         """Event for ActionInterface class.
         Enable action buttons near player's image.
 
@@ -29,7 +29,7 @@ class CustomEvents(object):
             USEREVENT,
             custom_type=EVENT_ENABLE_ACTION_INTERFACE,
             direction=direction,
-            actions_list=actions_list
+            object_=object_
         ))
 
 
@@ -55,6 +55,18 @@ class CustomEvents(object):
             message=message,
             message_type=message_type,
             once=once
+        ))
+
+    # ----------------------- Frame Manager --------------------------- #
+
+    def show_interface_frame(self, frame):
+        """Event for FrameManager class.
+        Disable action buttons near player's image.
+        """
+        post(Event(
+            USEREVENT,
+            custom_type=EVENT_SHOW_INTERFACE_FRAME,
+            frame=frame,
         ))
 
     # ------------- #
