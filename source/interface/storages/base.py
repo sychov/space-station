@@ -52,7 +52,9 @@ class Storage(Frame):
 
     @classmethod
     def set_cell_size(cls, size):
-        """
+        """Set storage's cell size.
+
+            size:       size of cell (in pixels)
         """
         if cls._cell_size:
             raise RuntimeError('Cell size is already set!')
@@ -64,9 +66,11 @@ class Storage(Frame):
 
     def __init__(self, rect, storage_config, storage_content):
         """
-            rect:  x, y, width, height (on global screen)
-            storage_config
-            storage_content
+            rect:               (x, y, width, height) tuple.
+                                Storage coords on global screen.
+                                Note, that width and height could be changed.
+            storage_config:     StorageConfig instance.
+            storage_content:    StorageContent instance.
         """
         if not self._cell_size:
             raise RuntimeError('Set Storage cell size first!')
@@ -142,6 +146,9 @@ class Storage(Frame):
 
     def bind_external_storage_search(self, external_method):
         """Bind external method "_get_target_storage()" to instance.
+
+            external_method:    method to get Storage instance by
+                                screen coordinates.
         """
         self._get_target_storage = external_method
 
@@ -156,10 +163,15 @@ class Storage(Frame):
             self._draw_dragged_item()
 
 
-    def _get_target_storage(self):
-        """External method.
+    def _get_target_storage(self, point_on_screen_coords):
+        """External method (from FrameManager).
+        Return Storage instance by screen coordinates (or
+        None, if there are no Storages in this point)
+
         Must be binded through "bind_external_storage_search()" method
         before using.
+
+            point_on_screen_coords:     (X, Y) coordinates of screen point
         """
         raise RuntimeError('External method _get_target_storage() '
                            'not binded!')
@@ -228,6 +240,8 @@ class Storage(Frame):
     def _get_cell_coords_by_click_pos(self, click_pos):
         """Return coords of cell, if was clicked to it.
         Else returns None.
+
+            click_pos:      (X, Y) of mouse clicking position
         """
         x, y = click_pos
         relative_pos = x - self.rect.x, y - self.rect.y
@@ -241,13 +255,18 @@ class Storage(Frame):
     def _start_item_dragging(self, x, y, mouse_pos):
         """Mark cell's item by (x, y) coords as "dragged" one.
         Item is drawn as outlined, fill metadata for dragged item.
+            x, y:           X, Y indexes of storage's cell
+            mouse_pos:      (X, Y) of mouse clicking position
+
         """
         self._sound_library.play('item_pick.wav')
-        cell = self.content.storage_cells[y][x]
 
+        # get main cell of chosen item
+        cell = self.content.storage_cells[y][x]
         if cell.is_dumb:
             cell, (x, y) = self.content.get_main_item_cell(cell)
 
+        # draw outline:
         image = cell.inventory_item.image
         mask = pygame.mask.from_surface(image)
         outline_list = mask.outline()
@@ -275,6 +294,7 @@ class Storage(Frame):
             pygame.draw.line(outlined_image, self._line_color,
                         (0, self._cell_size - 1), (width, self._cell_size - 1))
 
+        # draw item, we are dragging
         self._draw_dragged_item()
 
 
@@ -378,6 +398,8 @@ class Storage(Frame):
 
     def _mark_available_cells(self, cell_list):
         """Fill by AVAILABLE_COLOR cells in "cell_list".
+
+            cell_list:      mark available cells by special color.
         """
         for rect, coords in self._storage_cells_areas:
             if coords in cell_list:
@@ -394,6 +416,8 @@ class Storage(Frame):
 
     def _event_mousebutton_up(self, event):
         """Handle mouse button up event.
+
+            event:      pygame.event.Event instance
         """
         if self._dragging_handled_off() or self._dragging_item_handled_off():
             return True
@@ -403,6 +427,8 @@ class Storage(Frame):
 
     def _event_mousebutton_down(self, event):
         """Handle mouse button down event.
+
+            event:      pygame.event.Event instance
         """
         if self.rect.collidepoint(event.pos):
             in_border_rect = Rect(

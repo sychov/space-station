@@ -19,7 +19,7 @@ from misc._pathes import INTERFACE_DIR
 # ------------------------- Configuration -------------------------------- #
 
 FRAME_CONFIG = FrameConfig(
-    tileset_path=os.path.join(INTERFACE_DIR, "blue_scifi_border.png"),
+    tileset_path=os.path.join(INTERFACE_DIR, "brown_scifi_border.png"),
     part_rects={
         TOP_LEFT:       Rect(0, 0, 60, 54),
         TOP_RIGHT:      Rect(140, 0, 85, 49),
@@ -35,17 +35,17 @@ FRAME_CONFIG = FrameConfig(
 
 STORAGE_GONFIG = StorageConfig(
     frame_config=FRAME_CONFIG,
-    grid_size=(2, 4),
+    grid_size=(2, 3),
     grid_top_left_corner=(24, 29),
-    grid_line_color=Color(0, 140, 140),
+    grid_line_color=Color(129, 132, 110),
     item_outline_color=Color(110, 110, 110),
-    cell_avail_color=Color(0, 70, 70)
+    cell_avail_color=Color(70, 75, 62)
 )
 
-# ------------------------- MetalLocker Interface ------------------------- #
+# ------------------------- WoodenLocker Interface ------------------------- #
 
-class MetalLockerInterface(Storage):
-    """Storage interface for metal locker
+class WoodenLockerInterface(Storage):
+    """Storage interface for wood locker
     """
     def __init__(self, rect, storage_content):
         """Init.
@@ -53,5 +53,5 @@ class MetalLockerInterface(Storage):
             rect:               Rect instance (or tuple of X, Y, width, height)
             storage_content     StorageContent instance
         """
-        super(MetalLockerInterface, self).__init__(
+        super(WoodenLockerInterface, self).__init__(
                                          rect, STORAGE_GONFIG, storage_content)

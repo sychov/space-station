@@ -55,6 +55,7 @@ class Frame(object):
         Create Hud instance with default settings of tileset and limits.
 
             rect:           x, y, width, height (position on global screen);
+            frame_config:   FrameConfig instance
 
         """
         # 1. ~ Init variables ~
@@ -181,6 +182,7 @@ class Frame(object):
     def _update_dragging(self):
         """Method for using in classes, descendants of Frame.
         If dragging state was enabled, update frame's coords on screen.
+        Return True, if position was changed, else False.
         """
         if self._dragging:
             current_mouse_pos = pygame.mouse.get_pos()
@@ -228,6 +230,8 @@ class Frame(object):
 
     def _enable_dragging_state(self, mouse_pressed_pos):
         """Enable dragging state.
+
+            mouse_pressed_pos:      (X, Y) - point, where dragging begins.
         """
         self._dragging = True
         self._mouse_pressed_pos = mouse_pressed_pos
@@ -235,6 +239,8 @@ class Frame(object):
 
     def _enable_resizing_state(self, mouse_pressed_pos):
         """Enable resizing state.
+
+            mouse_pressed_pos:      (X, Y) - point, where resizing begins.
         """
         self._resizing = True
         self._mouse_pressed_pos = mouse_pressed_pos

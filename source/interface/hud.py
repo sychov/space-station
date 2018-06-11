@@ -5,7 +5,6 @@
  Description:
 ----------------------------------------------------------"""
 
-import gc
 
 import pygame
 
@@ -17,7 +16,8 @@ from actions import ActionInterface
 from misc._enums import *
 
 # for test only:
-from storages.wooden_box import WoodenShelfStorage
+from misc.events import events
+from storages.pseudo_inventory import PseudoInventoryInterface
 
 
 # ------------------------------ CONST ------------------------------------- #
@@ -39,6 +39,9 @@ class Hud(object):
     """
     def __init__(self, display_size, scale):
         """Init.
+
+            display_size:       (width, height) of game screen window
+            scale:              1 or 2
         """
         Storage.set_cell_size(CELL_SIZE * scale)
 
@@ -58,6 +61,8 @@ class Hud(object):
 
     def handle_event(self, event):
         """Returns True, if event handled. Else False.
+
+            event:      pygame.event.Event instance
         """
         return self._frames_manager.handle_event(event) or \
                self._handle_TEST_pseudo_inventory_events(event) or \
@@ -67,6 +72,8 @@ class Hud(object):
 
     def update(self, debug_text=None):
         """Update state of HUD components.
+
+            debug_text:     debug text to be shown on screen.
         """
         self._frames_manager.update()
         if debug_text:
@@ -77,6 +84,8 @@ class Hud(object):
 
     def draw(self, screen):
         """Draw HUD components.
+
+            screen:     display screen Surface
         """
         self._action_interface.draw(screen)
         self._frames_manager.draw_frames(screen)
@@ -86,6 +95,8 @@ class Hud(object):
     def _debug_outtext(self, screen):
         """Output line of text in a top left corner +20+20 with 25px interval.
         For debug purposes.
+
+            screen:     display screen Surface
         """
         textsurface = self._debug_text.render(
             self._debug_text_message,
@@ -107,6 +118,8 @@ class Hud(object):
     def _handle_TEST_log_events(self, event):
         """ JUST FOR TESTING !!!!
         TO DO: DEL IT !!!!
+
+            event:      pygame.event.Event instance
         """
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_0:
@@ -130,16 +143,17 @@ class Hud(object):
     def _handle_TEST_pseudo_inventory_events(self, event):
         """ JUST FOR TESTING !!!!
         TO DO: DEL IT !!!!
+
+            event:      pygame.event.Event instance
         """
         if event.type == pygame.KEYUP and event.key == pygame.K_i:
             if self._pseudo_inventory_enabled:
                 self._frames_manager.remove_frame(self.pseudo_inventory)
                 self.pseudo_inventory = None
-                gc.collect()
                 self._pseudo_inventory_enabled = False
             else:
-                self.pseudo_inventory = WoodenShelfStorage(
-                    (500, 10, 0, 0),
+                self.pseudo_inventory = PseudoInventoryInterface(
+                    (100, 100, 0, 0),
                     self.pseudo_inventory_content)
                 self.pseudo_inventory.redraw_storage()
                 self._frames_manager.add_frame(self.pseudo_inventory)
@@ -149,6 +163,8 @@ class Hud(object):
     def _init_TEST_storages(self, scale):
         """ JUST FOR TESTING !!!!
         TO DO: DEL IT !!!!
+
+            scale:  1 or 2
         """
         from misc._pathes import MAIN_DIR
         from environment.items.base import InventoryObject
@@ -168,9 +184,9 @@ class Hud(object):
             scale
         )
 
-        big_item = InventoryObject('2x2', 2)
-        medium_item = InventoryObject('2x1', 2)
-        self.pseudo_inventory_content = StorageContent(3, 3)
+        big_item = InventoryObject('2x2', 3)
+        medium_item = InventoryObject('2x1', 3)
+        self.pseudo_inventory_content = StorageContent(4, 5)
         self.pseudo_inventory_content.add_item(medium_item)
         self.pseudo_inventory_content.add_item(big_item)
 

@@ -151,7 +151,10 @@ class ObjectCell(LayerCell):
 
 
     def link_to_object(self, object_):
-        """
+        """Link map cell with map object by setting "object"
+        attribute of cell.
+
+            object_:        BaseObject instance.
         """
         self.object = object_
 
@@ -160,5 +163,4 @@ class ObjectCell(LayerCell):
         """Simple representation.
         """
         return 'Cell #%d, free: %s' % (self.tile_number, str(self.is_walkable))
-
 

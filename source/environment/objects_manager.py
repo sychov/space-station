@@ -21,16 +21,18 @@ LOCALE = 'rus'
 
 
 class ObjectsManager(object):
-    """
+    """Agregation class for game map objects.
+    Forms objects list using game map data and configuration files.
     """
     def __init__(self):
-        """
+        """Init. Please, use only one instance of this class.
         """
         self._objects = {}
         BaseObject.set_locale(LOCALE)
 
         try:
-            configuration = self._get_configuration()
+            with open(MAP_OBJECTS_CONFIG, 'r') as f:
+                configuration = json.load(f)
         except:
             raise RuntimeError('Error reading JSON objects configuration (%s)!'
                                                           % MAP_OBJECTS_CONFIG)
@@ -48,7 +50,9 @@ class ObjectsManager(object):
 
 
     def get_object_by_index(self, index):
-        """
+        """Return BaseObject instance of selected index.
+
+            index:      game map "OBJ_MARKS_LAYER_NUM" index value.
         """
         if index in self._objects:
             return self._objects[index]
@@ -56,10 +60,7 @@ class ObjectsManager(object):
             return None
 
 
-    def _get_configuration(self):
+    def __repr__(self):
+        """Simple representation.
         """
-        """
-        with open(MAP_OBJECTS_CONFIG, 'r') as f:
-            configuration = json.load(f)
-        return configuration
-
+        return 'Game map objects manager'

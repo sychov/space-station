@@ -61,6 +61,7 @@ class Log(Frame):
     def __init__(self, rect):
         """ Load tileset for a player's log.
         Create Log instance with default settings of tileset and limits.
+
             rect:  x, y, width, height (on global screen)
         """
 
@@ -84,6 +85,9 @@ class Log(Frame):
 
     def output(self, msg, tag=None):
         """Output new message.
+
+            msg:    message text
+            tag:    DANGER, SUCCESS, FAIL or None
         """
         self._messages.append((msg, tag))
         self._update_text_bottomed()
@@ -99,7 +103,8 @@ class Log(Frame):
 
     def _update_text(self, bottom_anchor=False):
         """Update text in box.
-        If "bottom_anchor" == True, force to bottom align.
+
+            bottom_anchor:      if True, force to bottom align.
         """
         if bottom_anchor or self._current_message_index is None:
             self._update_text_bottomed()
@@ -210,6 +215,8 @@ class Log(Frame):
 
     def _is_resize_corner_selected(self, coords):
         """Check, if "coords" are in resize corner area.
+
+            coords:     (x, y) coordinates of the point to check.
         """
         x, y = coords
         if x > self.rect.x + self.rect.width - RESIZE_BUTTON_SIZE and \
@@ -261,12 +268,23 @@ class Log(Frame):
         """Handle some custom event.
         """
         if event.custom_type == EVENT_PLAYER_MESSAGE_TO_LOG:
-            if (not event.once) or (not self._messages) or \
-                                     (self._messages[-1][0] != event.message):
+            if (not event.once) or (not self._messages) or (
+                        not self._is_msg_appears_last_time(
+                                           event.message, event.message_type)):
                 self.output(event.message, tag=event.message_type)
             return True
         else:
             return False
+
+
+    def _is_msg_appears_last_time(self, msg, msg_type):
+        """
+        """
+        pair = (msg, msg_type)
+        for q in xrange(min(len(self._messages), 5)):
+            if self._messages[-q - 1] == pair:
+                return True
+        return False
 
 
     def _scroll_up(self):

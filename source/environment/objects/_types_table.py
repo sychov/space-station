@@ -10,6 +10,9 @@ from environment.objects.metal_locker import MetalLocker
 from environment.objects.wooden_locker import WoodenLocker
 
 
+# Simple table of links between map object class names in
+# configuration files and those classes.
+
 OBJECTS_CLASSES = {
     'blue_metal_locker': MetalLocker,
     'wooden_locker': WoodenLocker,

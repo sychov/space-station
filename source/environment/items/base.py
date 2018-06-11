@@ -78,8 +78,10 @@ class InventoryObject(object):
 
     @staticmethod
     def _get_sizes_x_y(enum_sprite_size):
-        """Return tuple (size_x, size_y) for chosen sprite size
-        enum type (SPRITE_1x1, SPRITE_2x1, SPRITE_1x2 or SPRITE_2x2)
+        """Return tuple (size_x, size_y) for chosen sprite size.
+
+            enum_sprite_size:       enum type (SPRITE_1x1, SPRITE_2x1,
+                                               SPRITE_1x2 or SPRITE_2x2)
         """
         if enum_sprite_size == SPRITE_1x1:
             size_x = 32

@@ -23,6 +23,9 @@ class StorageCell(object):
 
     def is_empty(self, self_item=None):
         """Return True, if cell is empty, else False.
+
+            self_item:      if not None, this item cells would be
+                            counted as empty while checking.
         """
         if self.inventory_item and self.inventory_item != self_item:
             return False
@@ -34,7 +37,7 @@ class StorageCell(object):
         """Fill cell with item (main part or dumb one).
 
             item:          Inventory object
-            is_dumb:       True, for upper-left corner, False for others
+            is_dumb:       True for upper-left corner, False for others
         """
         self.inventory_item = item
         self.is_dumb = is_dumb
@@ -65,7 +68,9 @@ class StorageContent(object):
     """Data model class for Storage class.
     """
     def __init__(self, width, height):
-        """
+        """Init.
+
+            width, height:      storage size in cells.
         """
         self.width = width
         self.height = height
@@ -75,7 +80,9 @@ class StorageContent(object):
 
     def add_item(self, item):
         """Try to add item to storage with non-defined placement.
-        Return True, if item was added and False
+        Return True, if item was added and False, if was not.
+
+            item:       InventoryObject instance.
         """
         item_type = item.type
         for y in xrange(self.height):
@@ -115,6 +122,8 @@ class StorageContent(object):
 
     def remove_item(self, item):
         """Remove item from storage cells.
+
+            item:           InventoryObject instance.
         """
         for row in self.storage_cells:
             for cell in row:
@@ -126,8 +135,8 @@ class StorageContent(object):
         """Try to add item to storage defined placement (specific cells).
         Return True, if item was added and False
 
-            item:
-            cells:
+            item:           InventoryObject instance.
+            cells:          List of storage target cells coords in (X, Y).
 
         """
         upper_left_cell = min(cells)
@@ -151,6 +160,9 @@ class StorageContent(object):
     def get_cell_available_for(self, x, y, item):
         """Check, if item with "sprite_type" size can be put to cell
         with x, y coords (counting around ones).
+
+            x, y:       Storage cell coords
+            item:       InventoryObject instance.
         """
         if not self.storage_cells[y][x].is_empty(self_item=item):
             return None
@@ -208,6 +220,8 @@ class StorageContent(object):
 
     def get_main_item_cell(self, cell):
         """Return "main" cell it's coords for chosen "dumb".
+
+            cell:       StorageCell instance
         """
         for y, row in enumerate(self.storage_cells):
             for x, some_cell in enumerate(row):

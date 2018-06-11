@@ -53,14 +53,18 @@ FileName=$[Project-Path]source\environment\objects\base.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node1\ChildNodes\Node2]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]source\environment\objects\metal_locker.py
+FileName=$[Project-Path]source\environment\objects\base_storage.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node1\ChildNodes\Node3]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\environment\objects\metal_locker.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node1\ChildNodes\Node4]
 ClassName=TProjectFileNode
 FileName=$[Project-Path]source\environment\objects\wooden_locker.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node1\ChildNodes]
-Count=4
+Count=5
 
 [Project\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node2]
 ClassName=TProjectFileNode
@@ -103,10 +107,14 @@ FileName=$[Project-Path]source\interface\storages\metal_locker.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node2]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]source\interface\storages\wooden_box.py
+FileName=$[Project-Path]source\interface\storages\pseudo_inventory.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node3]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]source\interface\storages\wooden_locker.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes]
-Count=3
+Count=4
 
 [Project\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node1]
 ClassName=TProjectFileNode

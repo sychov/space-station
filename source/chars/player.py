@@ -92,6 +92,8 @@ class Player(BaseChar):
     def handle_event(self, event):
         """Handle event.
         If event is handled, return True, else False.
+
+            event:      pygame.event.Event instance
         """
         if event.type == pygame.KEYDOWN:
 
@@ -129,6 +131,20 @@ class Player(BaseChar):
                 self.key_bottom = False
                 return True
 
+        elif event.type == pygame.USEREVENT:
+
+            if event.custom_type == EVENT_ACTION_INTERFACE_CLOSED:
+                # actions interface could be closed on only by Player class
+                # so, it is better to set appropriate flags here.
+                self._is_object_action_interface_on = False
+                return True
+
+            if event.custom_type == EVENT_OBJECT_INTERFACE_CLOSED:
+                # object interface could be closed on only by Player class
+                # so, it is better to set appropriate flags here.
+                self._current_object_selected = None
+                return True
+
         return False
 
 
@@ -156,7 +172,6 @@ class Player(BaseChar):
 
         # 2. Check nearest tiles
 
-        is_usable_found = False
         is_player_stopped = False
         stop_border = None
 
@@ -187,21 +202,16 @@ class Player(BaseChar):
                 is_player_stopped = True
 
                 # - check object usability, if non-walkable:
-                if (object_c.object is not None) and (not is_usable_found):
+                if object_c.object is not None and \
+                              object_c.object != self._current_object_selected:
+                    # get middle point of the movement direction's side:
                     point = self._get_sensitive_point(self.direction)
-                    if object_c.rect.collidepoint(point):
-                        if self._is_object_action_interface_on and \
-                                     self._current_object_selected == object_c:
-                            # don't need to re-enable action interface
-                            # alredy opened for the same object
-                            continue
-                        else:
-                            self._enable_actions_interface(object_c.object)
-                            is_usable_found = True
-                            events.put_message_to_players_log(
-                                object_c.object.description,
-                                message_type=None,
-                                once=True)
+                    # check, if this point collides to active object and
+                    # interface was not already shown:
+                    if object_c.rect.collidepoint(point) and \
+                                       not self._is_object_action_interface_on:
+                        self._enable_actions_interface(object_c.object)
+
 
         if is_player_stopped:
             # stop to border value:
@@ -214,37 +224,45 @@ class Player(BaseChar):
             elif self.direction == DOWN:
                 self.rect.bottom = stop_border
             return True
+
         else:
-            # we don't need action interface, when moving
+            # disable actions interface, if enabled
             if self._is_object_action_interface_on:
-                self._disable_actions_interface()
+                events.disable_action_interface()
+                self._is_object_action_interface_on = False
+
+            # drop selection from active map object and
+            # disable object interface, if has enabled
+            if self._current_object_selected:
+                if self._current_object_selected.current_interface:
+                    self._current_object_selected.close_interface()
+                self._current_object_selected = None
             return False
 
 
     def _enable_actions_interface(self, obj):
-        """Enable interface of player's action buttons.
+        """Enable interface - set of player's action buttons.
+
+            obj:        target map's interactive object (BaseObject inst)
         """
         events.enable_action_interface(
             direction=self.direction,
             object_=obj)
 
+        events.put_message_to_players_log(
+            obj.description,
+            message_type=None,
+            once=True)
+
         self._is_object_action_interface_on = True
         self._current_object_selected = obj
-
-
-
-    def _disable_actions_interface(self):
-        """Disable interface of player's action buttons.
-        """
-        events.disable_action_interface()
-
-        self._is_object_action_interface_on = False
-        self._current_object_selected == None
 
 
     def _get_sensitive_point(self, direction):
         """Get point in the middle of collision box side, to
         check, if player could use map object.
+
+            direction:      UP, DOWN, LEFT, RIGHT
         """
         x, y, width, height = self.rect
         half_width = width / 2
@@ -257,5 +275,4 @@ class Player(BaseChar):
             return (x + half_width, y)
         elif direction == DOWN:
             return (x + half_width, y + height)
-
 

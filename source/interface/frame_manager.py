@@ -8,6 +8,7 @@
 import pygame
 
 from storages.base import Storage
+from misc.events import events
 from misc._enums import *
 
 
@@ -23,6 +24,9 @@ class FrameManager(object):
 
     def add_frame(self, frame, on_top=True):
         """Add frame to manager's list.
+
+            frame:      Frame instance
+            on_top:     True, if frame must be on top layer (default)
         """
         if on_top:
             self._frames.append(frame)
@@ -36,13 +40,18 @@ class FrameManager(object):
 
     def remove_frame(self, frame):
         """Delete frame from manager's list.
+
+            frame:      Frame instance
         """
         self._frames.remove(frame)
         self._update_events()
+        events.force_memory_free()
 
 
     def move_frame_to_top(self, frame):
         """Focus on selected frame.
+
+            frame:      Frame instance
         """
         self._frames.remove(frame)
         self._frames.append(frame)
@@ -50,6 +59,8 @@ class FrameManager(object):
 
     def draw_frames(self, screen):
         """Draw all frames in manager.
+
+            screen:     display screen Surface
         """
         for frame in self._frames:
             frame.draw(screen)
@@ -57,16 +68,24 @@ class FrameManager(object):
 
     def handle_event(self, event):
         """Returns True, if event handled. Else False.
+
+            event:      pygame.event.Event instance
         """
         if event.type not in self.events:
             return False
 
-        if event.type == pygame.USEREVENT and \
-                               event.custom_type == EVENT_SHOW_INTERFACE_FRAME:
+        # handle Frame Manager events:
+        if event.type == pygame.USEREVENT:
 
-            self.add_frame(event.frame)
-            return True
+            if event.custom_type == EVENT_SHOW_INTERFACE_FRAME:
+                self.add_frame(event.frame)
+                return True
 
+            elif event.custom_type == EVENT_HIDE_INTERFACE_FRAME:
+                self.remove_frame(event.frame)
+                return True
+
+        # handle frames events:
         for frame in reversed(self._frames):
             if frame.handle_event(event):
                 self.move_frame_to_top(frame)
@@ -92,12 +111,16 @@ class FrameManager(object):
         self.events = events
 
 
-    def _get_storage_in_position(self, pos):
+    def _get_storage_in_position(self, coords):
         """Scan for first frame collided given mouse position.
         If this frame is Storage, return it.
+
+            coords:        (X, Y) - game screen coords
+
+        Return Storage instance, or None.
         """
         for frame in reversed(self._frames):
-            if frame.rect.collidepoint(pos):
+            if frame.rect.collidepoint(coords):
                 break
         else:
             return None

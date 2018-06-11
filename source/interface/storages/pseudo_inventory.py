@@ -16,8 +16,10 @@ from misc._enums import *
 from misc._pathes import INTERFACE_DIR
 
 
+# ------------------------- Configuration -------------------------------- #
+
 FRAME_CONFIG = FrameConfig(
-    tileset_path=os.path.join(INTERFACE_DIR, "brown_scifi_border.png"),
+    tileset_path=os.path.join(INTERFACE_DIR, "green_scifi_border.png"),
     part_rects={
         TOP_LEFT:       Rect(0, 0, 60, 54),
         TOP_RIGHT:      Rect(140, 0, 85, 49),
@@ -33,21 +35,25 @@ FRAME_CONFIG = FrameConfig(
 
 STORAGE_GONFIG = StorageConfig(
     frame_config=FRAME_CONFIG,
-    grid_size=(3, 3),
+    grid_size=(4, 5),
     grid_top_left_corner=(24, 29),
     grid_line_color=Color(129, 132, 110),
     item_outline_color=Color(110, 110, 110),
-    cell_avail_color=Color(70, 75, 62)
+    cell_avail_color=Color(64, 79, 66)
 )
 
+# ---------------------- Pseudo Inventory Interface ------------------------ #
 
-class WoodenShelfStorage(Storage):
-    """Storage interface for wood locker
+class PseudoInventoryInterface(Storage):
+    """Storage interface for players imventory. Temporary solution.
     """
     def __init__(self, rect, storage_content):
         """Init.
+
+            rect:               Rect instance (or tuple of X, Y, width, height)
+            storage_content     StorageContent instance
         """
-        super(WoodenShelfStorage, self).__init__(
+        super(PseudoInventoryInterface, self).__init__(
                                          rect, STORAGE_GONFIG, storage_content)
 
 

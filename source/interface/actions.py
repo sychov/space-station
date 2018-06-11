@@ -26,9 +26,13 @@ HELP_KEY = pygame.K_z
 
 class ActionInterface(pygame.sprite.Sprite):
     """Action buttons set, interface for player possible actions.
+    Consist of Force, Use and Help buttons (not obligatory).
     """
     def __init__(self, display_size, scale):
         """ Init.
+
+        display_size:       (width, height) of game screen window
+        scale:              1 or 2
         """
         pygame.sprite.Sprite.__init__(self)
 
@@ -126,6 +130,9 @@ class ActionInterface(pygame.sprite.Sprite):
 
     def _enable(self, direction, object_):
         """Enable action buttons.
+
+            direction:      direction of player char (UP, DOWN, LEFT, RIGHT)
+            object_:        selected object to action's apply
         """
         self._selected_object = object_
         self._actions_list = object_.get_actions_list()
@@ -153,6 +160,8 @@ class ActionInterface(pygame.sprite.Sprite):
 
     def handle_event(self, event):
         """Returns True, if event handled. Else False.
+
+            event:      pygame.event.Event instance
         """
         # proceed handled events only:
         if event.type not in self._events:
@@ -161,17 +170,21 @@ class ActionInterface(pygame.sprite.Sprite):
         # if keydown event, proceed action keys:
         elif event.type == pygame.KEYDOWN:
 
-            if event.key not in (FORCE_KEY, USE_KEY, HELP_KEY):
+            if not self._is_active or \
+                               event.key not in (FORCE_KEY, USE_KEY, HELP_KEY):
                 return False
 
             elif event.key == FORCE_KEY:
                 self._selected_object.player_acts_bad()
+                return True
 
             elif event.key == USE_KEY:
                 self._selected_object.player_acts_use()
+                return True
 
             elif event.key == HELP_KEY:
                 self._selected_object.player_acts_good()
+                return True
 
         # if user event, proceed enabling/disableing interface:
         elif event.type == pygame.USEREVENT:
@@ -182,6 +195,7 @@ class ActionInterface(pygame.sprite.Sprite):
 
             elif event.custom_type == EVENT_DISABLE_ACTION_INTERFACE:
                 self._disable()
+                events.actions_interface_close_reporting()
                 return True
 
             else:

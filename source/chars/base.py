@@ -40,7 +40,7 @@ class BaseChar(pygame.sprite.Sprite):
             coords:                 starting coords (X, Y) on global map
             tileset_path:           chars tileset file path
             scale:                  game tile's scale param (1 or 2)
-            id_:                    string identificator.
+            id_:                    string identificator (deprecated).
 
         """
         pygame.sprite.Sprite.__init__(self)
@@ -77,6 +77,10 @@ class BaseChar(pygame.sprite.Sprite):
         """Update character state. Abstract :)
         I know about `abc` lib, but it is too complex for this case.
         Ok... Be honest - it is too complex for most of cases! :)
+
+            direction:              UP, RIGHT, DOWN, LEFT
+            game_map:               Map instance
+
         """
         raise RuntimeError('Need to define update nethod!')
 

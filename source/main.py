@@ -5,12 +5,16 @@
  Description:
 ----------------------------------------------------------"""
 
+import gc
+
 import pygame
 
 from environment.map import Map
 from chars.player import Player
 from interface.hud import Hud
+
 from misc._pathes import MAP_PATH, MAP_TILES_PATH, PLAYER_TILES_PATH
+from misc._enums import *
 
 
 # ------------------------------ CONST ------------------------------------- #
@@ -73,6 +77,11 @@ class Main(object):
 
                 if event.type == pygame.QUIT:
                     self.quit()
+
+                if event.type == pygame.USEREVENT and \
+                                  event.custom_type == EVENT_FORCE_MEMORY_FREE:
+                    gc.collect()
+                    continue
 
                 if self.hud.handle_event(event):
                     continue
