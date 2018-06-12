@@ -164,10 +164,14 @@ Name=sounds
 
 [Project\ChildNodes\Node0\ChildNodes\Node4\ChildNodes\Node0]
 ClassName=TProjectFileNode
+FileName=$[Project-Path]source\sounds\music_box.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node4\ChildNodes\Node1]
+ClassName=TProjectFileNode
 FileName=$[Project-Path]source\sounds\sound_library.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node4\ChildNodes]
-Count=1
+Count=2
 
 [Project\ChildNodes\Node0\ChildNodes\Node5]
 ClassName=TProjectFileNode

@@ -21,7 +21,8 @@ else:
 
 # ------ dirs ------- #
 
-SOUNDS_DIR = os.path.join(MAIN_DIR, 'sounds')
+SOUNDS_DIR = os.path.join(MAIN_DIR, 'sounds', 'sound')
+MUSIC_DIR = os.path.join(MAIN_DIR, 'sounds', 'music')
 INTERFACE_DIR = os.path.join(MAIN_DIR, 'graphics', 'interface')
 
 # ------ variation patterns ------- #

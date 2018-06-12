@@ -82,7 +82,7 @@ class Storage(Frame):
                                                  ) != storage_config.grid_size:
             raise RuntimeError('Incorrect size of Storage content!')
 
-        self._sound_library = SoundLibrary.get_instance()
+        self._sound_library = SoundLibrary()
 
         # metadata about item, currently dragged. None, if no item dragging
         self._dragged_item = None

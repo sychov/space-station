@@ -159,6 +159,10 @@ class CustomEvents(object):
         return "Custom events fabrique."
 
 
+# ------------------- CONST EVENT ------------------------- #
+
+EVENT_SONG_END = USEREVENT + 1
+
 # -------------- instance for importing ------------------- #
 
 events = CustomEvents()

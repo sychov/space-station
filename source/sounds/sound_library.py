@@ -13,37 +13,20 @@ from misc._pathes import SOUNDS_DIR
 
 
 class SoundLibrary(object):
-    """Class for in-game sounds collection.
-    Works like singleton, instances are got through:
-
-        SoundLibrary.get_instance()
+    """Singleton class for in-game sounds collection.
     """
     _instance = None
 
-    @staticmethod
-    def get_instance():
-        """Returns instance of SoundLibrary class.
-        Creates, if doesn't created yet.
+
+    def __new__(cls):
+        """Create instance and initializing music lib.
         """
-        if not SoundLibrary._instance:
-            return SoundLibrary(SOUNDS_DIR)
+        if cls._instance:
+            return cls._instance
         else:
-            return SoundLibrary._instance
-
-
-    def __init__(self, sounds_dir):
-        """Create instance and initializing library.
-        Could be called only once, raise error otherwise.
-
-            sounds_dir:     path to sounds directory.
-
-        """
-        if SoundLibrary._instance:
-            raise RuntimeError("SoundLibrary inst was already created!")
-
-        self._sounds = {}
-        self._sounds_path = sounds_dir
-        SoundLibrary._instance = self
+            cls._instance = super(SoundLibrary, cls).__new__(cls)
+            cls._instance._sounds = {}
+            return cls._instance
 
 
     def get(self, sound_path):
@@ -55,7 +38,7 @@ class SoundLibrary(object):
         "play()" method of SoundLibrary instance.
         """
         if sound_path not in self._sounds:
-            path = os.path.join(self._sounds_path, sound_path)
+            path = os.path.join(SOUNDS_DIR, sound_path)
             self._sounds[sound_path] = pygame.mixer.Sound(path)
         return self._sounds[sound_path]
 

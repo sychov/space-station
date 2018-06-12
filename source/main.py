@@ -12,9 +12,11 @@ import pygame
 from environment.map import Map
 from chars.player import Player
 from interface.hud import Hud
+from sounds.music_box import MusicBox
 
 from misc._pathes import MAP_PATH, MAP_TILES_PATH, PLAYER_TILES_PATH
 from misc._enums import *
+from misc.events import EVENT_SONG_END
 
 
 # ------------------------------ CONST ------------------------------------- #
@@ -64,6 +66,10 @@ class Main(object):
         # init map buffer first time
         self.game_map.make_bottom_buffer(self.player.get_camera_pos())
 
+        # start music playing
+        self.music_box = MusicBox()
+        self.music_box.start()
+
 
     def mainloop(self):
         """Start game main loop.
@@ -77,6 +83,10 @@ class Main(object):
 
                 if event.type == pygame.QUIT:
                     self.quit()
+
+                if event.type == EVENT_SONG_END:
+                    self.music_box.play_next()
+                    continue
 
                 if event.type == pygame.USEREVENT and \
                                   event.custom_type == EVENT_FORCE_MEMORY_FREE:

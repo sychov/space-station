@@ -21,7 +21,7 @@ class BaseObject(object):
     _text = None
     description = '~ none ~'
     _actions_list = [ACTION_GOOD, ACTION_BAD, ACTION_USE]
-    _sound_library = SoundLibrary.get_instance()
+    _sound_library = SoundLibrary()
 
 
     def __init__(self, id_, description):
