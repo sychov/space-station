@@ -41,6 +41,8 @@ TILES_COLLISIONS = {
     184: {X: 9,  Y: 2,  WIDTH: 17, HEIGHT: 7},     # flower 2
     181: {X: 4,  Y: 0,  WIDTH: 9,  HEIGHT: 6},     # cooler
     367: {X: 2,  Y: 2,  WIDTH: 4,  HEIGHT: 7},     # yellow chair
+    370: {X: 2,  Y: 2,  WIDTH: 4,  HEIGHT: 7},     # top sofa left
+    371: {X: 2,  Y: 2,  WIDTH: 4,  HEIGHT: 7},     # top sofa right
     348: {X: 7,  Y: 2,  WIDTH: 7,  HEIGHT: 5},     # right sofa top
     368: {X: 7,  Y: 2,  WIDTH: 7,  HEIGHT: 5},     # right sofa bottom
     349: {X: 0,  Y: 2,  WIDTH: 7,  HEIGHT: 5},     # left sofa top
@@ -49,7 +51,7 @@ TILES_COLLISIONS = {
 
 # big lockers
 for q in (301, 302, 461, 462, 463, 464, 465, 466,
-                                                634, 635, 636, 637, 638, 639,):
+                                                634, 635, 636, 637, 638, 639):
     TILES_COLLISIONS[q] = {X: 0,  Y: 0,  WIDTH: 0,  HEIGHT: 5}
 
 # pult-left
@@ -61,8 +63,8 @@ for q in (482, 502):
     TILES_COLLISIONS[q] = {X: 10,  Y: 0,  WIDTH: 10,  HEIGHT: 0}
 
 # beds (all bounds are equal)
-for q in (351, 352, 353, 354, 355, 356, 357, 358,
-                                     371, 372, 373, 374, 375, 376, 377, 378,):
+for q in (353, 354, 355, 356, 357, 358, 359, 360,
+                                     373, 374, 375, 376, 377, 378, 379, 380):
     TILES_COLLISIONS[q] = {X: 5, Y: 2,  WIDTH: 10, HEIGHT: 5}
 
 # doors (all bounds are equal)

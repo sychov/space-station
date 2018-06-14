@@ -11,6 +11,13 @@ from interface.storages.wooden_locker import WoodenLockerInterface
 from misc._enums import *
 
 
+# ---------------------------------- Const ----------------------------- #
+
+SND_OPEN = "wooden_locker_open.wav"
+SND_CLOSE = "wooden_locker_close.wav"
+
+# ---------------------------- WoodenLocker ---------------------------- #
+
 class WoodenLocker(BaseStorage):
     """Storage object - wooden shelf locker.
     """
@@ -28,8 +35,8 @@ class WoodenLocker(BaseStorage):
             description=description,
             storage_content=storage_content,
             interface_class=WoodenLockerInterface,
-            open_sound=kwargs.get('open_sound'),
-            close_sound=kwargs.get('close_sound'))
+            open_sound=SND_OPEN,
+            close_sound=SND_CLOSE)
 
         self._actions_list = [ACTION_BAD, ACTION_USE]
 

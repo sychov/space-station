@@ -2,18 +2,14 @@
     "1": {
         "class": "blue_metal_locker",
         "args": {
-            "description": 0,
-            "open_sound": "metal_locker_open.wav",
-            "close_sound": "metal_locker_close.wav"
+            "description": 0
         }
     },
 
     "2": {
         "class": "wooden_locker",
         "args": {
-            "description": 0,
-            "open_sound": "wooden_locker_open.wav",
-            "close_sound": "wooden_locker_close.wav"
+            "description": 0
         }
     }
 

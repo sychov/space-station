@@ -12,6 +12,13 @@ from interface.storages.metal_locker import MetalLockerInterface
 from misc._enums import *
 
 
+# ---------------------------------- Const ----------------------------- #
+
+SND_OPEN = "metal_locker_open.wav"
+SND_CLOSE = "metal_locker_close.wav"
+
+# ----------------------------- MetalLocker ---------------------------- #
+
 class MetalLocker(BaseStorage):
     """Storage object - metal locker.
     """
@@ -29,8 +36,8 @@ class MetalLocker(BaseStorage):
             description=description,
             storage_content=storage_content,
             interface_class=MetalLockerInterface,
-            open_sound=kwargs.get('open_sound'),
-            close_sound=kwargs.get('close_sound'))
+            open_sound=SND_OPEN,
+            close_sound=SND_CLOSE)
 
 
     def player_acts_good(self):
