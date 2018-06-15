@@ -26,7 +26,7 @@ from misc._enums import *
 # ---------------------------------------------------------------------------
 
 TILES_COLLISIONS = {
-    241: {X: 13, Y: 10, WIDTH: 27, HEIGHT: 21},    # short chair
+##    241: {X: 13, Y: 10, WIDTH: 27, HEIGHT: 21},    # short chair
     261: {X: 12, Y: 0,  WIDTH: 0,  HEIGHT: 0},     # table 1 left
     263: {X: 0,  Y: 0,  WIDTH: 12, HEIGHT: 0},     # table 1 right
     262: {X: 12, Y: 0,  WIDTH: 0,  HEIGHT: 0},     # table 2 left
@@ -37,8 +37,8 @@ TILES_COLLISIONS = {
     308: {X: 0,  Y: 2,  WIDTH: 6,  HEIGHT: 7},     # red bar right
     222: {X: 0,  Y: 0,  WIDTH: 0,  HEIGHT: 6},     # high locker
     223: {X: 0,  Y: 0,  WIDTH: 0,  HEIGHT: 6},     # low locker
-    183: {X: 9,  Y: 2,  WIDTH: 17, HEIGHT: 7},     # flower 1
-    184: {X: 9,  Y: 2,  WIDTH: 17, HEIGHT: 7},     # flower 2
+##    183: {X: 9,  Y: 2,  WIDTH: 17, HEIGHT: 7},     # flower 1
+##    184: {X: 9,  Y: 2,  WIDTH: 17, HEIGHT: 7},     # flower 2
     181: {X: 4,  Y: 0,  WIDTH: 9,  HEIGHT: 6},     # cooler
     367: {X: 2,  Y: 2,  WIDTH: 4,  HEIGHT: 7},     # yellow chair
     370: {X: 2,  Y: 2,  WIDTH: 4,  HEIGHT: 7},     # top sofa left

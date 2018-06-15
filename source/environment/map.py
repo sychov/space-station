@@ -33,7 +33,7 @@ class Map(object):
     WALKABLE_OBJ = 0
 
     # special object indexes offset (additional tileset starting index - 1)
-    OBJECT_INDEXIES_OFFSET = 1280
+    OBJECT_INDEXIES_OFFSET = 1920
 
 
     def __init__(self, map_path, tileset_path, display_size_tuple, scale=1):
