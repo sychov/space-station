@@ -42,8 +42,9 @@ class BaseObject(object):
 
         if not self._text:
             self._setup_localized_text()
-        self.description = self._text[self.id]['descriptions'][description]
+
         self.actions_text = self._text[self.id]['actions']
+        self._change_description(description)
 
 
     @classmethod
@@ -102,11 +103,18 @@ class BaseObject(object):
         pass
 
 
-    def _outtext(self, text_key, tag=None):
+    def _outtext(self, text_key, tag=None, once=False):
         """If text string with this key exists in current locale,
         log it to console with chosen text tag.
         """
         msg = self.actions_text.get(text_key)
         if msg:
-            events.put_message_to_players_log(msg, tag)
+            events.put_message_to_players_log(msg, tag, once)
+
+
+    def _change_description(self, description_key):
+        """Change object description.
+        """
+        self.description = self._text[self.id]['descriptions'][description_key]
+
 

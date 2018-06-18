@@ -39,10 +39,14 @@ class CustomEvents(object):
 
     # ------------------------- Game map -------------------------------- #
 
-    def change_tile_num_on_game_map(self, tile_coords, layer_type, tile_num):
+    def change_tiles_on_game_map(self, tiles):
         """
-            coords:         (X, Y) tuple of tile coords, in tiles
-            layer_type:     LAYER_OBJECTS, LAYER_TOP
+            tiles:  dictionary in format:
+
+                <layer type (LAYER_TOP, LAYER_OBJECTS)>:
+                {
+                    (X, Y) tuple of tile coords, in tiles : <new tile number>
+                }
         """
         if DEBUG:
             print '! change_tile_num_on_game_map'
@@ -50,12 +54,10 @@ class CustomEvents(object):
         post(Event(
             USEREVENT,
             custom_type=EVENT_GAME_MAP_CHANGE_TILE_NUM,
-            tile_coords=tile_coords,
-            layer_type=layer_type,
-            tile_num=tile_num,
+            tiles=tiles,
         ))
 
-    # ----------------------- ActionInterface --------------------------- #
+    # ----------------------- Action Interface --------------------------- #
 
     def enable_action_interface(self, direction, object_):
         """Event for ActionInterface class.
@@ -85,6 +87,19 @@ class CustomEvents(object):
         post(Event(
             USEREVENT,
             custom_type=EVENT_DISABLE_ACTION_INTERFACE
+        ))
+
+
+    def update_action_interface(self):
+        """Event for ActionInterface class.
+        Disable action buttons near player's image.
+        """
+        if DEBUG:
+            print '- update_action_interface'
+
+        post(Event(
+            USEREVENT,
+            custom_type=EVENT_UPDATE_ACTION_INTERFACE
         ))
 
     # ----------------------------- Log ------------------------------ #

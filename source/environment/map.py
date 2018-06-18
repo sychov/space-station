@@ -202,18 +202,7 @@ class Map(object):
         if event.type == pygame.USEREVENT:
 
             if event.custom_type == EVENT_GAME_MAP_CHANGE_TILE_NUM:
-                x, y = event.tile_coords
-                new_tile_num = event.tile_num
-
-                if event.layer_type == LAYER_OBJECTS:
-                    self.layer_objects[y][x].set_tile_number(new_tile_num)
-                    self._update_cells_on_bottom_buffer([(x, y)])
-                elif event.layer_type == LAYER_TOP:
-                    self.layer_objects_top[y][x].set_tile_number(new_tile_num)
-                else:
-                    raise RuntimeError('Incorrect layer in '
-                                              'EVENT_GAME_MAP_CHANGE_TILE_NUM')
-
+                self._change_tiles_on_layers(event.tiles)
                 return True
 
         return False
@@ -390,6 +379,27 @@ class Map(object):
                 y, x = divmod(q, width)
                 objects[(x, y)] = tile_num - self.OBJECT_INDEXIES_OFFSET
         return objects
+
+
+    def _change_tiles_on_layers(self, tiles):
+        """
+        Change tiles numbers (and images) on game map layers.
+
+            tiles:          dictionary in format:
+
+                <layer type (LAYER_TOP, LAYER_OBJECTS)>:
+                {
+                    (X, Y) tuple of tile coords, in tiles : <new tile number>
+                }
+        """
+        if LAYER_TOP in tiles:
+            for (x, y), tile_num in tiles[LAYER_TOP].items():
+                self.layer_objects_top[y][x].set_tile_number(tile_num)
+
+        if LAYER_OBJECTS in tiles:
+            for (x, y), tile_num in tiles[LAYER_OBJECTS].items():
+                self.layer_objects[y][x].set_tile_number(tile_num)
+            self._update_cells_on_bottom_buffer(tiles[LAYER_OBJECTS].keys())
 
 
     def _update_cells_on_bottom_buffer(self, cells_coords_list):

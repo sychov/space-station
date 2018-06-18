@@ -18,6 +18,8 @@ from misc._enums import *
 
 SND_OPEN = "metal_locker_open.wav"
 SND_CLOSE = "metal_locker_close.wav"
+SND_HIT = 'metal_locker_hit.wav'
+SND_BREAK = 'metal_locker_crack.wav'
 
 NORMAL_OBJ_TILE_NUM = 301
 NORMAL_TOP_TILE_NUM = 281
@@ -53,69 +55,85 @@ class MetalLocker(BaseStorage):
             open_sound=SND_OPEN,
             close_sound=SND_CLOSE)
 
+
         if 'state' not in kwargs or kwargs['state'] == 'normal':
             self.state = NORMAL
+            self._actions_list = [ACTION_BAD, ACTION_USE]
         elif kwargs['state'] == 'broken':
             self.state = BROKEN
+            self._actions_list = [ACTION_BAD, ACTION_USE, ACTION_GOOD]
+        elif kwargs['state'] == 'locked':
+            self._actions_list = [ACTION_BAD, ACTION_USE]
+            self.state = LOCKED
 
 
     def player_acts_good(self):
         """"Help" action of player.
         """
         if self.state == BROKEN:
-            self._repair_lock()
+            # temp TO DO: del later !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            if randrange(5):
+                self._outtext('repair_lock_fail', FAIL)
+                self._sound_library.play(SND_OPEN)
+            else:
+                self._repair_lock()
 
 
     def player_acts_bad(self):
         """"Force" action of player.
         """
-        if self.state == NORMAL:
+        if self.state == LOCKED:
             # temp TO DO: del later !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             if randrange(5):
                 self._outtext('break_lock_fail', FAIL)
-                self._sound_library.play('metal_locker_hit.wav')
+                self._sound_library.play(SND_HIT)
             else:
                 self._break_lock()
+        else:
+            if self.state == BROKEN:
+                self._outtext('broken_hit')
+            else:
+                self._outtext('senseless_hit', once=True)
+            self._sound_library.play(SND_HIT)
 
 
     def player_acts_use(self):
         """"Use" action of player.
         """
-        self.open_interface((600, 10, 0, 0))
+        if self.state != LOCKED:
+            self.open_interface((600, 10, 0, 0))
+        else:
+            self._outtext('locked', once=True)
 
 
     def _break_lock(self):
         """Break locker's lock.
         """
         self.state = BROKEN
-        events.change_tile_num_on_game_map(
-            tile_coords=(self.x, self.y),
-            layer_type=LAYER_OBJECTS,
-            tile_num=BROKEN_OBJ_TILE_NUM
-        )
-        events.change_tile_num_on_game_map(
-            tile_coords=(self.x, self.y - 1),
-            layer_type=LAYER_TOP,
-            tile_num=BROKEN_TOP_TILE_NUM
-        )
+        tiles = {
+            LAYER_OBJECTS: {(self.x, self.y): BROKEN_OBJ_TILE_NUM},
+            LAYER_TOP: {(self.x, self.y - 1): BROKEN_TOP_TILE_NUM}
+        }
+        events.change_tiles_on_game_map(tiles=tiles)
         self._outtext('break_lock', SUCCESS)
-        self._sound_library.play('metal_locker_crack.wav')
+        self._sound_library.play(SND_BREAK)
+        self._change_description('broken')
+        self._actions_list = [ACTION_BAD, ACTION_USE, ACTION_GOOD]
+        events.update_action_interface()
 
 
     def _repair_lock(self):
         """Repair locker's lock.
         """
         self.state = NORMAL
-        events.change_tile_num_on_game_map(
-            tile_coords=(self.x, self.y),
-            layer_type=LAYER_OBJECTS,
-            tile_num=NORMAL_OBJ_TILE_NUM
-        )
-        events.change_tile_num_on_game_map(
-            tile_coords=(self.x, self.y - 1),
-            layer_type=LAYER_TOP,
-            tile_num=NORMAL_TOP_TILE_NUM
-        )
+        tiles = {
+            LAYER_OBJECTS: {(self.x, self.y): NORMAL_OBJ_TILE_NUM},
+            LAYER_TOP: {(self.x, self.y - 1): NORMAL_TOP_TILE_NUM}
+        }
+        events.change_tiles_on_game_map(tiles=tiles)
         self._outtext('repair_lock', SUCCESS)
-        self._sound_library.play('metal_locker_close.wav')
+        self._sound_library.play(SND_CLOSE)
+        self._change_description('normal')
+        self._actions_list = [ACTION_BAD, ACTION_USE]
+        events.update_action_interface()
 

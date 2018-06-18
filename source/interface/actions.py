@@ -125,7 +125,8 @@ class ActionInterface(pygame.sprite.Sprite):
         self._events = [pygame.USEREVENT, pygame.KEYDOWN]
         self._custom_events = [
             EVENT_DISABLE_ACTION_INTERFACE,
-            EVENT_ENABLE_ACTION_INTERFACE]
+            EVENT_ENABLE_ACTION_INTERFACE,
+            EVENT_UPDATE_ACTION_INTERFACE]
 
 
     def _enable(self, direction, object_):
@@ -138,6 +139,13 @@ class ActionInterface(pygame.sprite.Sprite):
         self._actions_list = object_.get_actions_list()
         self._direction = direction
         self._is_active = True
+
+
+    def _update(self):
+        """Update action buttons.
+        """
+        if self._selected_object:
+            self._actions_list = self._selected_object.get_actions_list()
 
 
     def _disable(self):
@@ -196,6 +204,10 @@ class ActionInterface(pygame.sprite.Sprite):
             elif event.custom_type == EVENT_DISABLE_ACTION_INTERFACE:
                 self._disable()
                 events.actions_interface_close_reporting()
+                return True
+
+            elif event.custom_type == EVENT_UPDATE_ACTION_INTERFACE:
+                self._update()
                 return True
 
             else:
