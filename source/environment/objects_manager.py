@@ -44,9 +44,10 @@ class ObjectsManager(object):
             kwargs = value['args']
             try:
                 self._objects[index] = class_(id_=id_, **kwargs)
-            except:
+            except Exception as err:
                 raise RuntimeError('Error creating object '
-                                         '#%d (%s)!' % (index, value['class']))
+                                   '#%d (%s)!' % (index, value['class']) +
+                                   '%s' % str(err.args))
 
 
     def get_object_by_index(self, index):

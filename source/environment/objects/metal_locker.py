@@ -91,7 +91,7 @@ class MetalLocker(BaseStorage):
                 self._break_lock()
         else:
             if self.state == BROKEN:
-                self._outtext('broken_hit')
+                self._outtext('broken_hit', once=True)
             else:
                 self._outtext('senseless_hit', once=True)
             self._sound_library.play(SND_HIT)

@@ -15,6 +15,8 @@ from misc._enums import *
 
 SND_OPEN = "wooden_locker_open.wav"
 SND_CLOSE = "wooden_locker_close.wav"
+SND_HIT = 'wooden_locker_hit.wav'
+
 
 # ---------------------------- WoodenLocker ---------------------------- #
 
@@ -50,7 +52,8 @@ class WoodenLocker(BaseStorage):
     def player_acts_bad(self):
         """"Force" action of player.
         """
-        pass
+        self._outtext('senseless_hit', once=True)
+        self._sound_library.play(SND_HIT)
 
 
     def player_acts_use(self):

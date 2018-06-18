@@ -68,7 +68,7 @@ for q in (353, 354, 355, 356, 357, 358, 359, 360,
     TILES_COLLISIONS[q] = {X: 5, Y: 2,  WIDTH: 10, HEIGHT: 5}
 
 # doors (all bounds are equal)
-for q in (421, 422, 423, 424, 401, 402, 403, 404):
+for q in (421, 422, 423, 424, 401, 402, 403, 404, 477, 478, 479, 480):
     TILES_COLLISIONS[q] = {X: 0, Y: 7, WIDTH: 0, HEIGHT: 15}
 
 # colored round puffics (all bounds are equal)

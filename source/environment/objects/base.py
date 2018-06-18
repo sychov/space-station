@@ -23,6 +23,7 @@ class BaseObject(object):
     _actions_list = [ACTION_GOOD, ACTION_BAD, ACTION_USE]
     _sound_library = SoundLibrary()
 
+    current_interface = None
     description = '~ none ~'
 
     # list of tiles for specific object (including all states).

@@ -8,6 +8,7 @@
 
 from environment.objects.metal_locker import MetalLocker
 from environment.objects.wooden_locker import WoodenLocker
+from environment.objects.simple_door import SimpleDoor
 
 
 # Simple table of links between map object class names in
@@ -16,4 +17,6 @@ from environment.objects.wooden_locker import WoodenLocker
 OBJECTS_CLASSES = {
     'blue_metal_locker': MetalLocker,
     'wooden_locker': WoodenLocker,
+    'simple_door': SimpleDoor,
+
 }
