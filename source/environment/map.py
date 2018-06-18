@@ -64,6 +64,7 @@ class Map(object):
 
         self.tile_size = tile_size_origin * scale
         used_tiles = self._get_tiles_set_from_layers(layers)
+
         LayerCell.initialize(tileset_path, tile_size_origin, scale, used_tiles)
 
         self.layer_floor = self._get_map_from_layer(
@@ -190,6 +191,32 @@ class Map(object):
             buffer_cell_y += 1
 
         self.bottom_buffer[CAMERA_COORDS] = camera_x, camera_y
+
+
+    def handle_event(self, event):
+        """Handle event.
+        If event is handled, return True, else False.
+
+            event:      pygame.event.Event instance
+        """
+        if event.type == pygame.USEREVENT:
+
+            if event.custom_type == EVENT_GAME_MAP_CHANGE_TILE_NUM:
+                x, y = event.tile_coords
+                new_tile_num = event.tile_num
+
+                if event.layer_type == LAYER_OBJECTS:
+                    self.layer_objects[y][x].set_tile_number(new_tile_num)
+                    self._update_cells_on_bottom_buffer([(x, y)])
+                elif event.layer_type == LAYER_TOP:
+                    self.layer_objects_top[y][x].set_tile_number(new_tile_num)
+                else:
+                    raise RuntimeError('Incorrect layer in '
+                                              'EVENT_GAME_MAP_CHANGE_TILE_NUM')
+
+                return True
+
+        return False
 
 
     def draw_bottom_layers(self, screen, camera_coords):
@@ -341,6 +368,9 @@ class Map(object):
         tiles = set()
         for layer in layers_list:
             tiles.update(set(layer['data']))
+        # also, we need to use tiles, absent on layers, but used in
+        # objects.
+        tiles.update(self.objects_manager.get_tiles_used_in_objects())
         return tiles
 
 
@@ -360,4 +390,58 @@ class Map(object):
                 y, x = divmod(q, width)
                 objects[(x, y)] = tile_num - self.OBJECT_INDEXIES_OFFSET
         return objects
+
+
+    def _update_cells_on_bottom_buffer(self, cells_coords_list):
+        """As you know, For perfomance improvment, we are using special
+        buffer for:
+                - floor layer
+                - floor decorations layer
+                - bottom objects layer
+        that is huge 3x3 screen size sprite of 9 display screens and used
+        as a cache of bottom rendered map.
+
+        Somehow we need to change tiles numbers for some cells. Of
+        course, we need to redraw this cells on buffer (without
+        redrawal whole buffer). This method do this.
+
+            cells_coords_list:  list of tuples (X, Y) of cells coords,
+                                we have to update.
+        """
+        camera_x, camera_y = self.bottom_buffer[CAMERA_COORDS]
+
+        # get left and top borders of the screen (relative to buffer)
+        left_x = camera_x - self.display_width / 2
+        top_y = camera_y - self.display_height / 2
+
+        size = self.tile_size
+        dx = left_x % size
+        dy = top_y % size
+
+        buffer_surface = self.bottom_buffer[SURFACE]
+
+        left_cell = (left_x - self.display_width) / size
+        right_cell = (left_x + 2 * self.display_width) / size
+        top_cell = (top_y - self.display_height) / size
+        bottom_cell = (top_y + 2 * self.display_height) / size
+
+        for x_map, y_map in cells_coords_list:
+            if (x_map < left_cell or x_map > right_cell or
+                                      y_map < top_cell or y_map > bottom_cell):
+                continue
+
+            # draw background cell
+            coords = ((x_map - left_cell) * size - dx,
+                      (y_map - top_cell) * size - dy)
+
+            floor_tile = self.layer_floor[y_map][x_map]
+            buffer_surface.blit(floor_tile.image, coords)
+
+            obj_tile = self.layer_objects[y_map][x_map]
+            if obj_tile.tile_number:
+                buffer_surface.blit(obj_tile.image, coords)
+
+            decor_tile = self.layer_floor_decor[y_map][x_map]
+            if decor_tile.tile_number:
+                buffer_surface.blit(decor_tile.image, coords)
 

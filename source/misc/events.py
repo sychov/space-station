@@ -23,7 +23,7 @@ class CustomEvents(object):
     """Simple fabric for custom events.
     It's better to use standard single instance below.
     """
-    # --------------------------- Main -------------------------------- #
+    # ---------------------------- Main -------------------------------- #
 
     def force_memory_free(self):
         """Event for Main app class.
@@ -35,6 +35,24 @@ class CustomEvents(object):
         post(Event(
             USEREVENT,
             custom_type=EVENT_FORCE_MEMORY_FREE
+        ))
+
+    # ------------------------- Game map -------------------------------- #
+
+    def change_tile_num_on_game_map(self, tile_coords, layer_type, tile_num):
+        """
+            coords:         (X, Y) tuple of tile coords, in tiles
+            layer_type:     LAYER_OBJECTS, LAYER_TOP
+        """
+        if DEBUG:
+            print '! change_tile_num_on_game_map'
+
+        post(Event(
+            USEREVENT,
+            custom_type=EVENT_GAME_MAP_CHANGE_TILE_NUM,
+            tile_coords=tile_coords,
+            layer_type=layer_type,
+            tile_num=tile_num,
         ))
 
     # ----------------------- ActionInterface --------------------------- #

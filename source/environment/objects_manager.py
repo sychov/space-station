@@ -60,6 +60,17 @@ class ObjectsManager(object):
             return None
 
 
+    def get_tiles_used_in_objects(self):
+        """Return BaseObject instance of selected index.
+
+            index:      game map "OBJ_MARKS_LAYER_NUM" index value.
+        """
+        tiles_check_list = set()
+        for obj in self._objects.values():
+            tiles_check_list.update(obj.tiles_nums_checklist)
+        return tiles_check_list
+
+
     def __repr__(self):
         """Simple representation.
         """

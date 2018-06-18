@@ -81,22 +81,31 @@ class Main(object):
 
             for event in pygame.event.get():
 
+                # main event: exit from game
                 if event.type == pygame.QUIT:
                     self.quit()
 
+                # main event: need to play next song
                 if event.type == EVENT_SONG_END:
                     self.music_box.play_next()
                     continue
 
+                # main event: need to force garbage collector
                 if event.type == pygame.USEREVENT and \
                                   event.custom_type == EVENT_FORCE_MEMORY_FREE:
                     gc.collect()
                     continue
 
+                # HUD events:
                 if self.hud.handle_event(event):
                     continue
 
+                # Player events:
                 if self.player.handle_event(event):
+                    continue
+
+                # Game Map events:
+                if self.game_map.handle_event(event):
                     continue
 
             # ~ 2. Update ~

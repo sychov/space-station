@@ -9,8 +9,8 @@ import json
 
 from base import BaseObject
 from misc._pathes import OBJECT_TEXT_PATH_PATTERN
-from misc._enums import *
 from misc.events import events
+from misc._enums import *
 
 
 class BaseStorage(BaseObject):
@@ -51,7 +51,7 @@ class BaseStorage(BaseObject):
         self.is_opened = True
         if self._open_sound:
             self._sound_library.play(self._open_sound)
-        events.put_message_to_players_log(self.actions_text['open'])
+        self._outtext('open')
 
 
     def close_interface(self):
@@ -63,6 +63,6 @@ class BaseStorage(BaseObject):
         self.is_opened = False
         if self._close_sound:
             self._sound_library.play(self._close_sound)
-        events.put_message_to_players_log(self.actions_text['close'])
+        self._outtext('close')
 
 

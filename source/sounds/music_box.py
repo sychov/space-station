@@ -38,7 +38,7 @@ class MusicBox(object):
         self._compositions_list = [os.path.join(MUSIC_DIR, track)
                                                            for track in tracks]
         self._playlist = self._compositions_list[:]
-        pygame.mixer.music.set_volume(0.4)
+        pygame.mixer.music.set_volume(0.3)
         pygame.mixer.music.set_endevent(EVENT_SONG_END)
         if self._compositions_list:
             self.play_next()

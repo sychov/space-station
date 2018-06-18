@@ -84,6 +84,9 @@ class LayerCell(object):
         self.image = self._tileset[tile_number - 1]
         self.tile_number = tile_number
 
+        self._tile_x = x
+        self._tile_y = y
+
         # correction of collisions map for some sprites (bottom objects)
         if tile_number in TILES_COLLISIONS:
             special = TILES_COLLISIONS[tile_number]
@@ -91,6 +94,13 @@ class LayerCell(object):
             self.rect.y += special[Y] * self._scale
             self.rect.width -= special[WIDTH] * self._scale
             self.rect.height -= special[HEIGHT] * self._scale
+
+
+    def set_tile_number(self, tile_num):
+        """Change tile number to selected one.
+        """
+        self.tile_number = tile_num
+        self.image = self._tileset[tile_num - 1]
 
 
     def __repr__(self):
@@ -157,6 +167,8 @@ class ObjectCell(LayerCell):
             object_:        BaseObject instance.
         """
         self.object = object_
+        if object_ is not None:
+            object_.set_coords((self._tile_x, self._tile_y))
 
 
     def __repr__(self):

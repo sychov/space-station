@@ -2,7 +2,8 @@
     "1": {
         "class": "blue_metal_locker",
         "args": {
-            "description": 0
+            "description": 0,
+            "state": "normal"
         }
     },
 
