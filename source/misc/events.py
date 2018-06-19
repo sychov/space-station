@@ -184,6 +184,25 @@ class CustomEvents(object):
             custom_type=EVENT_OBJECT_INTERFACE_CLOSED
         ))
 
+    # ------------------------- Chars Manager ----------------------------- #
+
+    def check_cell_free_of_chars(self, cell_rect, callback_yes=None,
+                                                             callback_no=None):
+        """Event for CharsManager class.
+        Checks, if cell is free of chars, or not. Call one of
+        chosen two callbacks.
+        """
+        if DEBUG:
+            print '   * check_cell_free_of_chars'
+
+        post(Event(
+            USEREVENT,
+            custom_type=EVENT_DETECT_CHARS_ABSENCE_ON_CELL,
+            cell_rect=cell_rect,
+            callback_yes=callback_yes,
+            callback_no=callback_no,
+        ))
+
     # ------------- #
 
     def __repr__(self):

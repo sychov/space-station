@@ -11,6 +11,7 @@ import pygame
 
 from environment.map import Map
 from chars.player import Player
+from chars.chars_manager import CharsManager
 from interface.hud import Hud
 from sounds.music_box import MusicBox
 
@@ -63,6 +64,8 @@ class Main(object):
             scale=scale,
             display_size=DISPLAY_SIZE)
 
+        self.char_manager = CharsManager(self.player)
+
         # init map buffer first time
         self.game_map.make_bottom_buffer(self.player.get_camera_pos())
 
@@ -108,10 +111,15 @@ class Main(object):
                 if self.game_map.handle_event(event):
                     continue
 
+                # Char Manager events:
+                if self.char_manager.handle_event(event):
+                    continue
+
             # ~ 2. Update ~
 
             self.hud.update(debug_text=self._get_debug_message())
             self.player.update(self.game_map)
+            self.game_map.objects_manager.update()
 
             # ~ 3. Draw ~
 

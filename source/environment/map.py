@@ -53,8 +53,6 @@ class Map(object):
             SURFACE: Surface((self.display_width * 3, self.display_height * 3))
         }
 
-        self.objects_manager = ObjectsManager()
-
         # 2. Load map
 
         with open(map_path) as f:
@@ -63,6 +61,8 @@ class Map(object):
         tile_size_origin = map_file_data['tileheight']
 
         self.tile_size = tile_size_origin * scale
+        self.objects_manager = ObjectsManager(cell_size=self.tile_size)
+
         used_tiles = self._get_tiles_set_from_layers(layers)
 
         LayerCell.initialize(tileset_path, tile_size_origin, scale, used_tiles)
@@ -394,11 +394,13 @@ class Map(object):
         """
         if LAYER_TOP in tiles:
             for (x, y), tile_num in tiles[LAYER_TOP].items():
-                self.layer_objects_top[y][x].set_tile_number(tile_num)
+                self.layer_objects_top[y][x].set_tile(tile_num)
 
         if LAYER_OBJECTS in tiles:
             for (x, y), tile_num in tiles[LAYER_OBJECTS].items():
-                self.layer_objects[y][x].set_tile_number(tile_num)
+                self.layer_objects[y][x].set_tile(
+                    tile_num,
+                    walkable=(tile_num == self.WALKABLE_OBJ))
             self._update_cells_on_bottom_buffer(tiles[LAYER_OBJECTS].keys())
 
 
@@ -439,7 +441,6 @@ class Map(object):
             if (x_map < left_cell or x_map > right_cell or
                                       y_map < top_cell or y_map > bottom_cell):
                 continue
-
             # draw background cell
             coords = ((x_map - left_cell) * size - dx,
                       (y_map - top_cell) * size - dy)

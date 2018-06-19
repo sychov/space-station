@@ -26,6 +26,7 @@ class LayerCell(object):
 
     _is_class_initialized = False
     _scale = None
+    _is_walkable = True
     _tileset = []
 
 
@@ -96,11 +97,13 @@ class LayerCell(object):
             self.rect.height -= special[HEIGHT] * self._scale
 
 
-    def set_tile_number(self, tile_num):
+    def set_tile(self, tile_num, walkable=None):
         """Change tile number to selected one.
         """
         self.tile_number = tile_num
         self.image = self._tileset[tile_num - 1]
+        if walkable is not None:
+            self.is_walkable = walkable
 
 
     def __repr__(self):

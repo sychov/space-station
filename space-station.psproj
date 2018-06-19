@@ -19,10 +19,14 @@ FileName=$[Project-Path]source\chars\base.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1]
 ClassName=TProjectFileNode
+FileName=$[Project-Path]source\chars\chars_manager.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2]
+ClassName=TProjectFileNode
 FileName=$[Project-Path]source\chars\player.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes]
-Count=2
+Count=3
 
 [Project\ChildNodes\Node0\ChildNodes\Node1]
 ClassName=TProjectFolderNode

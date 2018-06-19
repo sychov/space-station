@@ -15,15 +15,24 @@ from misc._enums import *
 
 class BaseObject(object):
     """Base class for game map objects.
-    All objects on game map, player can interact with, are
-    based on this type.
+    All objects on game map, player can interact with, are based
+    on this type.
+    Must be initialized through initialize() method before using.
     """
+    # default zero instances
     _locale = None
     _text = None
+    _object_manager = None
+
+    # available buttons in actions interface
     _actions_list = [ACTION_GOOD, ACTION_BAD, ACTION_USE]
+
     _sound_library = SoundLibrary()
 
+    # field for interface frame class. Not all objects has one.
     current_interface = None
+
+    # object's info in players log
     description = '~ none ~'
 
     # list of tiles for specific object (including all states).
@@ -49,12 +58,15 @@ class BaseObject(object):
 
 
     @classmethod
-    def set_locale(cls, locale):
+    def initialize(cls, locale, object_manager):
         """Setup locale for all objects text strings.
+        Link all instances with their object manager.
 
-            locale:         locale name (string)
+            locale:             locale name (string)
+            object_manager:     ObjectManager instance
         """
         cls._locale = locale
+        cls._object_manager = object_manager
 
 
     @classmethod

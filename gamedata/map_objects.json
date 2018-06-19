@@ -19,5 +19,30 @@
         "args": {
             "description": "normal"
         }
+    },
+
+    "4": {
+        "class": "simple_door",
+        "args": {
+            "description": "normal",
+            "opened_delay": 1
+        }
+    },
+
+    "5": {
+        "class": "simple_door",
+        "args": {
+            "description": "normal",
+            "opened_delay": 2
+        }
+    },
+
+    "6": {
+        "class": "simple_door",
+        "args": {
+            "description": "normal",
+            "opened_delay": 0.5
+        }
     }
+
 }
