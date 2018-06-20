@@ -25,24 +25,100 @@
         "class": "simple_door",
         "args": {
             "description": "normal",
-            "opened_delay": 1
-        }
-    },
-
-    "5": {
-        "class": "simple_door",
-        "args": {
-            "description": "normal",
             "opened_delay": 2
         }
     },
 
-    "6": {
-        "class": "simple_door",
+    "5": {
+        "class": "smart_door",
         "args": {
             "description": "normal",
-            "opened_delay": 0.5
+            "terminal": 7
+        }
+    },
+
+    "6": {
+        "class": "smart_door",
+        "args": {
+            "description": "normal",
+            "terminal": 8
+        }
+    },
+
+    "7": {
+        "class": "door_terminal",
+        "args": {
+            "description": "normal",
+            "door": 5,
+            "free_access": true,
+            "code": 0,
+            "delay": 0
+        }
+    },
+
+    "8": {
+        "class": "door_terminal",
+        "args": {
+            "description": "normal",
+            "door": 6,
+            "free_access": false,
+            "code": 777
+        }
+    },
+
+    "9": {
+        "class": "smart_armored_door",
+        "args": {
+            "description": "normal",
+            "terminal": 8
+        }
+    },
+
+    "10": {
+        "class": "door_terminal",
+        "args": {
+            "description": "normal",
+            "door": 9,
+            "free_access": true,
+            "code": 0
+        }
+    },
+
+    "11": {
+        "class": "gate_door",
+        "args": {
+            "description": "normal",
+            "terminal": 12
+        }
+    },
+
+    "12": {
+        "class": "gate_terminal",
+        "args": {
+            "description": "normal",
+            "door": 11,
+            "pair_terminal": 14,
+            "free_access": true,
+            "code": 0
+        }
+    },
+    
+    "13": {
+        "class": "gate_door",
+        "args": {
+            "description": "normal",
+            "terminal": 14
+        }
+    },
+
+    "14": {
+        "class": "gate_terminal",
+        "args": {
+            "description": "normal",
+            "door": 13,
+            "pair_terminal": 12,
+            "free_access": true,
+            "code": 0
         }
     }
-
 }

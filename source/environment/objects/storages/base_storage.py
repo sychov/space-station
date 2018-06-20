@@ -7,7 +7,8 @@
 
 import json
 
-from base import BaseObject
+from environment.objects.base import BaseObject
+
 from misc._pathes import OBJECT_TEXT_PATH_PATTERN
 from misc.events import events
 from misc._enums import *

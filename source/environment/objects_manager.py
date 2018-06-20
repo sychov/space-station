@@ -52,7 +52,7 @@ class ObjectsManager(object):
             except Exception as err:
                 raise RuntimeError('Error creating object '
                                    '#%d (%s)!' % (index, value['class']) +
-                                   '%s' % str(err.args))
+                                   '%s' % (str(type(err)) + str(err.args)))
 
 
     def get_object_by_index(self, index):

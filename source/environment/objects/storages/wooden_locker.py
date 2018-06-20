@@ -29,7 +29,6 @@ class WoodenLocker(BaseStorage):
             id_:                class ID in configuration files.
             description:        index of description string in locale
                                 text files.
-            **kwargs:           all others parameters from config files.
         """
         storage_content = StorageContent(2, 3)
         super(WoodenLocker, self).__init__(

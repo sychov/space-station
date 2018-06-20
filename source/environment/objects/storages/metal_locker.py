@@ -38,13 +38,13 @@ class MetalLocker(BaseStorage):
         BROKEN_TOP_TILE_NUM,
     ]
 
-    def __init__(self, id_, description, **kwargs):
+    def __init__(self, id_, description, state='normal', **kwargs):
         """Init.
 
             id_:                class ID in configuration files.
             description:        index of description string in locale
                                 text files.
-            **kwargs:           all others parameters from config files.
+            state:              'normal', 'locked' or 'broken' strings
         """
         storage_content = StorageContent(2, 4)
         super(MetalLocker, self).__init__(
@@ -56,13 +56,13 @@ class MetalLocker(BaseStorage):
             close_sound=SND_CLOSE)
 
 
-        if 'state' not in kwargs or kwargs['state'] == 'normal':
+        if state == 'normal':
             self.state = NORMAL
             self._actions_list = [ACTION_BAD, ACTION_USE]
-        elif kwargs['state'] == 'broken':
+        elif state == 'broken':
             self.state = BROKEN
             self._actions_list = [ACTION_BAD, ACTION_USE, ACTION_GOOD]
-        elif kwargs['state'] == 'locked':
+        elif state == 'locked':
             self._actions_list = [ACTION_BAD, ACTION_USE]
             self.state = LOCKED
 

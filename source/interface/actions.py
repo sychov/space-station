@@ -17,8 +17,8 @@ from misc._pathes import ACTIONS_TILES_PATH
 
 TILE_WIDTH = 25
 
-FORCE_KEY = pygame.K_c
-USE_KEY = pygame.K_x
+USE_KEY = pygame.K_c
+FORCE_KEY = pygame.K_x
 HELP_KEY = pygame.K_z
 
 # ===================== ACTION_INTERFACE CLASS ============================== #

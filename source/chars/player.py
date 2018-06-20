@@ -177,20 +177,8 @@ class Player(BaseChar):
 
         for floor_c, object_c in game_map.get_cells_to_verification(self.rect):
 
-            # - check floor tiles walkability:
-            if not floor_c.is_walkable and self.rect.colliderect(floor_c):
-                if self.direction == RIGHT:
-                    stop_border = floor_c.rect.left
-                elif self.direction == LEFT:
-                    stop_border = floor_c.rect.right
-                elif self.direction == UP:
-                    stop_border = floor_c.rect.bottom
-                elif self.direction == DOWN:
-                    stop_border = floor_c.rect.top
-                is_player_stopped = True
-
             # - if ok, check object walkability:
-            elif not object_c.is_walkable and self.rect.colliderect(object_c):
+            if not object_c.is_walkable and self.rect.colliderect(object_c):
                 if self.direction == RIGHT:
                     stop_border = object_c.rect.left
                 elif self.direction == LEFT:
@@ -212,6 +200,17 @@ class Player(BaseChar):
                                        not self._is_object_action_interface_on:
                         self._enable_actions_interface(object_c.object)
 
+            # - check floor tiles walkability:
+            elif not floor_c.is_walkable and self.rect.colliderect(floor_c):
+                if self.direction == RIGHT:
+                    stop_border = floor_c.rect.left
+                elif self.direction == LEFT:
+                    stop_border = floor_c.rect.right
+                elif self.direction == UP:
+                    stop_border = floor_c.rect.bottom
+                elif self.direction == DOWN:
+                    stop_border = floor_c.rect.top
+                is_player_stopped = True
 
         if is_player_stopped:
             # stop to border value:
