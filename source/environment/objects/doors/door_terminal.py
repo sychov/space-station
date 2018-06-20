@@ -57,6 +57,8 @@ class DoorTerminal(BaseObject):
         self._code = code
         self._delay_before_open = delay
 
+        self._status = CLOSED
+
 
     def player_acts_good(self):
         """"Help" action of player.
@@ -81,8 +83,9 @@ class DoorTerminal(BaseObject):
         if self._check_access():
             self._sound_library.play(self.SND_USE_SUCCES)
             door = self._object_manager.get_object_by_index(self._door)
-            if door and door.state == CLOSED:
+            if door and door.state == CLOSED and self._status == CLOSED:
                 self._outtext('successful_use', SUCCESS)
+                self._status = OPENED
                 if not self._delay_before_open:
                     door.open_door()
                 else:
@@ -94,6 +97,13 @@ class DoorTerminal(BaseObject):
         else:
             self._outtext('access_denied', FAIL)
             self._sound_library.play(self.SND_USE_FAIL)
+
+
+    def set_closed(self):
+        """Return terminal to state "door closed".
+        Method for door object (to change status after closing).
+        """
+        self._status = CLOSED
 
 
     def _check_access(self):

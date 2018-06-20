@@ -83,3 +83,12 @@ class SmartDoor(SimpleDoor):
         if ACTION_USE in self._actions_list and self.state == CLOSED:
             self._outtext('senseless_use', once=True)
 
+
+    def _post_closing_actions(self):
+        """Some actions, we have to do after door is actually closed.
+        Virtual.
+        """
+        if self._terminal:
+            terminal = self._object_manager.get_object_by_index(self._terminal)
+            terminal.set_closed()
+

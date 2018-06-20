@@ -59,7 +59,6 @@ class GateTerminal(DoorTerminal):
             **kwargs)
 
         self._pair_terminal = pair_terminal
-        self.status = CLOSED
 
 
     def player_acts_use(self):
@@ -72,20 +71,20 @@ class GateTerminal(DoorTerminal):
             self._outtext('access_denied', FAIL)
             self._sound_library.play(self.SND_USE_FAIL)
 
-        elif self.status == BLOCKED:
+        elif self._status == BLOCKED:
             self._outtext('please_wait', FAIL)
             self._sound_library.play(self.SND_USE_FAIL)
 
-        elif self.status == OPENED:
+        elif self._status == OPENED:
             self._sound_library.play(self.SND_USE_SUCCES)
 
-        elif self.status == CLOSED:
+        elif self._status == CLOSED:
             self._sound_library.play(self.SND_USE_SUCCES)
             door = self._object_manager.get_object_by_index(self._door)
             if door and door.state == CLOSED:
 
                 self._outtext('successful_use', SUCCESS)
-                self.status = OPENED
+                self._status = OPENED
 
                 self.toggle_whole_pair_block(is_blocked=True)
 
@@ -102,10 +101,10 @@ class GateTerminal(DoorTerminal):
             is_blocked:       True, if you need to block terminal, or False
         """
         if is_blocked:
-            self.status = BLOCKED
+            self._status = BLOCKED
             tile = STATE_TILE_BUSY
         else:
-            self.status = CLOSED
+            self._status = CLOSED
             tile = STATE_TILE_READY
 
         events.change_tiles_on_game_map(

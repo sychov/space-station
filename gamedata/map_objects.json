@@ -70,7 +70,7 @@
         "class": "smart_armored_door",
         "args": {
             "description": "normal",
-            "terminal": 8
+            "terminal": 10
         }
     },
 
