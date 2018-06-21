@@ -5,6 +5,8 @@
  Description: Characters classes
 ----------------------------------------------------------"""
 
+import math
+
 import pygame
 from pygame import Rect
 
@@ -15,7 +17,7 @@ from misc.events import events
 # ================================= CONST =================================== #
 
 
-MOVE_SPEED = 240
+MOVE_SPEED = 120
 MAXIMUM_LAG = 50
 
 # ============================ PLAYER CLASS ================================= #
@@ -33,10 +35,16 @@ class Player(BaseChar):
             display_size:           (<screen width>, <screen height>)
 
         """
+        self.movement_speed = float(MOVE_SPEED) * scale
+
         super(Player, self).__init__(coords, tileset_path, scale, 'Player')
+
+        # center's shifts of inner Player rect (for camera purposes)
         self.camera_shift_x = self.rect.width / 2
         self.camera_shift_y = self.rect.height / 2
 
+        # Float versions of self.rect.x | self.rect.y
+        # it is made to implement smooth movement
         self._x = float(self.rect.x)
         self._y = float(self.rect.y)
 
@@ -71,26 +79,26 @@ class Player(BaseChar):
 
         if self.key_bottom:
             hard_ms = min(milliseconds_spent, MAXIMUM_LAG)
-            self._y += MOVE_SPEED * hard_ms / 1000.0
-            self.rect.y = int(self._y)
+            self._y += self.movement_speed * hard_ms / 1000.0
+            self.rect.y = math.ceil(self._y)
             self.direction = DOWN
 
         elif self.key_top:
             hard_ms = min(milliseconds_spent, MAXIMUM_LAG)
-            self._y -= MOVE_SPEED * hard_ms / 1000.0
+            self._y -= self.movement_speed * hard_ms / 1000.0
             self.rect.y = int(self._y)
             self.direction = UP
 
         elif self.key_left:
             hard_ms = min(milliseconds_spent, MAXIMUM_LAG)
-            self._x -= MOVE_SPEED * hard_ms / 1000.0
+            self._x -= self.movement_speed * hard_ms / 1000.0
             self.rect.x = int(self._x)
             self.direction = LEFT
 
         elif self.key_right:
             hard_ms = min(milliseconds_spent, MAXIMUM_LAG)
-            self._x += MOVE_SPEED * hard_ms / 1000.0
-            self.rect.x = int(self._x)
+            self._x += self.movement_speed * hard_ms / 1000.0
+            self.rect.x = math.ceil(self._x)
             self.direction = RIGHT
 
         else:
