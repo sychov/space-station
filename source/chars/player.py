@@ -15,8 +15,8 @@ from misc.events import events
 # ================================= CONST =================================== #
 
 
-MOVE_SPEED = 2
-
+MOVE_SPEED = 240
+MAXIMUM_LAG = 50
 
 # ============================ PLAYER CLASS ================================= #
 
@@ -37,6 +37,9 @@ class Player(BaseChar):
         self.camera_shift_x = self.rect.width / 2
         self.camera_shift_y = self.rect.height / 2
 
+        self._x = float(self.rect.x)
+        self._y = float(self.rect.y)
+
         x = (display_size[0] - self._inner_rect.width) / 2 - self._inner_rect.x
         y = (display_size[1] - self._inner_rect.height)/ 2 - self._inner_rect.y
         self.screen_coords = x, y
@@ -55,27 +58,39 @@ class Player(BaseChar):
         return x, y
 
 
-    def update(self, game_map):
+    def update(self, game_map, milliseconds_spent):
         """Update player state.
 
             game_map:       Map class instance.
         """
         is_idle_state = False
 
+        # DRY cries here....
+        # But this is one of the bottlenecks, so I don't want to calc
+        # senseless data for idle character..
+
         if self.key_bottom:
-            self.rect.y += MOVE_SPEED
+            hard_ms = min(milliseconds_spent, MAXIMUM_LAG)
+            self._y += MOVE_SPEED * hard_ms / 1000.0
+            self.rect.y = int(self._y)
             self.direction = DOWN
 
         elif self.key_top:
-            self.rect.y -= MOVE_SPEED
+            hard_ms = min(milliseconds_spent, MAXIMUM_LAG)
+            self._y -= MOVE_SPEED * hard_ms / 1000.0
+            self.rect.y = int(self._y)
             self.direction = UP
 
         elif self.key_left:
-            self.rect.x -= MOVE_SPEED
+            hard_ms = min(milliseconds_spent, MAXIMUM_LAG)
+            self._x -= MOVE_SPEED * hard_ms / 1000.0
+            self.rect.x = int(self._x)
             self.direction = LEFT
 
         elif self.key_right:
-            self.rect.x += MOVE_SPEED
+            hard_ms = min(milliseconds_spent, MAXIMUM_LAG)
+            self._x += MOVE_SPEED * hard_ms / 1000.0
+            self.rect.x = int(self._x)
             self.direction = RIGHT
 
         else:
@@ -162,12 +177,16 @@ class Player(BaseChar):
         if not game_map.rect.contains(self.rect):
             if self.direction == RIGHT:
                 self.rect.right = game_map.rect.right
+                self._x = self.rect.left
             elif self.direction == LEFT:
                 self.rect.left = game_map.rect.left
+                self._x = self.rect.left
             elif self.direction == UP:
                 self.rect.top = game_map.rect.top
+                self._y = self.rect.top
             elif self.direction == DOWN:
                 self.rect.bottom = game_map.rect.bottom
+                self._y = self.rect.top
             return True
 
         # 2. Check nearest tiles
@@ -216,12 +235,16 @@ class Player(BaseChar):
             # stop to border value:
             if self.direction == RIGHT:
                 self.rect.right = stop_border
+                self._x = self.rect.left
             elif self.direction == LEFT:
                 self.rect.left = stop_border
+                self._x = self.rect.left
             elif self.direction == UP:
                 self.rect.top = stop_border
+                self._y = self.rect.top
             elif self.direction == DOWN:
                 self.rect.bottom = stop_border
+                self._y = self.rect.top
             return True
 
         else:

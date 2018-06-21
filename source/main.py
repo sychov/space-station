@@ -23,7 +23,7 @@ from misc.events import EVENT_SONG_END
 # ------------------------------ CONST ------------------------------------- #
 
 DISPLAY_SIZE = (1024, 640)
-FPS_LIMIT = 200
+FPS_LIMIT = 180
 DOUBLE = True
 DEBUG = True
 
@@ -78,7 +78,7 @@ class Main(object):
         """Start game main loop.
         """
         while True:
-            self.timer.tick(FPS_LIMIT)
+            milliseconds_spent = self.timer.tick(FPS_LIMIT)
 
             # ~ 1. Events handling ~
 
@@ -118,7 +118,7 @@ class Main(object):
             # ~ 2. Update ~
 
             self.hud.update(debug_text=self._get_debug_message())
-            self.player.update(self.game_map)
+            self.player.update(self.game_map, milliseconds_spent)
             self.game_map.objects_manager.update()
 
             # ~ 3. Draw ~
