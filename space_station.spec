@@ -3,11 +3,14 @@
 block_cipher = None
 
 added_files = [
+         ( './gamedata/*.*', 'gamedata' ),
          ( './gamedata/map/*.*', 'gamedata/map' ),
+         ( './gamedata/text/objects/*.*', 'gamedata/text/objects' ),
          ( './graphics/chars/*.*', 'graphics/chars' ),
          ( './graphics/interface/*.*', 'graphics/interface' ),
          ( './graphics/tilesets/*.*', 'graphics/tilesets' ),
-         ( './sounds/*.*', 'sounds' ),
+         ( './sounds/music/*.*', 'sounds/music' ),
+         ( './sounds/sound/*.*', 'sounds/sound' ),
          ]
 
 a = Analysis(['./source/main.py'],
