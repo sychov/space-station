@@ -1,0 +1,89 @@
+{
+    "gate_door": {
+        "descriptions": {
+            "normal": ""
+        }, 
+        "actions": {
+            "senseless_hit": "", 
+            "senseless_use": ""
+        }
+    }, 
+    "simple_door": {
+        "descriptions": {
+            "normal": ""
+        }, 
+        "actions": {
+            "senseless_hit": "", 
+            "opening": ""
+        }
+    }, 
+    "wooden_locker": {
+        "descriptions": {
+            "normal": ""
+        }, 
+        "actions": {
+            "close": "", 
+            "senseless_hit": "", 
+            "open": ""
+        }
+    }, 
+    "gate_terminal": {
+        "descriptions": {
+            "normal": ""
+        }, 
+        "actions": {
+            "successful_use": "", 
+            "access_denied": "", 
+            "senseless_hit": "", 
+            "please_wait": ""
+        }
+    }, 
+    "door_terminal": {
+        "descriptions": {
+            "normal": "", 
+            "church": ""
+        }, 
+        "actions": {
+            "successful_use": "", 
+            "access_denied": "", 
+            "senseless_hit": ""
+        }
+    }, 
+    "smart_armored_door": {
+        "descriptions": {
+            "hospital": "", 
+            "normal": ""
+        }, 
+        "actions": {
+            "senseless_hit": "", 
+            "senseless_use": ""
+        }
+    }, 
+    "blue_metal_locker": {
+        "descriptions": {
+            "broken": "", 
+            "normal": ""
+        }, 
+        "actions": {
+            "locked": "", 
+            "repair_lock_fail": "", 
+            "break_lock": "", 
+            "broken_hit": "", 
+            "repair_lock": "", 
+            "close": "", 
+            "senseless_hit": "", 
+            "break_lock_fail": "", 
+            "open": ""
+        }
+    }, 
+    "smart_door": {
+        "descriptions": {
+            "normal": "", 
+            "church": ""
+        }, 
+        "actions": {
+            "senseless_hit": "", 
+            "senseless_use": ""
+        }
+    }
+}
