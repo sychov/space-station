@@ -285,13 +285,15 @@ class Map(object):
         """Return first cell on map, where player can spawn.
         Just for development purposes, will be changed later.
         """
-        BOUNDS = 5
-        for y in xrange(self.map_height_in_tiles):
-            for x in xrange(self.map_width_in_tiles):
-                 if self.layer_floor[y][x].is_walkable and \
-                                          self.layer_objects[y][x].is_walkable:
-                    return x * self.tile_size + BOUNDS, \
-                           y * self.tile_size + BOUNDS
+        return 55 * self.tile_size + 15, 127 * self.tile_size + 15
+
+##        BOUNDS = 5
+##        for y in xrange(self.map_height_in_tiles):
+##            for x in xrange(self.map_width_in_tiles):
+##                 if self.layer_floor[y][x].is_walkable and \
+##                                       self.layer_objects[y][x].is_walkable:
+##                    return x * self.tile_size + BOUNDS, \
+##                           y * self.tile_size + BOUNDS
 
 
     def get_cells_to_verification(self, char_rect):
@@ -356,7 +358,9 @@ class Map(object):
         """
         tiles = set()
         for layer in layers_list:
-            tiles.update(set(layer['data']))
+            # only tiled layers:
+            if 'data' in layer:
+                tiles.update(set(layer['data']))
         # also, we need to use tiles, absent on layers, but used in
         # objects.
         tiles.update(self.objects_manager.get_tiles_used_in_objects())

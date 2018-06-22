@@ -10,6 +10,9 @@ from pygame import Rect
 from _tile_collisions import TILES_COLLISIONS
 from misc._enums import *
 
+# ------------------------------ CONST ------------------------------------- #
+
+IGNORED_TILES_NUMS = [1980]
 
 # ======================== BASE LAYER CELL CLASS ============================ #
 
@@ -82,9 +85,13 @@ class LayerCell(object):
             raise RuntimeError('Impossible to use insances before class '
                             'initializing! Use <class>.initialize(...) first!')
         self.rect = Rect(x * self.SIZE, y * self.SIZE, self.SIZE, self.SIZE)
-        self.image = self._tileset[tile_number - 1]
-        self.tile_number = tile_number
 
+        if tile_number not in IGNORED_TILES_NUMS:
+            self.image = self._tileset[tile_number - 1]
+        else:
+            self.image = self._tileset[1]
+
+        self.tile_number = tile_number
         self._tile_x = x
         self._tile_y = y
 

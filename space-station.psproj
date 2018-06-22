@@ -216,11 +216,22 @@ FileName=$[Project-Path]source\sounds\sound_library.py
 Count=2
 
 [Project\ChildNodes\Node0\ChildNodes\Node5]
+ClassName=TProjectFolderNode
+Name=tools
+
+[Project\ChildNodes\Node0\ChildNodes\Node5\ChildNodes\Node0]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]tools\locale_editor.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node5\ChildNodes]
+Count=1
+
+[Project\ChildNodes\Node0\ChildNodes\Node6]
 ClassName=TProjectFileNode
 FileName=$[Project-Path]source\main.py
 
 [Project\ChildNodes\Node0\ChildNodes]
-Count=6
+Count=7
 
 [Project\ChildNodes\Node1]
 ClassName=TProjectRunConfiguationsNode

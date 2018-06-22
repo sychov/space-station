@@ -8,20 +8,292 @@
     },
 
     "2": {
-        "class": "wooden_locker",
+        "class": "blue_metal_locker",
         "args": {
-            "description": "normal"
+            "description": "normal",
+            "state": "normal"
         }
     },
 
     "3": {
-        "class": "simple_door",
+        "class": "blue_metal_locker",
         "args": {
-            "description": "normal"
+            "description": "normal",
+            "state": "locked"
         }
     },
 
     "4": {
+        "class": "blue_metal_locker",
+        "args": {
+            "description": "normal",
+            "state": "normal"
+        }
+    },
+
+    "5": {
+        "class": "blue_metal_locker",
+        "args": {
+            "description": "normal",
+            "state": "broken"
+        }
+    },
+
+    "6": {
+        "class": "blue_metal_locker",
+        "args": {
+            "description": "normal",
+            "state": "normal"
+        }
+    },
+
+    "7": {
+        "class": "blue_metal_locker",
+        "args": {
+            "description": "normal",
+            "state": "locked"
+        }
+    },
+
+    "8": {
+        "class": "blue_metal_locker",
+        "args": {
+            "description": "normal",
+            "state": "locked"
+        }
+    },
+
+    "9": {
+        "class": "blue_metal_locker",
+        "args": {
+            "description": "normal",
+            "state": "normal"
+        }
+    },
+
+    "10": {
+        "class": "blue_metal_locker",
+        "args": {
+            "description": "normal",
+            "state": "broken"
+        }
+    },
+
+    "11": {
+        "class": "blue_metal_locker",
+        "args": {
+            "description": "normal",
+            "state": "locked"
+        }
+    },
+
+    "12": {
+        "class": "blue_metal_locker",
+        "args": {
+            "description": "normal",
+            "state": "normal"
+        }
+    },
+
+    "13": {
+        "class": "blue_metal_locker",
+        "args": {
+            "description": "normal",
+            "state": "locked"
+        }
+    },
+
+    "17": {
+        "class": "smart_door",
+        "args": {
+            "description": "church",
+            "terminal": 27
+        }
+    },
+
+    "18": {
+        "class": "smart_door",
+        "args": {
+            "description": "normal",
+            "terminal": 28
+        }
+    },
+
+    "19": {
+        "class": "smart_door",
+        "args": {
+            "description": "normal",
+            "terminal": 29
+        }
+    },
+
+    "20": {
+        "class": "smart_door",
+        "args": {
+            "description": "normal",
+            "terminal": 30
+        }
+    },
+
+    "21": {
+        "class": "smart_door",
+        "args": {
+            "description": "normal",
+            "terminal": 31
+        }
+    },
+
+    "22": {
+        "class": "smart_door",
+        "args": {
+            "description": "normal",
+            "terminal": 32
+        }
+    },
+
+    "23": {
+        "class": "smart_door",
+        "args": {
+            "description": "normal",
+            "terminal": 33
+        }
+    },
+
+    "24": {
+        "class": "smart_door",
+        "args": {
+            "description": "normal",
+            "terminal": 34
+        }
+    },
+
+    "25": {
+        "class": "smart_door",
+        "args": {
+            "description": "normal",
+            "terminal": 35
+        }
+    },
+
+    "26": {
+        "class": "smart_door",
+        "args": {
+            "description": "normal",
+            "terminal": 36
+        }
+    },
+
+    "27": {
+        "class": "door_terminal",
+        "args": {
+            "description": "church",
+            "door": 17,
+            "free_access": true,
+            "code": 0,
+            "delay": 0
+        }
+    },
+
+    "28": {
+        "class": "door_terminal",
+        "args": {
+            "description": "normal",
+            "door": 18,
+            "free_access": true,
+            "code": 0,
+            "delay": 0
+        }
+    },
+
+    "29": {
+        "class": "door_terminal",
+        "args": {
+            "description": "normal",
+            "door": 19,
+            "free_access": true,
+            "code": 0,
+            "delay": 0
+        }
+    },
+
+    "30": {
+        "class": "door_terminal",
+        "args": {
+            "description": "normal",
+            "door": 20,
+            "free_access": true,
+            "code": 0,
+            "delay": 0
+        }
+    },
+
+    "31": {
+        "class": "door_terminal",
+        "args": {
+            "description": "normal",
+            "door": 21,
+            "free_access": true,
+            "code": 0,
+            "delay": 0
+        }
+    },
+
+    "32": {
+        "class": "door_terminal",
+        "args": {
+            "description": "normal",
+            "door": 22,
+            "free_access": true,
+            "code": 0,
+            "delay": 0
+        }
+    },
+
+    "33": {
+        "class": "door_terminal",
+        "args": {
+            "description": "normal",
+            "door": 23,
+            "free_access": true,
+            "code": 0,
+            "delay": 0
+        }
+    },
+
+    "34": {
+        "class": "door_terminal",
+        "args": {
+            "description": "normal",
+            "door": 24,
+            "free_access": true,
+            "code": 0,
+            "delay": 0
+        }
+    },
+
+    "35": {
+        "class": "door_terminal",
+        "args": {
+            "description": "normal",
+            "door": 25,
+            "free_access": true,
+            "code": 0,
+            "delay": 0
+        }
+    },
+
+    "36": {
+        "class": "door_terminal",
+        "args": {
+            "description": "normal",
+            "door": 26,
+            "free_access": true,
+            "code": 0,
+            "delay": 0
+        }
+    },
+
+    "49": {
         "class": "simple_door",
         "args": {
             "description": "normal",
@@ -29,96 +301,109 @@
         }
     },
 
-    "5": {
-        "class": "smart_door",
+    "50": {
+        "class": "simple_door",
         "args": {
             "description": "normal",
-            "terminal": 7
+            "opened_delay": 2
+        }
+    },
+    "51": {
+        "class": "simple_door",
+        "args": {
+            "description": "normal",
+            "opened_delay": 2
         }
     },
 
-    "6": {
-        "class": "smart_door",
+    "52": {
+        "class": "simple_door",
         "args": {
             "description": "normal",
-            "terminal": 8
+            "opened_delay": 2
+        }
+    },
+    "53": {
+        "class": "simple_door",
+        "args": {
+            "description": "normal",
+            "opened_delay": 2
         }
     },
 
-    "7": {
-        "class": "door_terminal",
+    "54": {
+        "class": "simple_door",
         "args": {
             "description": "normal",
-            "door": 5,
-            "free_access": true,
-            "code": 0,
-            "delay": 0
+            "opened_delay": 2
+        }
+    },
+    "55": {
+        "class": "simple_door",
+        "args": {
+            "description": "normal",
+            "opened_delay": 2
         }
     },
 
-    "8": {
-        "class": "door_terminal",
+    "56": {
+        "class": "simple_door",
         "args": {
             "description": "normal",
-            "door": 6,
-            "free_access": false,
-            "code": 777
+            "opened_delay": 2
         }
     },
 
-    "9": {
+    "57": {
+        "class": "simple_door",
+        "args": {
+            "description": "normal",
+            "opened_delay": 2
+        }
+    },
+
+    "58": {
+        "class": "simple_door",
+        "args": {
+            "description": "normal",
+            "opened_delay": 2
+        }
+    },
+
+    "59": {
         "class": "smart_armored_door",
         "args": {
             "description": "normal",
-            "terminal": 10
+            "terminal": 61
         }
     },
 
-    "10": {
+    "61": {
         "class": "door_terminal",
         "args": {
             "description": "normal",
-            "door": 9,
+            "door": 59,
             "free_access": true,
             "code": 0
         }
     },
 
-    "11": {
-        "class": "gate_door",
+    "60": {
+        "class": "smart_armored_door",
         "args": {
             "description": "normal",
-            "terminal": 12
+            "terminal": 62
         }
     },
 
-    "12": {
-        "class": "gate_terminal",
+    "62": {
+        "class": "door_terminal",
         "args": {
             "description": "normal",
-            "door": 11,
-            "pair_terminal": 14,
-            "free_access": true,
-            "code": 0
-        }
-    },
-    
-    "13": {
-        "class": "gate_door",
-        "args": {
-            "description": "normal",
-            "terminal": 14
-        }
-    },
-
-    "14": {
-        "class": "gate_terminal",
-        "args": {
-            "description": "normal",
-            "door": 13,
-            "pair_terminal": 12,
+            "door": 60,
             "free_access": true,
             "code": 0
         }
     }
+
 }

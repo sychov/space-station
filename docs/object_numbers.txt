@@ -1,0 +1,20 @@
+
+
+HOSPITAL / CHURCH
+=================
+
+	
+1-13 - lockers
+
+17-26 - smart doors
+27-36 - controllers of them
+37-46 reserved for automatics
+
+49-58 - simple doors
+
+59-60 - armored doors
+61-62 - controllers of them
+63 - reserved for automatics
+
+47 - vertical smart door
+48 - control for it
