@@ -10,7 +10,7 @@ HOSPITAL / CHURCH
 27-36 - controllers of them
 37-46 reserved for automatics
 
-49-58 - simple doors
+49-58, 64 - simple doors
 
 59-60 - armored doors
 61-62 - controllers of them
@@ -18,3 +18,4 @@ HOSPITAL / CHURCH
 
 47 - vertical smart door
 48 - control for it
+

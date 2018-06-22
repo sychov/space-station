@@ -26,19 +26,14 @@ from misc._enums import *
 # ---------------------------------------------------------------------------
 
 TILES_COLLISIONS = {
-##    241: {X: 13, Y: 10, WIDTH: 27, HEIGHT: 21},    # short chair
     261: {X: 12, Y: 0,  WIDTH: 0,  HEIGHT: 0},     # table 1 left
     263: {X: 0,  Y: 0,  WIDTH: 12, HEIGHT: 0},     # table 1 right
     262: {X: 12, Y: 0,  WIDTH: 0,  HEIGHT: 0},     # table 2 left
     264: {X: 0,  Y: 0,  WIDTH: 12, HEIGHT: 0},     # table 2 right
     224: {X: 8,  Y: 0,  WIDTH: 0,  HEIGHT: 5},     # shoverC left
     225: {X: 0,  Y: 0,  WIDTH: 8,  HEIGHT: 5},     # shoverC right
-    307: {X: 6,  Y: 2,  WIDTH: 0,  HEIGHT: 7},     # red bar left
-    308: {X: 0,  Y: 2,  WIDTH: 6,  HEIGHT: 7},     # red bar right
     222: {X: 0,  Y: 0,  WIDTH: 0,  HEIGHT: 6},     # high locker
     223: {X: 0,  Y: 0,  WIDTH: 0,  HEIGHT: 6},     # low locker
-##    183: {X: 9,  Y: 2,  WIDTH: 17, HEIGHT: 7},     # flower 1
-##    184: {X: 9,  Y: 2,  WIDTH: 17, HEIGHT: 7},     # flower 2
     181: {X: 4,  Y: 0,  WIDTH: 9,  HEIGHT: 6},     # cooler
     367: {X: 2,  Y: 2,  WIDTH: 4,  HEIGHT: 7},     # yellow chair
     370: {X: 2,  Y: 2,  WIDTH: 4,  HEIGHT: 7},     # top sofa left
@@ -47,7 +42,30 @@ TILES_COLLISIONS = {
     368: {X: 7,  Y: 2,  WIDTH: 7,  HEIGHT: 5},     # right sofa bottom
     349: {X: 0,  Y: 2,  WIDTH: 7,  HEIGHT: 5},     # left sofa top
     369: {X: 0,  Y: 2,  WIDTH: 7,  HEIGHT: 5},     # left sofa bottom
+    1243:{X: 3,  Y: 0,  WIDTH: 6,  HEIGHT: 0},     # wide small flower
+    1246:{X: 9,  Y: 0,  WIDTH: 17, HEIGHT: 0},     # long flower
+    1254:{X: 3,  Y: 0,  WIDTH: 6,  HEIGHT: 6},     # acient flower
+    1448:{X: 3,  Y: 0,  WIDTH: 6,  HEIGHT: 7},     # handwasher
+    1405:{X: 3,  Y: 2,  WIDTH: 6,  HEIGHT: 7},     # medical table
+
 }
+
+# thin double lockers left
+for q in (307, 1454, 1456):
+    TILES_COLLISIONS[q] = {X: 6,  Y: 2,  WIDTH: 0,  HEIGHT: 7}
+
+# thin double lockers right
+for q in (308, 1455, 1457):
+    TILES_COLLISIONS[q] = {X: 0,  Y: 2,  WIDTH: 6,  HEIGHT: 7}
+
+# short chair
+for q in (330, 331, 332, 333, 334, 335, 336):
+    TILES_COLLISIONS[q] = {X: 13, Y: 10, WIDTH: 27, HEIGHT: 21}
+
+# flowers
+for q in (1241, 1242, 1253, 1244, 1245, 1255, 1247, 1248, 1249, 1250, 1453,
+                                                             1251, 1252, 1253):
+    TILES_COLLISIONS[q] = {X: 9,  Y: 2,  WIDTH: 17, HEIGHT: 7}
 
 # big lockers
 for q in (301, 302, 461, 462, 463, 464, 465, 466,

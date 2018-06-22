@@ -2,15 +2,15 @@
     "1": {
         "class": "blue_metal_locker",
         "args": {
-            "description": "normal",
-            "state": "locked"
+            "description": "clean",
+            "state": "normal"
         }
     },
 
     "2": {
         "class": "blue_metal_locker",
         "args": {
-            "description": "normal",
+            "description": "medic",
             "state": "normal"
         }
     },
@@ -18,7 +18,7 @@
     "3": {
         "class": "blue_metal_locker",
         "args": {
-            "description": "normal",
+            "description": "medic",
             "state": "locked"
         }
     },
@@ -26,7 +26,7 @@
     "4": {
         "class": "blue_metal_locker",
         "args": {
-            "description": "normal",
+            "description": "medic",
             "state": "normal"
         }
     },
@@ -34,7 +34,7 @@
     "5": {
         "class": "blue_metal_locker",
         "args": {
-            "description": "normal",
+            "description": "medic",
             "state": "broken"
         }
     },
@@ -42,15 +42,15 @@
     "6": {
         "class": "blue_metal_locker",
         "args": {
-            "description": "normal",
-            "state": "normal"
+            "description": "medic",
+            "state": "locked"
         }
     },
 
     "7": {
         "class": "blue_metal_locker",
         "args": {
-            "description": "normal",
+            "description": "medic",
             "state": "locked"
         }
     },
@@ -58,15 +58,15 @@
     "8": {
         "class": "blue_metal_locker",
         "args": {
-            "description": "normal",
-            "state": "locked"
+            "description": "clean",
+            "state": "normal"
         }
     },
 
     "9": {
         "class": "blue_metal_locker",
         "args": {
-            "description": "normal",
+            "description": "medic",
             "state": "normal"
         }
     },
@@ -74,7 +74,7 @@
     "10": {
         "class": "blue_metal_locker",
         "args": {
-            "description": "normal",
+            "description": "medic",
             "state": "broken"
         }
     },
@@ -82,7 +82,7 @@
     "11": {
         "class": "blue_metal_locker",
         "args": {
-            "description": "normal",
+            "description": "medic",
             "state": "locked"
         }
     },
@@ -90,15 +90,15 @@
     "12": {
         "class": "blue_metal_locker",
         "args": {
-            "description": "normal",
-            "state": "normal"
+            "description": "medic_qa",
+            "state": "locked"
         }
     },
 
     "13": {
         "class": "blue_metal_locker",
         "args": {
-            "description": "normal",
+            "description": "medic",
             "state": "locked"
         }
     },
@@ -114,7 +114,7 @@
     "18": {
         "class": "smart_door",
         "args": {
-            "description": "normal",
+            "description": "hospital",
             "terminal": 28
         }
     },
@@ -122,7 +122,7 @@
     "19": {
         "class": "smart_door",
         "args": {
-            "description": "normal",
+            "description": "hospital_medics",
             "terminal": 29
         }
     },
@@ -130,7 +130,7 @@
     "20": {
         "class": "smart_door",
         "args": {
-            "description": "normal",
+            "description": "hospital_chief",
             "terminal": 30
         }
     },
@@ -138,7 +138,7 @@
     "21": {
         "class": "smart_door",
         "args": {
-            "description": "normal",
+            "description": "hospital_drugstore",
             "terminal": 31
         }
     },
@@ -146,7 +146,7 @@
     "22": {
         "class": "smart_door",
         "args": {
-            "description": "normal",
+            "description": "hospital_n3",
             "terminal": 32
         }
     },
@@ -154,7 +154,7 @@
     "23": {
         "class": "smart_door",
         "args": {
-            "description": "normal",
+            "description": "hospital_paramedics",
             "terminal": 33
         }
     },
@@ -162,7 +162,7 @@
     "24": {
         "class": "smart_door",
         "args": {
-            "description": "normal",
+            "description": "hospital_lab",
             "terminal": 34
         }
     },
@@ -170,7 +170,7 @@
     "25": {
         "class": "smart_door",
         "args": {
-            "description": "normal",
+            "description": "hospital_morgue",
             "terminal": 35
         }
     },
@@ -208,7 +208,7 @@
     "29": {
         "class": "door_terminal",
         "args": {
-            "description": "normal",
+            "description": "hospital",
             "door": 19,
             "free_access": true,
             "code": 0,
@@ -219,7 +219,7 @@
     "30": {
         "class": "door_terminal",
         "args": {
-            "description": "normal",
+            "description": "hospital_chief",
             "door": 20,
             "free_access": true,
             "code": 0,
@@ -230,7 +230,7 @@
     "31": {
         "class": "door_terminal",
         "args": {
-            "description": "normal",
+            "description": "hospital",
             "door": 21,
             "free_access": true,
             "code": 0,
@@ -241,7 +241,7 @@
     "32": {
         "class": "door_terminal",
         "args": {
-            "description": "normal",
+            "description": "hospital_quarantine",
             "door": 22,
             "free_access": true,
             "code": 0,
@@ -252,7 +252,7 @@
     "33": {
         "class": "door_terminal",
         "args": {
-            "description": "normal",
+            "description": "hospital",
             "door": 23,
             "free_access": true,
             "code": 0,
@@ -263,7 +263,7 @@
     "34": {
         "class": "door_terminal",
         "args": {
-            "description": "normal",
+            "description": "hospital",
             "door": 24,
             "free_access": true,
             "code": 0,
@@ -274,7 +274,7 @@
     "35": {
         "class": "door_terminal",
         "args": {
-            "description": "normal",
+            "description": "hospital",
             "door": 25,
             "free_access": true,
             "code": 0,
@@ -285,7 +285,7 @@
     "36": {
         "class": "door_terminal",
         "args": {
-            "description": "normal",
+            "description": "hospital",
             "door": 26,
             "free_access": true,
             "code": 0,
@@ -293,10 +293,18 @@
         }
     },
 
+    "64": {
+        "class": "simple_door",
+        "args": {
+            "description": "cleaning_room",
+            "opened_delay": 2
+        }
+    },
+
     "49": {
         "class": "simple_door",
         "args": {
-            "description": "normal",
+            "description": "hospital_therapy",
             "opened_delay": 2
         }
     },
@@ -304,14 +312,14 @@
     "50": {
         "class": "simple_door",
         "args": {
-            "description": "normal",
+            "description": "hospital_trauma",
             "opened_delay": 2
         }
     },
     "51": {
         "class": "simple_door",
         "args": {
-            "description": "normal",
+            "description": "hospital_n1",
             "opened_delay": 2
         }
     },
@@ -319,7 +327,7 @@
     "52": {
         "class": "simple_door",
         "args": {
-            "description": "normal",
+            "description": "hospital_n1",
             "opened_delay": 2
         }
     },
@@ -341,7 +349,7 @@
     "55": {
         "class": "simple_door",
         "args": {
-            "description": "normal",
+            "description": "cleaning_room",
             "opened_delay": 2
         }
     },
@@ -349,7 +357,7 @@
     "56": {
         "class": "simple_door",
         "args": {
-            "description": "normal",
+            "description": "hospital_diag",
             "opened_delay": 2
         }
     },
@@ -357,7 +365,7 @@
     "57": {
         "class": "simple_door",
         "args": {
-            "description": "normal",
+            "description": "hospital_n2",
             "opened_delay": 2
         }
     },
@@ -373,7 +381,7 @@
     "59": {
         "class": "smart_armored_door",
         "args": {
-            "description": "normal",
+            "description": "hospital",
             "terminal": 61
         }
     },
@@ -381,7 +389,7 @@
     "61": {
         "class": "door_terminal",
         "args": {
-            "description": "normal",
+            "description": "hospital",
             "door": 59,
             "free_access": true,
             "code": 0
@@ -391,7 +399,7 @@
     "60": {
         "class": "smart_armored_door",
         "args": {
-            "description": "normal",
+            "description": "hospital",
             "terminal": 62
         }
     },
@@ -399,7 +407,7 @@
     "62": {
         "class": "door_terminal",
         "args": {
-            "description": "normal",
+            "description": "hospital",
             "door": 60,
             "free_access": true,
             "code": 0

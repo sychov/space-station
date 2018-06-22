@@ -216,7 +216,7 @@ class LocaleEditor(object):
         for section_name in self.CLASS_KEYS:
             self._treeview.insert('', 'end', section_name, text=section_name,
                                                       open=True, tags='header')
-            for key, value in locale[section_name].items():
+            for key, value in sorted(locale[section_name].items()):
                 self._treeview.insert(
                     section_name,
                     END,
@@ -278,11 +278,11 @@ class LocaleEditor(object):
 
         if 'header' in tags:
             self._header = self._treeview.item(item_name, 'text')
-            self._key_entry.delete(0, END)
-            self._text_entry.delete(0, END)
 
             if self._mode != 'add':
                 self._mode = 'add'
+
+            if self._update_button['state'] != NORMAL:
                 self._update_button['text'] = 'Add'
                 self._update_button['state'] = NORMAL
                 self._update_button['command'] = self._add_class_field_text
@@ -298,6 +298,8 @@ class LocaleEditor(object):
 
             if self._mode != 'update':
                 self._mode = 'update'
+
+            if self._update_button['state'] != NORMAL:
                 self._update_button['text'] = 'Update'
                 self._update_button['state'] = NORMAL
                 self._update_button['command'] = self._update_class_field_text

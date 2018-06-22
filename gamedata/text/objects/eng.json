@@ -40,8 +40,8 @@
     }, 
     "door_terminal": {
         "descriptions": {
-            "normal": "", 
-            "church": ""
+            "church": "", 
+            "normal": ""
         }, 
         "actions": {
             "successful_use": "", 
@@ -78,8 +78,8 @@
     }, 
     "smart_door": {
         "descriptions": {
-            "normal": "", 
-            "church": ""
+            "church": "", 
+            "normal": ""
         }, 
         "actions": {
             "senseless_hit": "", 

@@ -378,16 +378,18 @@ class Map(object):
         """
         width = layer['width']
         objects = {}
-        control_set = set()
+        control_set = {}
         for q, tile_num in enumerate(layer['data']):
             if tile_num:
                 y, x = divmod(q, width)
                 obj_num = tile_num - self.OBJECT_INDEXIES_OFFSET
                 if obj_num in control_set:
-                    raise RuntimeError('Duplicate object number on the '
-                                                        'map! (#%d)' % obj_num)
+                    raise RuntimeError(
+                        'Duplicate object number on map! '
+                        '#%d : %s and (%d, %d)' %
+                        (obj_num, str(control_set[obj_num]), x, y))
                 else:
-                    control_set.add(obj_num)
+                    control_set[obj_num] = (x, y)
                 objects[(x, y)] = obj_num
         return objects
 
