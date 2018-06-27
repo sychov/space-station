@@ -64,7 +64,7 @@ class Main(object):
             scale=scale,
             display_size=DISPLAY_SIZE)
 
-        self.char_manager = CharsManager(self.player)
+        self.chars_manager = CharsManager(self.player)
 
         # init map buffer first time
         self.game_map.make_bottom_buffer(self.player.get_camera_pos())
@@ -112,7 +112,7 @@ class Main(object):
                     continue
 
                 # Char Manager events:
-                if self.char_manager.handle_event(event):
+                if self.chars_manager.handle_event(event):
                     continue
 
             # ~ 2. Update ~
