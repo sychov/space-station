@@ -12,10 +12,10 @@ Sad, but now I have no time to spend for this project. But I'll have it later an
  * all people, who draw free tiles used in game, and write a free music;
  * people, who make wonderful animated characters. I don't know who are you, guys, and I'm not sure, that this graphics is free, but if you will be angry of using yours graphics here, I'll remove it immidiately!
 
- ## Some screenshots:
+ ## Of course, some screenshots:
 
-![screenshot1](https://github.com/sychov/space-station/blob/master/docs/img/1.PNG)
+![screenshot1](https://github.com/sychov/space-station/blob/master/docs/img/1.png)
 
-![screenshot2](https://github.com/sychov/space-station/blob/master/docs/img/2.PNG)
+![screenshot2](https://github.com/sychov/space-station/blob/master/docs/img/2.png)
 
-![screenshot3](https://github.com/sychov/space-station/blob/master/docs/img/3.PNG)
+![screenshot3](https://github.com/sychov/space-station/blob/master/docs/img/3.png)
