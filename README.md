@@ -19,3 +19,7 @@ Sad, but now I have no time to spend for this project. But I'll have it later an
 ![screenshot2](https://github.com/sychov/space-station/blob/master/docs/img/2.png)
 
 ![screenshot3](https://github.com/sychov/space-station/blob/master/docs/img/3.png)
+
+## Demo (packed by Pyinstaller):
+
+https://drive.google.com/open?id=1s4J8lN3F5Ac3oapKEVPrQdFWHZJlbM75
