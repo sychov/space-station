@@ -14,8 +14,8 @@ Sad, but now I have no time to spend for this project. But I'll have it later an
 
  ## Some screenshots:
 
-![screenshot1](https://github.com/sychov/space-station/docs/img/1.PNG)
+![screenshot1](https://github.com/sychov/space-station/blob/master/docs/img/1.PNG)
 
-![screenshot2](https://github.com/sychov/space-station/docs/img/2.PNG)
+![screenshot2](https://github.com/sychov/space-station/blob/master/docs/img/2.PNG)
 
-![screenshot3](https://github.com/sychov/space-station/docs/img/3.PNG)
+![screenshot3](https://github.com/sychov/space-station/blob/master/docs/img/3.PNG)
