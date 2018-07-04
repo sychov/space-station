@@ -16,6 +16,16 @@ Sad, but now I have no time to spend for this project. But I'll have it later an
 
 https://drive.google.com/open?id=1s4J8lN3F5Ac3oapKEVPrQdFWHZJlbM75
 
+For now, user interface is very unfriendly :)
+
+Use:
+ * arrows to move around; 
+ * keys "Z"-"X"-"C" for "help"-"force"-"use" commands;
+ * key "I" for pseudo-inventory open/close;
+ * mouse for UI windows moving and resizing, drag-n-drop items.
+
+Functionality is very limited, cause I was focusing on basis building.
+
  ## Of course, some screenshots:
 
 ![screenshot1](https://github.com/sychov/space-station/blob/master/docs/img/1.png)
