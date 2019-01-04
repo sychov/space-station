@@ -7,12 +7,11 @@
 
 from random import randrange
 
-from base_storage import BaseStorage
-from environment.storage_container import StorageContent
-from interface.storages.metal_locker import MetalLockerInterface
-from misc.events import events
-from misc._enums import *
-
+from source.environment.storage_container import StorageContent
+from source.interface.storages.metal_locker import MetalLockerInterface
+from source.misc.events import events
+from source.misc._enums import *
+from .base_storage import BaseStorage
 
 # -------------------------------- Const ------------------------------- #
 

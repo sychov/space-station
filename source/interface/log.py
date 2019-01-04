@@ -9,12 +9,11 @@ from collections import deque
 from itertools import islice
 
 import pygame
-from pygame import Rect, Surface, Color
+from pygame import Rect, Color
 
-from frame import Frame, FrameConfig
-from misc._enums import *
-from misc._pathes import INTERFACE_DIR
-
+from source.misc._enums import *
+from source.misc._pathes import INTERFACE_DIR
+from .frame import Frame, FrameConfig
 
 # ------------------------------ CONST ------------------------------------- #
 
@@ -281,7 +280,7 @@ class Log(Frame):
         """
         """
         pair = (msg, msg_type)
-        for q in xrange(min(len(self._messages), 5)):
+        for q in range(min(len(self._messages), 5)):
             if self._messages[-q - 1] == pair:
                 return True
         return False

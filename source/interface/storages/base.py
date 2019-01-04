@@ -7,11 +7,11 @@
 
 
 import pygame
-from pygame import Rect, Surface, Color
+from pygame import Rect, Surface
 
-from interface.frame import Frame, FrameConfig
-from sounds.sound_library import SoundLibrary
-from misc._enums import *
+from source.interface.frame import Frame
+from source.sounds.sound_library import SoundLibrary
+from source.misc._enums import *
 
 
 # ========================= Storage config class ========================== #
@@ -180,8 +180,8 @@ class Storage(Frame):
     def _draw_storage_items(self):
         """Draw items in storage.
         """
-        for y in xrange(self.content.height):
-            for x in xrange(self.content.width):
+        for y in range(self.content.height):
+            for x in range(self.content.width):
                 cell = self.content.storage_cells[y][x]
                 if not cell.is_empty() and not cell.is_dumb:
                     self._background.blit(
@@ -198,7 +198,7 @@ class Storage(Frame):
                                                          self._storage_rect, 1)
 
         _x = self._storage_rect.x + self._cell_size
-        for x in xrange(self.content.width - 1):
+        for x in range(self.content.width - 1):
             pygame.draw.line(
                 self._background,
                 self._line_color,
@@ -208,7 +208,7 @@ class Storage(Frame):
             )
 
         _y = self._storage_rect.y + self._cell_size
-        for y in xrange(self.content.height - 1):
+        for y in range(self.content.height - 1):
             pygame.draw.line(
                 self._background,
                 self._line_color,
@@ -227,8 +227,8 @@ class Storage(Frame):
         cell_size = self._cell_size
         _x = self._storage_rect.x
         _y = self._storage_rect.y
-        for y in xrange(self.content.height):
-            for x in xrange(self.content.width):
+        for y in range(self.content.height):
+            for x in range(self.content.width):
                 rect = Rect(_x + x * cell_size,
                             _y + y * cell_size,
                             cell_size,
@@ -276,8 +276,8 @@ class Storage(Frame):
             DI_ITEM: cell.inventory_item,
             DI_CELL_X: x,
             DI_CELL_Y: y,
-            DI_HALF_IMAGE_WIDTH: image.get_width() / 3,
-            DI_HALF_IMAGE_HEIGHT: image.get_height() / 3,
+            DI_HALF_IMAGE_WIDTH: image.get_width() // 3,
+            DI_HALF_IMAGE_HEIGHT: image.get_height() // 3,
             DI_LAST_MOUSE_POS: mouse_pos,
             DI_TARGET_CELLS_LIST: None,
             DI_TARGET_STORAGE: None,

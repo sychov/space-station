@@ -5,10 +5,8 @@
  Description:
 ----------------------------------------------------------"""
 
-from environment.objects.base import BaseObject
-
-from misc.events import events
-from misc._enums import *
+from source.environment.objects.base import BaseObject
+from source.misc._enums import *
 
 
 # -------------------------------- Const ------------------------------- #

@@ -5,10 +5,9 @@
  Description:
 ----------------------------------------------------------"""
 
-from door_terminal import DoorTerminal
-from misc.events import events
-from misc._enums import *
-
+from source.misc.events import events
+from source.misc._enums import *
+from .door_terminal import DoorTerminal
 
 # -------------------------------- Const ------------------------------- #
 

@@ -5,9 +5,8 @@
 ----------------------------------------------------------"""
 
 import pygame
-from pygame import Rect
 
-from misc._enums import *
+from source.misc._enums import *
 
 
 # ==================== Inventory object class ============================== #
@@ -44,8 +43,8 @@ class InventoryObject(object):
         size_x, size_y = cls._get_sizes_x_y(sprite_type)
 
         count = 0
-        for tile_y in xrange(0, image_height / size_y):
-            for tile_x in xrange(0, image_width / size_x):
+        for tile_y in range(0, image_height // size_y):
+            for tile_x in range(0, image_width // size_x):
                 rect = (tile_x * size_x, tile_y * size_y, size_x, size_y)
                 tile = image.subsurface(rect).convert_alpha()
                 if scale == 2:

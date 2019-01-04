@@ -8,11 +8,10 @@
 import math
 
 import pygame
-from pygame import Rect
 
-from base import BaseChar
-from misc._enums import *
-from misc.events import events
+from source.misc._enums import *
+from source.misc.events import events
+from .base import BaseChar
 
 # ================================= CONST =================================== #
 
@@ -40,16 +39,16 @@ class Player(BaseChar):
         super(Player, self).__init__(coords, tileset_path, scale, 'Player')
 
         # center's shifts of inner Player rect (for camera purposes)
-        self.camera_shift_x = self.rect.width / 2
-        self.camera_shift_y = self.rect.height / 2
+        self.camera_shift_x = self.rect.width // 2
+        self.camera_shift_y = self.rect.height // 2
 
         # Float versions of self.rect.x | self.rect.y
         # it is made to implement smooth movement
         self._x = float(self.rect.x)
         self._y = float(self.rect.y)
 
-        x = (display_size[0] - self._inner_rect.width) / 2 - self._inner_rect.x
-        y = (display_size[1] - self._inner_rect.height)/ 2 - self._inner_rect.y
+        x = (display_size[0] - self._inner_rect.width) // 2 - self._inner_rect.x
+        y = (display_size[1] - self._inner_rect.height) // 2 - self._inner_rect.y
         self.screen_coords = x, y
 
         self.key_left = self.key_right = self.key_top = self.key_bottom = False
@@ -295,8 +294,8 @@ class Player(BaseChar):
             direction:      UP, DOWN, LEFT, RIGHT
         """
         x, y, width, height = self.rect
-        half_width = width / 2
-        half_height = height / 2
+        half_width = width // 2
+        half_height = height // 2
         if direction == LEFT:
             return (x, y + half_height)
         elif direction == RIGHT:

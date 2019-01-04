@@ -7,8 +7,7 @@
 
 import pygame
 
-from misc.events import events
-from misc._enums import *
+from source.misc._enums import *
 
 # ----------------------------- Chars manager ------------------------- #
 

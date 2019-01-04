@@ -7,8 +7,8 @@
 import pygame
 from pygame import Rect
 
-from _tile_collisions import TILES_COLLISIONS
-from misc._enums import *
+from source.misc._enums import *
+from ._tile_collisions import TILES_COLLISIONS
 
 # ------------------------------ CONST ------------------------------------- #
 
@@ -50,8 +50,8 @@ class LayerCell(object):
         _tileset = []
 
         count = 0
-        for tile_y in xrange(0, image_height / size):
-            for tile_x in xrange(0, image_width / size):
+        for tile_y in range(0, image_height // size):
+            for tile_x in range(0, image_width // size):
 
                 # we don't need to load tiles images of not used tiles
                 count += 1

@@ -5,10 +5,7 @@
  Description:
 ----------------------------------------------------------"""
 
-from smart_door import SmartDoor
-from misc.events import events
-from misc._enums import *
-
+from .smart_door import SmartDoor
 
 # -------------------------------- Const ------------------------------- #
 

@@ -9,7 +9,7 @@ import pyganim
 import pygame
 from pygame import Surface, Rect, Color
 
-from misc._enums import *
+from source.misc._enums import *
 
 # ================================= CONST =================================== #
 
@@ -106,9 +106,9 @@ class BaseChar(pygame.sprite.Sprite):
             raise RuntimeError('Sorry! only scale 4x4 tilesets with size '
                                             'of %d supported now!' % CHAR_SIZE)
         animations = {}
-        for tile_y, phase_name in zip(xrange(4), self.DIRECTIONS):
+        for tile_y, phase_name in zip(range(4), self.DIRECTIONS):
             tiles = []
-            for tile_x in xrange(4):
+            for tile_x in range(4):
                 rect = (tile_x * CHAR_SIZE,
                         tile_y * CHAR_SIZE,
                         CHAR_SIZE,

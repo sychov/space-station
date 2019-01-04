@@ -7,10 +7,10 @@
 
 from pygame import Rect
 
-from environment.objects.base import BaseObject
+from source.environment.objects.base import BaseObject
 
-from misc.events import events
-from misc._enums import *
+from source.misc.events import events
+from source.misc._enums import *
 
 
 # -------------------------------- Const ------------------------------- #

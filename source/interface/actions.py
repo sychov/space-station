@@ -6,11 +6,11 @@
 ----------------------------------------------------------"""
 
 import pygame
-from pygame import Surface, Rect
+from pygame import Rect
 
-from misc.events import events
-from misc._enums import *
-from misc._pathes import ACTIONS_TILES_PATH
+from source.misc.events import events
+from source.misc._enums import *
+from source.misc._pathes import ACTIONS_TILES_PATH
 
 
 # ================================= CONST =================================== #
@@ -50,26 +50,26 @@ class ActionInterface(pygame.sprite.Sprite):
 
         # ~ 2. Set positioning
 
-        center_x = display_size[0] / 2
-        center_y = display_size[1] / 2
+        center_x = display_size[0] // 2
+        center_y = display_size[1] // 2
 
         self._positions = {
             3: {
                 UP: [
                     (center_x - 30 - TILE_WIDTH, center_y - 40 * scale),
-                    (center_x - TILE_WIDTH / 2, center_y - 30 * scale - 40),
+                    (center_x - TILE_WIDTH // 2, center_y - 30 * scale - 40),
                     (center_x + 30, center_y - 40 * scale),
                 ],
                 DOWN: [
                     (center_x - 30 - TILE_WIDTH, center_y + 10),
-                    (center_x - TILE_WIDTH / 2, center_y + 20),
+                    (center_x - TILE_WIDTH // 2, center_y + 20),
                     (center_x + 30, center_y + 10),
                 ],
                 LEFT: [
                     (center_x - 35 * scale + 10,
                                 center_y - 20 - image_height - 15 * scale),
                     (center_x - 25 * scale - 25,
-                                center_y + 10 - image_height / 2 - 15 * scale),
+                                center_y + 10 - image_height // 2 - 15 * scale),
                     (center_x - 35 * scale + 10,
                                 center_y + 40 - 15 * scale),
                 ],
@@ -77,7 +77,7 @@ class ActionInterface(pygame.sprite.Sprite):
                     (center_x + 35 * scale - 35,
                                 center_y - 20 - image_height - 15 * scale),
                     (center_x + 25 * scale,
-                                center_y + 10 - image_height / 2 - 15 * scale),
+                                center_y + 10 - image_height // 2 - 15 * scale),
                     (center_x + 35 * scale - 35,
                                 center_y + 40 - 15 * scale),
                 ],
@@ -107,12 +107,12 @@ class ActionInterface(pygame.sprite.Sprite):
             },
 
             1: {
-                UP: [(center_x - TILE_WIDTH / 2, center_y - 30 * scale - 40)],
-                DOWN: [(center_x - TILE_WIDTH / 2, center_y + 20)],
+                UP: [(center_x - TILE_WIDTH // 2, center_y - 30 * scale - 40)],
+                DOWN: [(center_x - TILE_WIDTH // 2, center_y + 20)],
                 LEFT: [(center_x - 20 * scale - 25,
-                            center_y + 10 - image_height / 2 - 15 * scale)],
+                            center_y + 10 - image_height // 2 - 15 * scale)],
                 RIGHT: [(center_x + 20 * scale,
-                                center_y + 10 - image_height / 2 - 15 * scale)]
+                                center_y + 10 - image_height // 2 - 15 * scale)]
             },
         }
 

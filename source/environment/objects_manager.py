@@ -9,9 +9,9 @@
 import json
 from time import time
 
-from objects._types_table import OBJECTS_CLASSES
-from objects.base import BaseObject
-from misc._pathes import MAP_OBJECTS_CONFIG
+from source.misc._pathes import MAP_OBJECTS_CONFIG
+from .objects._types_table import OBJECTS_CLASSES
+from .objects.base import BaseObject
 
 
 # ---------------------------------- Const ----------------------------- #
@@ -90,7 +90,7 @@ class ObjectsManager(object):
             need_to_update = True
 
         if need_to_update:
-            self._timers_to_exec = self._timeouted_objects.keys()
+            self._timers_to_exec = list(self._timeouted_objects.keys())
             self._timers_to_exec.sort()
 
 
@@ -103,7 +103,7 @@ class ObjectsManager(object):
         """
         callback_time = time() + timeout
         self._timeouted_objects[callback_time] = callback
-        self._timers_to_exec = self._timeouted_objects.keys()
+        self._timers_to_exec = list(self._timeouted_objects.keys())
         self._timers_to_exec.sort()
 
 

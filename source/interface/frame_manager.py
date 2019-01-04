@@ -7,9 +7,9 @@
 
 import pygame
 
-from storages.base import Storage
-from misc.events import events
-from misc._enums import *
+from source.misc.events import events
+from source.misc._enums import *
+from .storages.base import Storage
 
 
 class FrameManager(object):

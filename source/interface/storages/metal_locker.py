@@ -9,12 +9,10 @@ import os
 
 from pygame import Rect, Color
 
-from base import Storage, StorageConfig
-from interface.frame import FrameConfig
-
-from misc._enums import *
-from misc._pathes import INTERFACE_DIR
-
+from source.misc._enums import *
+from source.misc._pathes import INTERFACE_DIR
+from source.interface.frame import FrameConfig
+from .base import Storage, StorageConfig
 
 # ------------------------- Configuration -------------------------------- #
 

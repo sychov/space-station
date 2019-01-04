@@ -7,10 +7,10 @@
 
 import json
 
-from sounds.sound_library import SoundLibrary
-from misc._pathes import OBJECT_TEXT_PATH_PATTERN
-from misc.events import events
-from misc._enums import *
+from source.sounds.sound_library import SoundLibrary
+from source.misc._pathes import OBJECT_TEXT_PATH_PATTERN
+from source.misc.events import events
+from source.misc._enums import *
 
 
 class BaseObject(object):

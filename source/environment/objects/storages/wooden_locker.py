@@ -5,11 +5,10 @@
  Description:
 ----------------------------------------------------------"""
 
-from base_storage import BaseStorage
-from environment.storage_container import StorageContent
-from interface.storages.wooden_locker import WoodenLockerInterface
-from misc._enums import *
-
+from source.environment.storage_container import StorageContent
+from source.interface.storages.wooden_locker import WoodenLockerInterface
+from source.misc._enums import *
+from .base_storage import BaseStorage
 
 # ---------------------------------- Const ----------------------------- #
 

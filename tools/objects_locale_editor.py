@@ -10,11 +10,11 @@ import os
 import json
 import fnmatch
 
-from Tkinter import Tk, Frame, Listbox, Label, Scrollbar, Entry
-from Tkinter import LEFT, RIGHT, TOP, BOTTOM, Y, X, W, YES, NORMAL, DISABLED, \
+from tkinter import Tk, Frame, Listbox, Label, Scrollbar, Entry
+from tkinter import LEFT, RIGHT, BOTTOM, Y, X, W, YES, NORMAL, DISABLED, \
                     VERTICAL, END, BOTH
-from ttk import Treeview, Button
-from tkMessageBox import askyesno, showerror
+from tkinter.ttk import Treeview, Button
+from tkinter.messagebox import askyesno, showerror
 
 
 class LocaleEditor(object):

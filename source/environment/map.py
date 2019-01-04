@@ -10,9 +10,9 @@ import json
 import pygame
 from pygame import Rect, Surface
 
-from objects_manager import ObjectsManager
-from map_cells import LayerCell, ObjectCell, FloorCell
-from misc._enums import *
+from source.misc._enums import *
+from .objects_manager import ObjectsManager
+from .map_cells import LayerCell, ObjectCell, FloorCell
 
 
 # ============================ MAP CLASS ================================= #
@@ -89,7 +89,6 @@ class Map(object):
 
         # 4. Form whole map rectangle borders (1 cell is border)
 
-        min_x = min_y = self.tile_size
         width = self.tile_size * (self.map_width_in_tiles - 2)
         height = self.tile_size * (self.map_height_in_tiles - 2)
         self.rect = Rect(self.tile_size, self.tile_size, width, height)
@@ -128,8 +127,8 @@ class Map(object):
             camera_x = old_camera_x
 
         # get left and top borders of the screen (relative to buffer)
-        left_x = camera_x - self.display_width / 2
-        top_y = camera_y - self.display_height / 2
+        left_x = camera_x - self.display_width // 2
+        top_y = camera_y - self.display_height // 2
 
         size = self.tile_size
         dx = left_x % size
@@ -139,41 +138,41 @@ class Map(object):
 
         # RIGHT scroll features
         if direction == RIGHT:
-            left_cell = (left_x + self.display_width) / size
-            start_cell_x = self.display_width * 2 / size
+            left_cell = (left_x + self.display_width) // size
+            start_cell_x = self.display_width * 2 // size
             buffer_surface.scroll(dx=-self.display_width - shift, dy=0)
         else:
-            left_cell = (left_x - self.display_width) / size
+            left_cell = (left_x - self.display_width) // size
             start_cell_x = 0
 
         # LEFT scroll features
         if direction == LEFT:
-            right_cell = left_x / size
+            right_cell = left_x // size
             buffer_surface.scroll(dx=self.display_width - shift, dy=0)
         else:
-            right_cell = (left_x + 2 * self.display_width) / size
+            right_cell = (left_x + 2 * self.display_width) // size
 
         # DOWN scroll features
         if direction == DOWN:
-            top_cell = (top_y + self.display_height) / size
-            start_cell_y = self.display_height * 2 / size
+            top_cell = (top_y + self.display_height) // size
+            start_cell_y = self.display_height * 2 // size
             buffer_surface.scroll(dx=0, dy=-self.display_height - shift)
         else:
-            top_cell = (top_y - self.display_height) / size
+            top_cell = (top_y - self.display_height) // size
             start_cell_y = 0
 
         # UP scroll features
         if direction == UP:
-            bottom_cell = top_y / size
+            bottom_cell = top_y // size
             buffer_surface.scroll(dx=0, dy=self.display_height - shift)
         else:
-            bottom_cell = (top_y + 2 * self.display_height) / size
+            bottom_cell = (top_y + 2 * self.display_height) // size
 
         # draw background
         buffer_cell_y = start_cell_y
-        for y_map in xrange(top_cell, bottom_cell + 1):
+        for y_map in range(top_cell, bottom_cell + 1):
             buffer_cell_x = start_cell_x
-            for x_map in xrange(left_cell, right_cell + 1):
+            for x_map in range(left_cell, right_cell + 1):
                 coords = (buffer_cell_x * size - dx,
                           buffer_cell_y * size - dy)
 
@@ -265,17 +264,17 @@ class Map(object):
         """
         camera_x, camera_y = camera_coords
 
-        shift_x = camera_x - self.display_width / 2
-        shift_y = camera_y - self.display_height / 2
+        shift_x = camera_x - self.display_width // 2
+        shift_y = camera_y - self.display_height // 2
         size = self.tile_size
 
-        left_cell = shift_x / self.tile_size
-        top_cell = shift_y / self.tile_size
-        right_cell = (shift_x + self.display_width) / self.tile_size
-        bottom_cell = (shift_y + self.display_height) / self.tile_size
+        left_cell = shift_x // self.tile_size
+        top_cell = shift_y // self.tile_size
+        right_cell = (shift_x + self.display_width) // self.tile_size
+        bottom_cell = (shift_y + self.display_height) // self.tile_size
 
-        for y in xrange(top_cell, bottom_cell + 1):
-            for x in xrange(left_cell, right_cell + 1):
+        for y in range(top_cell, bottom_cell + 1):
+            for x in range(left_cell, right_cell + 1):
                 if self.layer_objects_top[y][x].tile_number:
                     tile = self.layer_objects_top[y][x].image
                     screen.blit(tile, (x*size - shift_x, y*size - shift_y))
@@ -288,8 +287,8 @@ class Map(object):
         return 55 * self.tile_size + 15, 127 * self.tile_size + 15
 
 ##        BOUNDS = 5
-##        for y in xrange(self.map_height_in_tiles):
-##            for x in xrange(self.map_width_in_tiles):
+##        for y in range(self.map_height_in_tiles):
+##            for x in range(self.map_width_in_tiles):
 ##                 if self.layer_floor[y][x].is_walkable and \
 ##                                       self.layer_objects[y][x].is_walkable:
 ##                    return x * self.tile_size + BOUNDS, \
@@ -302,8 +301,8 @@ class Map(object):
 
             char_rect:      Rect instance with char's position
         """
-        top = char_rect.y / self.tile_size
-        left = char_rect.x / self.tile_size
+        top = char_rect.y // self.tile_size
+        left = char_rect.x // self.tile_size
 
         floor = self.layer_floor
         objects = self.layer_objects
@@ -436,8 +435,8 @@ class Map(object):
         camera_x, camera_y = self.bottom_buffer[CAMERA_COORDS]
 
         # get left and top borders of the screen (relative to buffer)
-        left_x = camera_x - self.display_width / 2
-        top_y = camera_y - self.display_height / 2
+        left_x = camera_x - self.display_width // 2
+        top_y = camera_y - self.display_height // 2
 
         size = self.tile_size
         dx = left_x % size
@@ -445,10 +444,10 @@ class Map(object):
 
         buffer_surface = self.bottom_buffer[SURFACE]
 
-        left_cell = (left_x - self.display_width) / size
-        right_cell = (left_x + 2 * self.display_width) / size
-        top_cell = (top_y - self.display_height) / size
-        bottom_cell = (top_y + 2 * self.display_height) / size
+        left_cell = (left_x - self.display_width) // size
+        right_cell = (left_x + 2 * self.display_width) // size
+        top_cell = (top_y - self.display_height) // size
+        bottom_cell = (top_y + 2 * self.display_height) // size
 
         for x_map, y_map in cells_coords_list:
             if (x_map < left_cell or x_map > right_cell or

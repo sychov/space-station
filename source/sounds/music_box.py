@@ -11,8 +11,8 @@ from random import shuffle
 
 import pygame
 
-from misc._pathes import MUSIC_DIR
-from misc.events import EVENT_SONG_END
+from source.misc._pathes import MUSIC_DIR
+from source.misc.events import EVENT_SONG_END
 
 
 class MusicBox(object):

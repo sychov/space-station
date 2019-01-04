@@ -8,16 +8,14 @@
 
 import pygame
 
-from log import Log
-from frame_manager import FrameManager
-from storages.base import Storage
-from frame import FrameConfig
-from actions import ActionInterface
-from misc._enums import *
+from source.misc._enums import *
+from .log import Log
+from .frame_manager import FrameManager
+from .storages.base import Storage
+from .actions import ActionInterface
 
 # for test only:
-from misc.events import events
-from storages.pseudo_inventory import PseudoInventoryInterface
+from .storages.pseudo_inventory import PseudoInventoryInterface
 
 
 # ------------------------------ CONST ------------------------------------- #
@@ -166,9 +164,9 @@ class Hud(object):
 
             scale:  1 or 2
         """
-        from misc._pathes import MAIN_DIR
-        from environment.items.base import InventoryObject
-        from environment.storage_container import StorageContent
+        from source.misc._pathes import MAIN_DIR
+        from source.environment.items.base import InventoryObject
+        from source.environment.storage_container import StorageContent
 
         InventoryObject.add_sprites(
             MAIN_DIR + '/graphics/tilesets/items_2x1.png',

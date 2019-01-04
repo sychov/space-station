@@ -6,16 +6,15 @@
 ----------------------------------------------------------"""
 
 
-from storages.metal_locker import MetalLocker
-from storages.wooden_locker import WoodenLocker
+from .storages.metal_locker import MetalLocker
+from .storages.wooden_locker import WoodenLocker
 
-from doors.simple_door import SimpleDoor
-from doors.smart_door import SmartDoor
-from doors.smart_armored_door import SmartArmoredDoor
-from doors.gate_door import GateDoor
-
-from doors.door_terminal import DoorTerminal
-from doors.gate_terminal import GateTerminal
+from .doors.simple_door import SimpleDoor
+from .doors.smart_door import SmartDoor
+from .doors.smart_armored_door import SmartArmoredDoor
+from .doors.gate_door import GateDoor
+from .doors.door_terminal import DoorTerminal
+from .doors.gate_terminal import GateTerminal
 
 # Simple table of links between map object class names in
 # configuration files and those classes.

@@ -9,7 +9,7 @@
 from pygame.locals import USEREVENT
 from pygame.event import Event, post
 
-from _enums import *
+from ._enums import *
 
 
 # ------------------------------ CONST --------------------------------- #
@@ -30,7 +30,7 @@ class CustomEvents(object):
         Force memory garbage collection.
         """
         if DEBUG:
-            print '! force_memory_free'
+            print('! force_memory_free')
 
         post(Event(
             USEREVENT,
@@ -49,7 +49,7 @@ class CustomEvents(object):
                 }
         """
         if DEBUG:
-            print '! change_tile_num_on_game_map'
+            print('! change_tile_num_on_game_map')
 
         post(Event(
             USEREVENT,
@@ -67,7 +67,7 @@ class CustomEvents(object):
             object_:        selected game map object.
         """
         if DEBUG:
-            print '+ enable_action_interface'
+            print('+ enable_action_interface')
 
         post(Event(
             USEREVENT,
@@ -82,7 +82,7 @@ class CustomEvents(object):
         Disable action buttons near player's image.
         """
         if DEBUG:
-            print '- disable_action_interface'
+            print('- disable_action_interface')
 
         post(Event(
             USEREVENT,
@@ -95,7 +95,7 @@ class CustomEvents(object):
         Disable action buttons near player's image.
         """
         if DEBUG:
-            print '- update_action_interface'
+            print('- update_action_interface')
 
         post(Event(
             USEREVENT,
@@ -114,7 +114,7 @@ class CustomEvents(object):
             once:                   flag, True if need preventing spam
         """
         if DEBUG:
-            print '   + put_message_to_players_log'
+            print('   + put_message_to_players_log')
 
         post(Event(
             USEREVENT,
@@ -133,7 +133,7 @@ class CustomEvents(object):
             frame:       Frame instance, interface of game map's object.
         """
         if DEBUG:
-            print '+ show_interface_frame'
+            print('+ show_interface_frame')
 
         post(Event(
             USEREVENT,
@@ -149,7 +149,7 @@ class CustomEvents(object):
             frame:       Frame instance, interface of game map's object.
         """
         if DEBUG:
-            print '- hide_interface_frame'
+            print('- hide_interface_frame')
 
         post(Event(
             USEREVENT,
@@ -164,7 +164,7 @@ class CustomEvents(object):
         Pure report about closing actions interface.
         """
         if DEBUG:
-            print '   * actions_interface_close_reporting'
+            print('   * actions_interface_close_reporting')
 
         post(Event(
             USEREVENT,
@@ -177,7 +177,7 @@ class CustomEvents(object):
         Pure report about closing object interface.
         """
         if DEBUG:
-            print '   * object_interface_close_reporting'
+            print('   * object_interface_close_reporting')
 
         post(Event(
             USEREVENT,
@@ -193,7 +193,7 @@ class CustomEvents(object):
         chosen two callbacks.
         """
         if DEBUG:
-            print '   * check_cell_free_of_chars'
+            print('   * check_cell_free_of_chars')
 
         post(Event(
             USEREVENT,

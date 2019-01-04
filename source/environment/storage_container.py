@@ -6,7 +6,7 @@
 ----------------------------------------------------------"""
 
 
-from misc._enums import *
+from source.misc._enums import *
 
 
 # =========================== Storage cell class =========================== #
@@ -74,8 +74,8 @@ class StorageContent(object):
         """
         self.width = width
         self.height = height
-        self.storage_cells = [[StorageCell() for x in xrange(self.width)]
-                                                 for y in xrange(self.height)]
+        self.storage_cells = [[StorageCell() for x in range(self.width)]
+                                                 for y in range(self.height)]
 
 
     def add_item(self, item):
@@ -85,8 +85,8 @@ class StorageContent(object):
             item:       InventoryObject instance.
         """
         item_type = item.type
-        for y in xrange(self.height):
-            for x in xrange(self.width):
+        for y in range(self.height):
+            for x in range(self.width):
                 if self.get_cell_available_for(x, y, item):
                     # for 1x1 sprites:
                     if item_type == SPRITE_1x1:

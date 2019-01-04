@@ -9,15 +9,15 @@ import gc
 
 import pygame
 
-from environment.map import Map
-from chars.player import Player
-from chars.chars_manager import CharsManager
-from interface.hud import Hud
-from sounds.music_box import MusicBox
+from source.environment.map import Map
+from source.chars.player import Player
+from source.chars.chars_manager import CharsManager
+from source.interface.hud import Hud
+from source.sounds.music_box import MusicBox
 
-from misc._pathes import MAP_PATH, MAP_TILES_PATH, PLAYER_TILES_PATH
-from misc._enums import *
-from misc.events import EVENT_SONG_END
+from source.misc._pathes import MAP_PATH, MAP_TILES_PATH, PLAYER_TILES_PATH
+from source.misc._enums import *
+from source.misc.events import EVENT_SONG_END
 
 
 # ------------------------------ CONST ------------------------------------- #
@@ -139,7 +139,7 @@ class Main(object):
         """Exit from game.
         """
         pygame.quit()
-        print "The end."
+        print("The end.")
         raise SystemExit(0)
 
 
